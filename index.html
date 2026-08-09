@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lưu Thiết Hoa - Giao Diện AI</title>
+  <title>SkyAI - Trợ lý của Hoa</title>
   <style>
-    /* Tổng thể và Nền Đen Huyền Ảo */
+    /* TỔNG THỂ & NỀN */
     body, html {
       margin: 0; padding: 0; height: 100%; width: 100%;
       background: #000; color: #fff;
@@ -14,54 +14,44 @@
       overflow: hidden;
     }
 
-    /* Hiệu ứng Nền Nebula Xoáy Động */
-    .nebula-background {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-    }
+    .nebula-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
     .nebula-layer { position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0.6; }
-    .nebula-layer:nth-child(1) {
-      background: radial-gradient(circle at 40% 40%, rgba(50, 0, 100, 0.4) 0%, transparent 60%);
-      filter: blur(50px); animation: moveLayerPurple 120s linear infinite;
-    }
-    .nebula-layer:nth-child(2) {
-      background: radial-gradient(circle at 60% 60%, rgba(0, 50, 100, 0.4) 0%, transparent 60%);
-      filter: blur(50px); animation: moveLayerBlue 180s linear infinite;
-    }
-    .nebula-layer:nth-child(3) {
-      background: radial-gradient(circle at 50% 50%, rgba(80, 70, 0, 0.15) 0%, transparent 50%);
-      filter: blur(50px); animation: moveLayerGold 90s linear infinite;
-    }
+    .nebula-layer:nth-child(1) { background: radial-gradient(circle at 40% 40%, rgba(50, 0, 100, 0.4) 0%, transparent 60%); filter: blur(50px); animation: moveLayerPurple 120s linear infinite; }
+    .nebula-layer:nth-child(2) { background: radial-gradient(circle at 60% 60%, rgba(0, 50, 100, 0.4) 0%, transparent 60%); filter: blur(50px); animation: moveLayerBlue 180s linear infinite; }
+    .nebula-layer:nth-child(3) { background: radial-gradient(circle at 50% 50%, rgba(80, 70, 0, 0.15) 0%, transparent 50%); filter: blur(50px); animation: moveLayerGold 90s linear infinite; }
 
     @keyframes moveLayerPurple { 0%, 100% { transform: scale(1) translate(0, 0); } 50% { transform: scale(1.1) translate(5%, 5%); } }
     @keyframes moveLayerBlue { 0%, 100% { transform: scale(1.1) translate(5%, 5%); } 50% { transform: scale(1) translate(0, 0); } }
     @keyframes moveLayerGold { 0%, 100% { transform: scale(1) translate(0, 0); } 50% { transform: scale(1.05) translate(2%, 2%); } }
 
-    /* Nội dung chính và Nút Kích hoạt */
-    .content-wrapper { text-align: center; display: flex; flex-direction: column; align-items: center; z-index: 10; width: 80%; max-width: 800px; }
-    #activate-panel { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: opacity 0.5s ease; }
-    
-    .ai-core {
-      width: 60px; height: 60px; border-radius: 50%;
-      background: radial-gradient(circle, #fff, cyan, #00f);
-      box-shadow: 0 0 40px cyan, 0 0 60px #00f;
-      margin-bottom: 20px; animation: corePulse 3s ease-in-out infinite;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* VÙNG CHỨA CHÍNH */
+    .content-wrapper { 
+      text-align: center; display: flex; flex-direction: column; align-items: center; 
+      justify-content: center; z-index: 10; width: 90%; max-width: 800px; height: 100%; position: relative;
     }
+
+    /* 1. MÀN HÌNH KÍCH HOẠT */
+    #activate-panel { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: opacity 0.5s ease; position: absolute; }
+    .ai-core { width: 60px; height: 60px; border-radius: 50%; background: radial-gradient(circle, #fff, cyan, #00f); box-shadow: 0 0 40px cyan, 0 0 60px #00f; margin-bottom: 20px; animation: corePulse 3s ease-in-out infinite; transition: transform 0.3s ease; }
     #activate-panel:hover .ai-core { transform: scale(1.1); box-shadow: 0 0 50px cyan, 0 0 70px #00f; }
     @keyframes corePulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); opacity: 0.8; } }
     #activate-label { font-size: 1.2rem; letter-spacing: 0.1em; text-shadow: 0 0 5px cyan; }
 
-    /* Giao diện Văn bản AI Động */
-    #ai-panel { display: none; flex-direction: column; align-items: center; opacity: 0; transition: opacity 0.5s ease; }
-    .ai-text {
-      font-size: 2.2rem; font-weight: 300; letter-spacing: 0.15em; line-height: 1.5;
-      text-shadow: 0 0 10px rgba(255,255,255,0.7), 0 0 25px cyan; margin-bottom: 40px; position: relative;
+    /* CÁC PANEL GIAO DIỆN CẦN ẨN/HIỆN */
+    .ui-panel {
+      display: none; flex-direction: column; align-items: center; 
+      opacity: 0; transition: opacity 0.5s ease, transform 0.5s ease;
+      width: 100%; position: absolute;
     }
+    .ui-panel.active { display: flex; opacity: 1; transform: translateY(0); }
+    .ui-panel.hidden { transform: translateY(20px); }
+
+    /* 2. MÀN HÌNH CHÍNH (LỜI CHÀO) */
+    .ai-text { font-size: 2.2rem; font-weight: 300; letter-spacing: 0.15em; line-height: 1.5; text-shadow: 0 0 10px rgba(255,255,255,0.7), 0 0 25px cyan; margin-bottom: 40px; }
     .ai-text::after { content: '|'; color: cyan; animation: blink 0.8s infinite; display: inline-block; }
     @keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
 
-    /* Hiệu ứng Sóng Âm khi AI nói */
-    .voice-waves { display: flex; gap: 7px; height: 40px; opacity: 0; transition: opacity 0.3s; }
+    .voice-waves { display: flex; gap: 7px; height: 40px; opacity: 0; transition: opacity 0.3s; margin-bottom: 30px;}
     .voice-waves.active { opacity: 1; }
     .voice-bar { width: 7px; background: cyan; box-shadow: 0 0 10px cyan; border-radius: 4px; animation: wavePulse 1s ease-in-out infinite; }
     .voice-bar:nth-child(1) { height: 15px; animation-delay: 0.1s; }
@@ -71,100 +61,286 @@
     .voice-bar:nth-child(5) { height: 18px; animation-delay: 0.5s; }
     @keyframes wavePulse { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
 
-    /* Ngôi sao nhỏ ở góc phải dưới */
-    .star-corner { position: fixed; bottom: 25px; right: 25px; font-size: 2.5rem; color: rgba(255, 255, 255, 0.7); text-shadow: 0 0 10px white; animation: twinkle 1s ease-in-out infinite; }
-    @keyframes twinkle { 50% { opacity: 0.2; transform: scale(0.9); } }
+    /* 3. MÀN HÌNH DANH SÁCH MÓN */
+    .menu-container {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 30px;
+      width: 100%; max-width: 600px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+    .menu-title { font-size: 1.8rem; text-transform: uppercase; letter-spacing: 2px; color: cyan; margin-bottom: 25px; border-bottom: 1px solid rgba(0, 255, 255, 0.3); padding-bottom: 10px; text-shadow: 0 0 10px rgba(0, 255, 255, 0.5); }
+    .menu-list { list-style: none; padding: 0; margin: 0; }
+    .menu-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 15px 20px; margin-bottom: 10px;
+      background: rgba(0, 0, 0, 0.3); border-radius: 10px;
+      cursor: pointer; transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+    }
+    .menu-item:hover { background: rgba(0, 255, 255, 0.1); border-left: 3px solid cyan; transform: translateX(5px); }
+    .item-id { font-weight: bold; color: cyan; font-size: 1.2rem; width: 60px; text-align: left; }
+    .item-name { flex-grow: 1; text-align: left; font-size: 1.1rem; letter-spacing: 1px; }
+
+    /* 4. MÀN HÌNH CHI TIẾT CÔNG THỨC */
+    .recipe-container {
+      background: rgba(0, 10, 20, 0.6);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 40px; width: 100%; max-width: 500px;
+      display: flex; flex-direction: column; align-items: center;
+      box-shadow: 0 0 40px rgba(0, 255, 255, 0.1);
+    }
+    .recipe-image { width: 200px; height: 200px; object-fit: cover; border-radius: 50%; border: 3px solid cyan; margin-bottom: 25px; box-shadow: 0 0 20px rgba(0, 255, 255, 0.4); background: #111; }
+    .recipe-id { font-size: 2rem; color: cyan; margin-bottom: 5px; text-shadow: 0 0 10px cyan; font-weight: bold;}
+    .recipe-name { font-size: 1.3rem; margin-bottom: 25px; color: #aaa; text-transform: uppercase; letter-spacing: 1px;}
+    .recipe-details { font-size: 1.2rem; line-height: 1.6; text-align: center; background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 10px; width: 100%; }
+
+    /* NÚT ĐIỀU KHIỂN CHUNG */
+    .btn {
+      margin-top: 25px; padding: 10px 30px; font-size: 1rem; color: #fff;
+      background: transparent; border: 1px solid cyan; border-radius: 25px;
+      cursor: pointer; text-transform: uppercase; letter-spacing: 2px;
+      transition: all 0.3s ease; outline: none;
+    }
+    .btn:hover { background: cyan; color: #000; box-shadow: 0 0 15px cyan; }
+
+    /* NÚT MICROPHONE (GIAO TIẾP GIỌNG NÓI) */
+    .mic-container { position: fixed; bottom: 40px; display: none; flex-direction: column; align-items: center; z-index: 100; }
+    .mic-btn {
+      width: 60px; height: 60px; border-radius: 50%; background: rgba(0, 0, 0, 0.5);
+      border: 2px solid cyan; color: cyan; font-size: 1.5rem; cursor: pointer;
+      display: flex; justify-content: center; align-items: center; transition: all 0.3s ease;
+    }
+    .mic-btn.listening { background: cyan; color: #000; animation: pulseMic 1.5s infinite; }
+    .mic-status { margin-top: 10px; font-size: 0.9rem; color: cyan; letter-spacing: 1px; opacity: 0.7; }
+    @keyframes pulseMic { 0% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(0, 255, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0); } }
+
   </style>
 </head>
 <body>
 
-  <audio id="ai-audio" src="AIvoice1.mp3"></audio>
+  <audio id="ai-audio-1" src="AIvoice1.mp3"></audio>
+  <audio id="ai-audio-2" src="AIV2.mp3"></audio>
 
   <div class="nebula-background">
     <div class="nebula-layer"></div><div class="nebula-layer"></div><div class="nebula-layer"></div>
   </div>
 
   <div class="content-wrapper">
+    
     <div id="activate-panel">
       <div class="ai-core"></div>
       <p id="activate-label">NHẤP VÀO LÕI AI ĐỂ KHỞI CHẠY</p>
     </div>
 
-    <div id="ai-panel">
+    <div id="home-panel" class="ui-panel hidden">
       <p class="ai-text" id="ai-greeting-text"></p>
       <div class="voice-waves" id="voice-waves">
         <div class="voice-bar"></div><div class="voice-bar"></div><div class="voice-bar"></div><div class="voice-bar"></div><div class="voice-bar"></div>
       </div>
     </div>
+
+    <div id="menu-panel" class="ui-panel hidden">
+      <div class="menu-container">
+        <div class="menu-title">Danh sách Trà Rang</div>
+        <ul class="menu-list" id="menu-list">
+          </ul>
+      </div>
+    </div>
+
+    <div id="recipe-panel" class="ui-panel hidden">
+      <div class="recipe-container">
+        <img id="r-image" src="" alt="Drink Image" class="recipe-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMjIyIi8+PHRleHQgeT0iNTAlIiB4PSI1MCUiIGZpbGw9IiM1NTUiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ObyBJbWFnZTwvdGV4dD48L3N2Zz4='">
+        <div id="r-id" class="recipe-id">MÃ MÓN</div>
+        <div id="r-name" class="recipe-name">Tên món</div>
+        <div id="r-details" class="recipe-details">Công thức chi tiết sẽ hiển thị ở đây.</div>
+        <button class="btn" onclick="switchPanel('menu-panel')">Quay lại danh sách</button>
+      </div>
+    </div>
+
   </div>
 
-  <div class="star-corner">✦</div>
+  <div id="mic-container" class="mic-container">
+    <div id="mic-btn" class="mic-btn">🎤</div>
+    <div id="mic-status" class="mic-status">Nhấn để nói</div>
+  </div>
   
   <script>
+    // --- DỮ LIỆU CÔNG THỨC ---
+    const menuData = {
+      "A2": { name: "Houji latte", recipe: "140 ml Houji latte", img: "A2.png" },
+      "A6": { name: "Houji Latte Shiratama", recipe: "140 ml Houji latte và 7 viên nếp", img: "A6.png" },
+      "A15": { name: "Houji latte shiratama Gelato", recipe: "140 ml Houji latte, 7 viên nếp, 1 viên kem Houji", img: "A15.png" },
+      "A30": { name: "Houji chiato", recipe: "140 ml Houji latte và lớp chiato", img: "A30.png" },
+      "AF": { name: "Houjicha latte purin", recipe: "140 ml Houji latte và một bánh flan", img: "AF.png" }
+    };
+
+    // --- CÁC PHẦN TỬ UI ---
     const activatePanel = document.getElementById('activate-panel');
-    const aiPanel = document.getElementById('ai-panel');
+    const homePanel = document.getElementById('home-panel');
+    const menuPanel = document.getElementById('menu-panel');
+    const recipePanel = document.getElementById('recipe-panel');
+    const micContainer = document.getElementById('mic-container');
     const aiGreetingText = document.getElementById('ai-greeting-text');
-    const aiAudio = document.getElementById('ai-audio');
     const voiceWaves = document.getElementById('voice-waves');
     
-    // Văn bản mới được cập nhật
-    const fullTextToType = "Xin chào Hoa, tôi là SkyAI được tạo bởi bạn.\n\nHôm nay bạn muốn làm gì?";
+    const audio1 = document.getElementById('ai-audio-1');
+    const audio2 = document.getElementById('ai-audio-2');
 
-    // Tốc độ gõ chữ tiêu chuẩn (ms)
-    const baseTypingSpeed = 60; 
+    // --- KHỞI ĐỘNG HỆ THỐNG ---
+    const fullTextToType = "Xin chào Hoa, tôi là SkyAI được tạo bởi bạn.\n\nHôm nay bạn muốn làm gì?";
+    const baseTypingSpeed = 50; 
 
     activatePanel.addEventListener('click', () => {
       activatePanel.style.display = 'none';
-      aiPanel.style.display = 'flex';
       
-      // Khởi động giao diện mượt mà
+      // Phát âm thanh ngay lập tức (phát sớm hơn theo yêu cầu)
+      audio1.play().catch(e => console.error("Lỗi phát audio 1", e));
+      
+      switchPanel('home-panel');
+      micContainer.style.display = 'flex'; // Hiện nút Micro
+      
+      // Độ trễ ngắn cho UI
       setTimeout(() => {
-        aiPanel.style.opacity = 1;
-        
-        // Phát file âm thanh
-        aiAudio.play().catch(e => console.error("Không tải được AIvoice1.mp3. Kiểm tra lại đường dẫn trên GitHub Pages.", e));
-        
-        // Bật sóng âm
         voiceWaves.classList.add('active');
-        
-        // Bắt đầu hiệu ứng gõ chữ
         startTypingEffect();
-      }, 300);
+      }, 50); 
     });
 
-    // Tắt hiệu ứng sóng âm ngay khi audio kết thúc
-    aiAudio.addEventListener('ended', () => {
-      voiceWaves.classList.remove('active');
-    });
+    audio1.addEventListener('ended', () => voiceWaves.classList.remove('active'));
 
-    // Hiệu ứng gõ chữ thông minh: Tự động ngắt nghỉ theo dấu câu
+    // Hiệu ứng gõ chữ
     function startTypingEffect() {
       aiGreetingText.innerHTML = "";
       let charIndex = 0;
-
       function typeNextChar() {
         if (charIndex < fullTextToType.length) {
           let char = fullTextToType[charIndex];
           let currentDelay = baseTypingSpeed;
-
-          // Chuyển ký tự \n thành thẻ xuống dòng HTML
           if (char === '\n') {
             aiGreetingText.innerHTML += '<br>';
-            currentDelay = 500; // Nghỉ nửa giây khi xuống dòng lớn
+            currentDelay = 400;
           } else {
             aiGreetingText.innerHTML += char;
           }
-
-          // Phân tích dấu câu để ngắt nghỉ giống giọng nói thật
-          if (char === ',') currentDelay = 350; // Nghỉ nhịp ngắn
-          if (char === '.') currentDelay = 600; // Nghỉ nhịp dài
-
+          if (char === ',') currentDelay = 300;
+          if (char === '.') currentDelay = 500;
           charIndex++;
           setTimeout(typeNextChar, currentDelay);
         }
       }
-      
       typeNextChar(); 
+    }
+
+    // --- CHUYỂN ĐỔI GIAO DIỆN (CÓ HIỆU ỨNG) ---
+    function switchPanel(panelId) {
+      const panels = [homePanel, menuPanel, recipePanel];
+      panels.forEach(panel => {
+        if (panel.id === panelId) {
+          panel.classList.remove('hidden');
+          panel.classList.add('active');
+        } else {
+          panel.classList.remove('active');
+          panel.classList.add('hidden');
+        }
+      });
+    }
+
+    // --- RENDER DANH SÁCH MÓN ---
+    const menuListUl = document.getElementById('menu-list');
+    for (const [id, data] of Object.entries(menuData)) {
+      const li = document.createElement('li');
+      li.className = 'menu-item';
+      li.innerHTML = `<div class="item-id">${id}</div><div class="item-name">${data.name}</div>`;
+      // Hỗ trợ click chuột phòng khi không dùng giọng nói
+      li.onclick = () => openRecipe(id);
+      menuListUl.appendChild(li);
+    }
+
+    // --- MỞ CHI TIẾT CÔNG THỨC ---
+    function openRecipe(id) {
+      const data = menuData[id.toUpperCase()];
+      if(data) {
+        document.getElementById('r-id').innerText = id.toUpperCase();
+        document.getElementById('r-name').innerText = data.name;
+        document.getElementById('r-details').innerText = data.recipe;
+        document.getElementById('r-image').src = data.img;
+        switchPanel('recipe-panel');
+      }
+    }
+
+    // --- NHẬN DẠNG GIỌNG NÓI (SPEECH TO TEXT) ---
+    const micBtn = document.getElementById('mic-btn');
+    const micStatus = document.getElementById('mic-status');
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'vi-VN';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      micBtn.addEventListener('click', () => {
+        recognition.start();
+        micBtn.classList.add('listening');
+        micStatus.innerText = "Đang nghe...";
+      });
+
+      recognition.onresult = (event) => {
+        micBtn.classList.remove('listening');
+        const transcript = event.results[0][0].transcript.toLowerCase();
+        micStatus.innerText = 'Bạn nói: "' + transcript + '"';
+        
+        processVoiceCommand(transcript);
+
+        // Reset text status sau 3s
+        setTimeout(() => { micStatus.innerText = "Nhấn để nói"; }, 3000);
+      };
+
+      recognition.onerror = (event) => {
+        micBtn.classList.remove('listening');
+        micStatus.innerText = "Lỗi nhận dạng, thử lại!";
+      };
+    } else {
+      micBtn.style.display = 'none';
+      micStatus.innerText = "Trình duyệt không hỗ trợ nhận giọng nói";
+    }
+
+    // --- XỬ LÝ LỆNH GIỌNG NÓI ---
+    function processVoiceCommand(command) {
+      // 1. Mở danh sách
+      if (command.includes("danh sách") || command.includes("trà rang")) {
+        switchPanel('menu-panel');
+        audio2.play().catch(e => console.log("Thiếu file AIV2.mp3"));
+        return;
+      }
+      
+      // 2. Quay lại
+      if (command.includes("quay lại") || command.includes("trở lại") || command.includes("màn hình chính")) {
+        // Nếu đang ở màn hình công thức, quay lại menu. Nếu ở menu, quay lại home.
+        if (recipePanel.classList.contains('active')) {
+          switchPanel('menu-panel');
+        } else {
+          switchPanel('home-panel');
+        }
+        return;
+      }
+
+      // 3. Mở công thức cụ thể
+      if (command.includes("công thức") || command.includes("món")) {
+        const idRegex = /(a2|a6|a15|a30|af)/i;
+        const match = command.match(idRegex);
+        if (match) {
+          const idFound = match[0].toUpperCase();
+          openRecipe(idFound);
+        } else {
+          micStatus.innerText = "Không nghe rõ mã món (A2, A6...)";
+        }
+      }
     }
   </script>
 </body>
