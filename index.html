@@ -7,57 +7,29 @@
   <style>
     /* Tổng thể và Nền Đen Huyền Ảo */
     body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-      background: #000;
-      color: #fff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Phông chữ sang trọng */
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      margin: 0; padding: 0; height: 100%; width: 100%;
+      background: #000; color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex; justify-content: center; align-items: center;
       overflow: hidden;
     }
 
     /* Hiệu ứng Nền Nebula Xoáy Động */
     .nebula-background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
     }
-
-    .nebula-layer {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      opacity: 0.6;
-    }
-
-    /* Tầng màu tím-xanh */
+    .nebula-layer { position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0.6; }
     .nebula-layer:nth-child(1) {
       background: radial-gradient(circle at 40% 40%, rgba(50, 0, 100, 0.4) 0%, transparent 60%);
-      filter: blur(50px);
-      animation: moveLayerPurple 120s linear infinite;
+      filter: blur(50px); animation: moveLayerPurple 120s linear infinite;
     }
-
-    /* Tầng màu xanh lam */
     .nebula-layer:nth-child(2) {
       background: radial-gradient(circle at 60% 60%, rgba(0, 50, 100, 0.4) 0%, transparent 60%);
-      filter: blur(50px);
-      animation: moveLayerBlue 180s linear infinite;
+      filter: blur(50px); animation: moveLayerBlue 180s linear infinite;
     }
-
-    /* Tầng màu vàng mờ */
     .nebula-layer:nth-child(3) {
       background: radial-gradient(circle at 50% 50%, rgba(80, 70, 0, 0.15) 0%, transparent 50%);
-      filter: blur(50px);
-      animation: moveLayerGold 90s linear infinite;
+      filter: blur(50px); animation: moveLayerGold 90s linear infinite;
     }
 
     @keyframes moveLayerPurple { 0%, 100% { transform: scale(1) translate(0, 0); } 50% { transform: scale(1.1) translate(5%, 5%); } }
@@ -65,123 +37,51 @@
     @keyframes moveLayerGold { 0%, 100% { transform: scale(1) translate(0, 0); } 50% { transform: scale(1.05) translate(2%, 2%); } }
 
     /* Nội dung chính và Nút Kích hoạt */
-    .content-wrapper {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      z-index: 10;
-      width: 80%;
-      max-width: 800px;
-    }
-
-    /* Nút khởi động AI (tránh chặn tự động phát âm thanh) */
-    #activate-panel {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      transition: opacity 0.5s ease;
-    }
-
+    .content-wrapper { text-align: center; display: flex; flex-direction: column; align-items: center; z-index: 10; width: 80%; max-width: 800px; }
+    #activate-panel { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: opacity 0.5s ease; }
+    
     .ai-core {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
+      width: 60px; height: 60px; border-radius: 50%;
       background: radial-gradient(circle, #fff, cyan, #00f);
       box-shadow: 0 0 40px cyan, 0 0 60px #00f;
-      margin-bottom: 20px;
-      animation: corePulse 3s ease-in-out infinite;
+      margin-bottom: 20px; animation: corePulse 3s ease-in-out infinite;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-
-    #activate-panel:hover .ai-core {
-      transform: scale(1.1);
-      box-shadow: 0 0 50px cyan, 0 0 70px #00f;
-    }
-
+    #activate-panel:hover .ai-core { transform: scale(1.1); box-shadow: 0 0 50px cyan, 0 0 70px #00f; }
     @keyframes corePulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); opacity: 0.8; } }
-
-    #activate-label {
-      font-size: 1.2rem;
-      letter-spacing: 0.1em;
-      text-shadow: 0 0 5px cyan;
-    }
+    #activate-label { font-size: 1.2rem; letter-spacing: 0.1em; text-shadow: 0 0 5px cyan; }
 
     /* Giao diện Văn bản AI Động */
-    #ai-panel {
-      display: none; /* Ẩn ban đầu */
-      flex-direction: column;
-      align-items: center;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-
+    #ai-panel { display: none; flex-direction: column; align-items: center; opacity: 0; transition: opacity 0.5s ease; }
     .ai-text {
-      font-size: 2.2rem;
-      font-weight: 300;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      line-height: 1.4;
-      text-shadow: 0 0 10px rgba(255,255,255,0.7), 0 0 25px cyan;
-      margin-bottom: 40px;
-      position: relative;
+      font-size: 2.2rem; font-weight: 300; letter-spacing: 0.15em; line-height: 1.5;
+      text-shadow: 0 0 10px rgba(255,255,255,0.7), 0 0 25px cyan; margin-bottom: 40px; position: relative;
     }
-
-    /* Hiệu ứng gõ văn bản */
-    .ai-text::after {
-      content: '|';
-      color: cyan;
-      animation: blink 0.8s infinite;
-      display: inline-block;
-    }
-
+    .ai-text::after { content: '|'; color: cyan; animation: blink 0.8s infinite; display: inline-block; }
     @keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
 
     /* Hiệu ứng Sóng Âm khi AI nói */
-    .voice-waves {
-      display: flex;
-      gap: 7px;
-      height: 40px;
-    }
-
-    .voice-bar {
-      width: 7px;
-      background: cyan;
-      box-shadow: 0 0 10px cyan;
-      border-radius: 4px;
-      animation: wavePulse 1s ease-in-out infinite;
-    }
-
-    /* Điều chỉnh các sóng âm phát ra khác nhau */
+    .voice-waves { display: flex; gap: 7px; height: 40px; opacity: 0; transition: opacity 0.3s; }
+    .voice-waves.active { opacity: 1; }
+    .voice-bar { width: 7px; background: cyan; box-shadow: 0 0 10px cyan; border-radius: 4px; animation: wavePulse 1s ease-in-out infinite; }
     .voice-bar:nth-child(1) { height: 15px; animation-delay: 0.1s; }
     .voice-bar:nth-child(2) { height: 35px; animation-delay: 0.2s; }
     .voice-bar:nth-child(3) { height: 40px; animation-delay: 0.3s; }
     .voice-bar:nth-child(4) { height: 25px; animation-delay: 0.4s; }
     .voice-bar:nth-child(5) { height: 18px; animation-delay: 0.5s; }
-
     @keyframes wavePulse { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
 
     /* Ngôi sao nhỏ ở góc phải dưới */
-    .star-corner {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      font-size: 2.5rem;
-      color: rgba(255, 255, 255, 0.7);
-      text-shadow: 0 0 10px white;
-      animation: twinkle 1s ease-in-out infinite;
-    }
-
+    .star-corner { position: fixed; bottom: 25px; right: 25px; font-size: 2.5rem; color: rgba(255, 255, 255, 0.7); text-shadow: 0 0 10px white; animation: twinkle 1s ease-in-out infinite; }
     @keyframes twinkle { 50% { opacity: 0.2; transform: scale(0.9); } }
   </style>
 </head>
 <body>
 
+  <audio id="ai-audio" src="AIvoice1.mp3"></audio>
+
   <div class="nebula-background">
-    <div class="nebula-layer"></div>
-    <div class="nebula-layer"></div>
-    <div class="nebula-layer"></div>
+    <div class="nebula-layer"></div><div class="nebula-layer"></div><div class="nebula-layer"></div>
   </div>
 
   <div class="content-wrapper">
@@ -192,13 +92,8 @@
 
     <div id="ai-panel">
       <p class="ai-text" id="ai-greeting-text"></p>
-      
-      <div class="voice-waves">
-        <div class="voice-bar"></div>
-        <div class="voice-bar"></div>
-        <div class="voice-bar"></div>
-        <div class="voice-bar"></div>
-        <div class="voice-bar"></div>
+      <div class="voice-waves" id="voice-waves">
+        <div class="voice-bar"></div><div class="voice-bar"></div><div class="voice-bar"></div><div class="voice-bar"></div><div class="voice-bar"></div>
       </div>
     </div>
   </div>
@@ -209,87 +104,67 @@
     const activatePanel = document.getElementById('activate-panel');
     const aiPanel = document.getElementById('ai-panel');
     const aiGreetingText = document.getElementById('ai-greeting-text');
-    const fullTextToType = "Xin chào lưu thiết hoa,\nHôm nay ngài muốn làm gì?";
-    const textToSpeak = "Xin chào lưu thiết hoa, hôm nay ngài muốn làm gì?";
+    const aiAudio = document.getElementById('ai-audio');
+    const voiceWaves = document.getElementById('voice-waves');
+    
+    // Văn bản mới được cập nhật
+    const fullTextToType = "Xin chào Hoa, tôi là SkyAI được tạo bởi bạn.\n\nHôm nay bạn muốn làm gì?";
 
-    let speechInitialized = false;
-    let utterance;
+    // Tốc độ gõ chữ tiêu chuẩn (ms)
+    const baseTypingSpeed = 60; 
 
-    // 1. Tích hợp Giọng nói AI (Sử dụng Web Speech API)
-    function initSpeechSynthesis() {
-      // Đảm bảo trình duyệt hỗ trợ
-      if (!window.speechSynthesis) {
-        console.error('Trình duyệt không hỗ trợ Web Speech API.');
-        return;
-      }
-      
-      // Tạo đối tượng lời nói
-      utterance = new SpeechSynthesisUtterance(textToSpeak);
-      
-      // Lựa chọn giọng nói Tiếng Việt tốt nhất
-      const voices = window.speechSynthesis.getVoices();
-      // Thử tìm giọng Google Tiếng Việt, nếu không tìm giọng vi-VN bất kỳ
-      const vietnameseVoice = voices.find(voice => voice.lang.startsWith('vi') && voice.name.includes('Google')) ||
-                                voices.find(voice => voice.lang.startsWith('vi'));
-
-      if (vietnameseVoice) {
-        utterance.voice = vietnameseVoice;
-      } else {
-        // Fallback sang ngôn ngữ, giọng có thể không hoàn hảo
-        utterance.lang = 'vi-VN';
-      }
-
-      utterance.rate = 1.0; // Tốc độ bình thường
-      utterance.pitch = 1.1; // Hơi cao hơn để nghe có vẻ AI hơn
-
-      // Tắt sóng âm khi nói xong
-      utterance.onend = () => {
-        // Có thể thêm code tắt sóng âm ở đây nếu muốn
-      };
-
-      speechInitialized = true;
-    }
-
-    // Tải danh sách giọng nói trước khi khởi động
-    if (window.speechSynthesis.onvoiceschanged !== undefined) {
-      window.speechSynthesis.onvoiceschanged = initSpeechSynthesis;
-    } else {
-      initSpeechSynthesis();
-    }
-
-    // 2. Xử lý Kích hoạt
     activatePanel.addEventListener('click', () => {
       activatePanel.style.display = 'none';
       aiPanel.style.display = 'flex';
-      aiPanel.style.opacity = 1;
       
-      // Bắt đầu hiệu ứng gõ văn bản
-      startTypingEffect();
-      
-      // Bắt đầu phát giọng nói AI
-      if (speechInitialized) {
-        window.speechSynthesis.speak(utterance);
-      }
+      // Khởi động giao diện mượt mà
+      setTimeout(() => {
+        aiPanel.style.opacity = 1;
+        
+        // Phát file âm thanh
+        aiAudio.play().catch(e => console.error("Không tải được AIvoice1.mp3. Kiểm tra lại đường dẫn trên GitHub Pages.", e));
+        
+        // Bật sóng âm
+        voiceWaves.classList.add('active');
+        
+        // Bắt đầu hiệu ứng gõ chữ
+        startTypingEffect();
+      }, 300);
     });
 
-    // 3. Hiệu ứng gõ văn bản động hoàn toàn
+    // Tắt hiệu ứng sóng âm ngay khi audio kết thúc
+    aiAudio.addEventListener('ended', () => {
+      voiceWaves.classList.remove('active');
+    });
+
+    // Hiệu ứng gõ chữ thông minh: Tự động ngắt nghỉ theo dấu câu
     function startTypingEffect() {
       aiGreetingText.innerHTML = "";
       let charIndex = 0;
-      const typingInterval = setInterval(() => {
+
+      function typeNextChar() {
         if (charIndex < fullTextToType.length) {
-          // Xử lý xuống dòng
-          if (fullTextToType[charIndex] === '\n') {
+          let char = fullTextToType[charIndex];
+          let currentDelay = baseTypingSpeed;
+
+          // Chuyển ký tự \n thành thẻ xuống dòng HTML
+          if (char === '\n') {
             aiGreetingText.innerHTML += '<br>';
+            currentDelay = 500; // Nghỉ nửa giây khi xuống dòng lớn
           } else {
-            aiGreetingText.innerHTML += fullTextToType[charIndex];
+            aiGreetingText.innerHTML += char;
           }
+
+          // Phân tích dấu câu để ngắt nghỉ giống giọng nói thật
+          if (char === ',') currentDelay = 350; // Nghỉ nhịp ngắn
+          if (char === '.') currentDelay = 600; // Nghỉ nhịp dài
+
           charIndex++;
-        } else {
-          // Gõ xong, dừng interval
-          clearInterval(typingInterval);
+          setTimeout(typeNextChar, currentDelay);
         }
-      }, 70); // Tốc độ gõ (milliseconds mỗi ký tự)
+      }
+      
+      typeNextChar(); 
     }
   </script>
 </body>
