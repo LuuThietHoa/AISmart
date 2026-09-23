@@ -43,7 +43,6 @@
             overflow-x: hidden;
         }
         
-        /* Hiệu ứng Glassmorphism */
         .glass-card {
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(12px);
@@ -52,23 +51,16 @@
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
         }
 
-        .bubble-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
+        .bubble-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .bubble-card:hover {
             transform: scale(1.03) translateY(-5px);
             box-shadow: 0 20px 40px rgba(91, 155, 255, 0.15);
             border-color: rgba(91, 155, 255, 0.3);
         }
 
-        /* Nút Bong bóng khởi động (Start Bubble) */
         .start-bubble {
             background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.2));
-            box-shadow: 
-                inset 0 0 20px rgba(255,255,255,0.8),
-                0 0 20px rgba(255,255,255,0.4),
-                0 15px 30px rgba(91, 155, 255, 0.4);
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.4), 0 15px 30px rgba(91, 155, 255, 0.4);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255,255,255,0.6);
             animation: floatBubble 3s ease-in-out infinite;
@@ -79,44 +71,31 @@
             50% { transform: translateY(-15px) scale(1.05); }
         }
 
-        /* Trái tim bay lúc đánh dấu đã đi */
-        .floating-heart {
-            position: absolute;
-            animation: floatUp 1.5s ease-out forwards;
-            pointer-events: none;
-            z-index: 50;
-        }
+        /* Modal transitions */
+        .modal-enter { opacity: 0; transform: scale(0.95) translateY(10px); }
+        .modal-enter-active { opacity: 1; transform: scale(1) translateY(0); transition: all 0.3s ease-out; }
+        .modal-leave { opacity: 1; transform: scale(1) translateY(0); }
+        .modal-leave-active { opacity: 0; transform: scale(0.95) translateY(10px); transition: all 0.2s ease-in; }
 
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
-        }
-
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #A5D8FF; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #5B9BFF; }
-        
-        /* Ẩn thanh cuộn lúc Intro đang chạy */
         .no-scroll { overflow: hidden; height: 100vh; }
+        
+        /* Star Rating */
+        .star { cursor: pointer; color: #cbd5e1; transition: color 0.2s; }
+        .star.active { color: #fbbf24; }
     </style>
 </head>
 <body class="text-textDark antialiased no-scroll" id="body">
 
-    <!-- ================= INTRO SCREEN (VIDEO NỀN) ================= -->
+    <!-- ================= INTRO SCREEN ================= -->
     <div id="intro-screen" class="fixed inset-0 z-[100] flex items-center justify-center bg-[#E0F2FE] transition-all duration-1000 ease-in-out">
-        <!-- Video nền -->
         <video id="bg-video" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000" muted playsinline autoplay>
             <source src="nenweb.mp4" type="video/mp4">
-            <!-- Nếu video lỗi, thông báo mờ -->
-            Trình duyệt của bạn không hỗ trợ thẻ video.
         </video>
-        
-        <!-- Overlay làm mờ video một chút để nút nổi bật hơn -->
         <div class="absolute inset-0 bg-black/10"></div>
-
-        <!-- Bong bóng Khởi động (Ẩn mặc định, scale-0) -->
         <button id="start-btn" class="start-bubble relative z-10 w-40 h-40 rounded-full flex flex-col items-center justify-center gap-2 cursor-pointer transition-all duration-700 scale-0 opacity-0 group">
             <span class="font-serif text-2xl font-bold text-primary drop-shadow-sm group-hover:text-[#4FC3F7] transition-colors">Mở ra</span>
             <svg class="w-6 h-6 text-primary group-hover:text-[#4FC3F7]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -125,10 +104,8 @@
         </button>
     </div>
 
-
-    <!-- ================= MAIN CONTENT (BẢN ĐỒ WEB) ================= -->
+    <!-- ================= MAIN CONTENT ================= -->
     <div id="main-content" class="opacity-0 transition-opacity duration-1000 ease-in-out pb-20">
-        <!-- Header / Hero Section -->
         <header class="max-w-4xl mx-auto pt-16 px-6 text-center">
             <div class="inline-block mb-4 px-4 py-1.5 rounded-full glass-card text-primary font-medium text-sm flex items-center gap-2 w-max mx-auto">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
@@ -140,79 +117,127 @@
             <p class="text-textGray mb-8 max-w-lg mx-auto font-sans leading-relaxed">
                 Lưu giữ từng góc phố, từng món ngon và những ngày thong thả đi dạo cùng em bé Mỹ Mỹ ☁️
             </p>
-            <button class="bg-primary hover:bg-[#4FC3F7] text-white px-8 py-3 rounded-full font-medium transition-all transform hover:scale-105 shadow-lg shadow-primary/30 flex items-center gap-2 mx-auto">
+            <button onclick="openModal()" class="bg-primary hover:bg-[#4FC3F7] text-white px-8 py-3 rounded-full font-medium transition-all transform hover:scale-105 shadow-lg shadow-primary/30 flex items-center gap-2 mx-auto">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                 Thêm địa điểm mới
             </button>
         </header>
 
-        <!-- Filter Section -->
-        <section class="max-w-4xl mx-auto mt-12 px-6">
-            <div class="flex flex-wrap gap-3 justify-center">
-                <button class="px-5 py-2 rounded-full bg-white text-primary shadow-sm border border-transparent font-medium hover:border-primary/30 transition-colors">Tất cả</button>
-                <button class="px-5 py-2 rounded-full glass-card text-textGray hover:text-primary transition-colors">Đã đi 🌸</button>
-                <button class="px-5 py-2 rounded-full glass-card text-textGray hover:text-primary transition-colors">Sẽ đi 📌</button>
-                <button class="px-5 py-2 rounded-full glass-card text-textGray hover:text-primary transition-colors">Favorite ⭐</button>
-            </div>
-        </section>
-
-        <!-- Cards Grid -->
-        <main class="max-w-4xl mx-auto mt-10 px-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Card 1 -->
-            <article class="glass-card rounded-3xl p-4 bubble-card group cursor-pointer relative overflow-hidden">
-                <div class="h-48 rounded-2xl bg-gray-200 overflow-hidden relative mb-4">
-                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Nhà hàng" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-[#10B981] flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-[#10B981]"></span> Đã đi
-                    </div>
-                </div>
-                <div class="px-2">
-                    <div class="flex justify-between items-start mb-1">
-                        <h3 class="font-serif text-xl font-semibold text-textDark">A Mà Kitchen (Cống Quỳnh)</h3>
-                        <span class="text-sm font-medium text-primary">$$</span>
-                    </div>
-                    <p class="text-sm text-textGray flex items-center gap-1 mb-3">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        Quận 1, TP.HCM
-                    </p>
-                    <p class="text-sm text-textGray italic bg-accent/50 p-2 rounded-xl border border-white/50">
-                        "Giao ca làm thêm xong rủ em bé ăn đồ hoa luôn, vịt quay rất ưng ý 🥢"
-                    </p>
-                </div>
-            </article>
-
-            <!-- Card 2 -->
-            <article class="glass-card rounded-3xl p-4 bubble-card group cursor-pointer relative overflow-hidden">
-                <div class="h-48 rounded-2xl bg-gray-200 overflow-hidden relative mb-4">
-                    <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Quán cà phê" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-primary flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> Sẽ đi
-                    </div>
-                </div>
-                <div class="px-2">
-                    <div class="flex justify-between items-start mb-1">
-                        <h3 class="font-serif text-xl font-semibold text-textDark">Tiệm Cà phê Vườn Yên</h3>
-                        <span class="text-sm font-medium text-primary">$</span>
-                    </div>
-                    <p class="text-sm text-textGray flex items-center gap-1 mb-3">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        Quận 3, TP.HCM
-                    </p>
-                    <p class="text-sm text-textGray italic bg-accent/50 p-2 rounded-xl border border-white/50 mb-3">
-                        "Góc yên tĩnh có ánh nắng, cuối tuần mang sách giáo trình Boya ra đây ôn chung 📚☕"
-                    </p>
-                    
-                    <button onclick="markAsDone(event, this)" class="w-full mt-2 py-2 rounded-xl bg-white/60 hover:bg-white text-primary text-sm font-medium transition-colors border border-primary/20 flex items-center justify-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        Đánh dấu đã đi
-                    </button>
-                </div>
-            </article>
+        <!-- Cards Grid (Được render động bằng JS) -->
+        <main id="places-grid" class="max-w-5xl mx-auto mt-12 px-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Các địa điểm sẽ được chèn vào đây -->
         </main>
     </div>
 
-    <!-- JavaScript Xử lý Logic Video & Bong bóng -->
+    <!-- ================= MODAL THÊM ĐỊA ĐIỂM ================= -->
+    <div id="modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4">
+        <div id="modal-content" class="bg-white rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl modal-enter relative">
+            
+            <!-- Nút đóng -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <div class="p-6">
+                <h2 class="text-2xl font-serif font-bold text-textDark mb-4">Lưu lại một kỷ niệm ☁️</h2>
+                
+                <!-- Tabs loại địa điểm -->
+                <div class="flex p-1 bg-gray-100 rounded-xl mb-6">
+                    <button id="tab-food" onclick="switchTab('food')" class="flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm transition-all">Ăn uống</button>
+                    <button id="tab-homestay" onclick="switchTab('homestay')" class="flex-1 py-2 rounded-lg text-textGray font-medium text-sm hover:text-primary transition-all">Homestay / Net</button>
+                </div>
+
+                <form id="add-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                    <!-- Tên & Địa chỉ -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tên địa điểm *</label>
+                        <input type="text" id="input-name" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Địa chỉ</label>
+                        <input type="text" id="input-address" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                    </div>
+
+                    <!-- Trạng thái đi & Đánh giá -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Đã đi chưa?</label>
+                            <select id="input-visited" onchange="toggleRating()" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary">
+                                <option value="true">Đi rồi</option>
+                                <option value="false">Chưa đi</option>
+                            </select>
+                        </div>
+                        <div id="rating-container">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Đánh giá</label>
+                            <div class="flex items-center gap-1 mt-2" id="star-group">
+                                <!-- Tạo 5 sao bằng JS -->
+                                <svg onclick="setRating(1)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg onclick="setRating(2)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg onclick="setRating(3)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg onclick="setRating(4)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg onclick="setRating(5)" class="w-6 h-6 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Link ảnh -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Link hình ảnh (postimg.cc, imgur...)</label>
+                        <input type="url" id="input-image" placeholder="https://..." class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20">
+                    </div>
+
+                    <!-- ================= PHẦN ĐỘNG (Dựa vào Tab) ================= -->
+                    
+                    <!-- Dành cho Ăn Uống -->
+                    <div id="form-food-fields" class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Loại</label>
+                                <select id="input-food-type" class="w-full px-4 py-2.5 rounded-xl border border-gray-200">
+                                    <option value="Lề đường">Lề đường</option>
+                                    <option value="Nhà hàng">Nhà hàng</option>
+                                    <option value="Quán Cà Phê">Quán Cà Phê</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Hình thức</label>
+                                <select id="input-format" class="w-full px-4 py-2.5 rounded-xl border border-gray-200">
+                                    <option value="Ăn tại chỗ">Ăn tại chỗ</option>
+                                    <option value="Mang đi">Mang đi</option>
+                                    <option value="Cả hai">Cả hai</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dành cho Homestay/Net -->
+                    <div id="form-homestay-fields" class="space-y-4 hidden">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Loại</label>
+                                <select id="input-home-type" class="w-full px-4 py-2.5 rounded-xl border border-gray-200">
+                                    <option value="Homestay">Homestay</option>
+                                    <option value="Phòng Net">Phòng Net</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Giá / Đêm / Giờ</label>
+                                <input type="text" id="input-price" placeholder="VD: 500k/đêm" class="w-full px-4 py-2.5 rounded-xl border border-gray-200">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full mt-4 bg-primary hover:bg-[#4FC3F7] text-white py-3 rounded-xl font-medium transition-colors shadow-lg shadow-primary/20">
+                        Lưu vào Bản Đồ
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
     <script>
+        // --- LOGIC GIAO DIỆN KHỞI ĐỘNG (VIDEO) ---
         document.addEventListener('DOMContentLoaded', () => {
             const video = document.getElementById('bg-video');
             const startBtn = document.getElementById('start-btn');
@@ -220,12 +245,7 @@
             const mainContent = document.getElementById('main-content');
             const body = document.getElementById('body');
 
-            // 1. Khi Video kết thúc -> Hiện nút bong bóng
-            video.addEventListener('ended', () => {
-                showStartBubble();
-            });
-
-            // Dự phòng: Nếu video bị lỗi không tải được hoặc người dùng chạm màn hình trước khi hết video
+            video.addEventListener('ended', showStartBubble);
             video.addEventListener('error', showStartBubble);
             
             function showStartBubble() {
@@ -233,63 +253,252 @@
                 startBtn.classList.add('scale-100', 'opacity-100');
             }
 
-            // 2. Khi Click vào nút bong bóng -> Vỡ bong bóng & Mở Web
             startBtn.addEventListener('click', () => {
-                // Hiệu ứng bong bóng vỡ (phóng to và mờ dần)
-                startBtn.style.animation = 'none'; // Dừng hiệu ứng nổi
+                startBtn.style.animation = 'none';
                 startBtn.classList.replace('scale-100', 'scale-150');
                 startBtn.classList.replace('opacity-100', 'opacity-0');
                 
                 setTimeout(() => {
-                    // Tắt dần màn hình video
                     introScreen.style.opacity = '0';
-                    
                     setTimeout(() => {
-                        // Ẩn hẳn Intro Screen khỏi DOM
                         introScreen.style.display = 'none';
-                        
-                        // Cho phép cuộn trang lại và hiện Content chính
                         body.classList.remove('no-scroll');
                         mainContent.classList.remove('opacity-0');
                         mainContent.classList.add('opacity-100');
-                    }, 1000); // Đợi màn hình intro tắt hẳn
-                }, 300); // Đợi bong bóng vỡ xong
+                    }, 1000);
+                }, 300);
             });
+
+            // Load dữ liệu khi trang vừa tải
+            loadPlaces();
         });
 
-        // Hàm click trái tim ở card (như cũ)
-        function markAsDone(event, buttonElement) {
-            event.stopPropagation();
-            buttonElement.innerHTML = `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Đã lưu kỷ niệm!`;
-            buttonElement.classList.remove('bg-white/60', 'text-primary', 'hover:bg-white');
-            buttonElement.classList.add('bg-[#10B981]', 'text-white', 'border-transparent');
-            
-            const x = event.clientX;
-            const y = event.clientY;
+        // --- QUẢN LÝ DỮ LIỆU BẰNG LOCAL STORAGE ---
+        let places = [];
+        let currentTab = 'food';
+        let currentRating = 4;
 
-            for (let i = 0; i < 6; i++) {
-                createFloatingHeart(x, y);
+        function loadPlaces() {
+            const savedData = localStorage.getItem('myDatesData');
+            if (savedData) {
+                places = JSON.parse(savedData);
+            } else {
+                // Dữ liệu mẫu ban đầu nếu chưa có gì
+                places = [
+                    {
+                        id: 1,
+                        category: 'food',
+                        name: 'A Mà Kitchen (Cống Quỳnh)',
+                        address: 'Quận 1, TP.HCM',
+                        image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        visited: true,
+                        rating: 5,
+                        type: 'Nhà hàng',
+                        format: 'Ăn tại chỗ'
+                    },
+                    {
+                        id: 2,
+                        category: 'food',
+                        name: 'Tiệm Cà phê Vườn Yên',
+                        address: 'Quận 3, TP.HCM',
+                        image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        visited: false,
+                        rating: 0,
+                        type: 'Quán Cà Phê',
+                        format: 'Cả hai'
+                    }
+                ];
+                savePlaces(); // Lưu dữ liệu mẫu vào máy
+            }
+            renderPlaces();
+        }
+
+        function savePlaces() {
+            localStorage.setItem('myDatesData', JSON.stringify(places));
+        }
+
+        // --- RENDER GIAO DIỆN DANH SÁCH ĐỊA ĐIỂM ---
+        function renderPlaces() {
+            const grid = document.getElementById('places-grid');
+            grid.innerHTML = ''; // Xóa trắng trước khi render lại
+
+            // Đảo ngược mảng để địa điểm mới thêm hiện lên đầu
+            const reversedPlaces = [...places].reverse(); 
+
+            reversedPlaces.forEach(place => {
+                // Render sao
+                let starsHtml = '';
+                if (place.visited) {
+                    for(let i=1; i<=5; i++) {
+                        starsHtml += `<svg class="w-3.5 h-3.5 ${i <= place.rating ? 'text-yellow-400' : 'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`;
+                    }
+                } else {
+                    starsHtml = `<span class="text-xs text-gray-400 font-medium italic">Chưa đánh giá</span>`;
+                }
+
+                // Render Tag loại & format / giá
+                let extraInfoHtml = '';
+                if(place.category === 'food') {
+                    extraInfoHtml = `
+                        <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded-md text-xs font-medium">${place.type}</span>
+                        <span class="bg-blue-50 text-primary px-2 py-0.5 rounded-md text-xs font-medium">${place.format}</span>
+                    `;
+                } else {
+                    extraInfoHtml = `
+                        <span class="bg-purple-50 text-purple-600 px-2 py-0.5 rounded-md text-xs font-medium">${place.type}</span>
+                        <span class="bg-green-50 text-green-600 px-2 py-0.5 rounded-md text-xs font-medium">${place.price || 'Chưa rõ giá'}</span>
+                    `;
+                }
+                
+                // Fallback hình ảnh nếu không có link
+                const defaultImage = place.category === 'food' 
+                    ? 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                    : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+
+                const cardHtml = `
+                    <article class="glass-card rounded-3xl p-4 bubble-card group relative overflow-hidden flex flex-col">
+                        <div class="h-48 rounded-2xl bg-gray-200 overflow-hidden relative mb-4 shrink-0">
+                            <img src="${place.image || defaultImage}" alt="${place.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold ${place.visited ? 'text-[#10B981]' : 'text-primary'} flex items-center gap-1 shadow-sm">
+                                <span class="w-2 h-2 rounded-full ${place.visited ? 'bg-[#10B981]' : 'bg-primary animate-pulse'}"></span> 
+                                ${place.visited ? 'Đã đi' : 'Sẽ đi'}
+                            </div>
+                        </div>
+                        <div class="px-2 flex-1 flex flex-col">
+                            <h3 class="font-serif text-xl font-semibold text-textDark leading-tight mb-1">${place.name}</h3>
+                            <p class="text-sm text-textGray flex items-center gap-1 mb-2">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                                ${place.address || 'Chưa cập nhật địa chỉ'}
+                            </p>
+                            
+                            <div class="flex items-center gap-2 mb-3 mt-auto">
+                                ${extraInfoHtml}
+                            </div>
+                            
+                            <div class="flex justify-between items-center bg-white/50 p-2.5 rounded-xl border border-white">
+                                <div class="flex gap-1 items-center">
+                                    ${starsHtml}
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                `;
+                grid.innerHTML += cardHtml;
+            });
+        }
+
+        // --- MODAL LOGIC ---
+        function openModal() {
+            const overlay = document.getElementById('modal-overlay');
+            const content = document.getElementById('modal-content');
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+            
+            // Trigger animation
+            content.classList.remove('modal-leave', 'modal-leave-active');
+            content.classList.add('modal-enter', 'modal-enter-active');
+            setTimeout(() => {
+                content.classList.remove('modal-enter', 'modal-enter-active');
+            }, 300);
+        }
+
+        function closeModal() {
+            const overlay = document.getElementById('modal-overlay');
+            const content = document.getElementById('modal-content');
+            
+            content.classList.add('modal-leave-active');
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
+                content.classList.remove('modal-leave-active');
+                // Reset form khi đóng
+                document.getElementById('add-form').reset();
+                setRating(4); 
+                toggleRating();
+            }, 200);
+        }
+
+        // --- FORM TABS LOGIC ---
+        function switchTab(tab) {
+            currentTab = tab;
+            const btnFood = document.getElementById('tab-food');
+            const btnHome = document.getElementById('tab-homestay');
+            const foodFields = document.getElementById('form-food-fields');
+            const homeFields = document.getElementById('form-homestay-fields');
+
+            if(tab === 'food') {
+                btnFood.className = "flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm transition-all";
+                btnHome.className = "flex-1 py-2 rounded-lg text-textGray font-medium text-sm hover:text-primary transition-all";
+                foodFields.classList.remove('hidden');
+                homeFields.classList.add('hidden');
+            } else {
+                btnHome.className = "flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm transition-all";
+                btnFood.className = "flex-1 py-2 rounded-lg text-textGray font-medium text-sm hover:text-primary transition-all";
+                homeFields.classList.remove('hidden');
+                foodFields.classList.add('hidden');
             }
         }
 
-        function createFloatingHeart(x, y) {
-            const heart = document.createElement('div');
-            heart.classList.add('floating-heart');
-            heart.innerHTML = `<svg class="w-6 h-6 text-pinkLight fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>`;
-            
-            const offsetX = (Math.random() - 0.5) * 50;
-            heart.style.left = `${x + offsetX}px`;
-            heart.style.top = `${y}px`;
-            
-            const colors = ['#A5D8FF', '#FFD6E0', '#5B9BFF'];
-            heart.querySelector('svg').classList.remove('text-pinkLight');
-            heart.querySelector('svg').style.color = colors[Math.floor(Math.random() * colors.length)];
+        // --- RATING LOGIC ---
+        function setRating(val) {
+            if(document.getElementById('input-visited').value === 'false') return; // Chưa đi không cho đánh giá
+            currentRating = val;
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if(index < val) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
 
-            document.body.appendChild(heart);
+        function toggleRating() {
+            const isVisited = document.getElementById('input-visited').value === 'true';
+            const ratingContainer = document.getElementById('rating-container');
+            const stars = document.querySelectorAll('.star');
+            
+            if(isVisited) {
+                ratingContainer.style.opacity = '1';
+                setRating(4); // Mặc định 4 sao
+            } else {
+                ratingContainer.style.opacity = '0.4';
+                currentRating = 0;
+                stars.forEach(s => s.classList.remove('active'));
+            }
+        }
 
-            setTimeout(() => {
-                heart.remove();
-            }, 1500);
+        // --- XỬ LÝ LƯU FORM ---
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const isVisited = document.getElementById('input-visited').value === 'true';
+            
+            // Tạo Object lưu trữ dữ liệu
+            const newPlace = {
+                id: Date.now(),
+                category: currentTab,
+                name: document.getElementById('input-name').value,
+                address: document.getElementById('input-address').value,
+                image: document.getElementById('input-image').value,
+                visited: isVisited,
+                rating: isVisited ? currentRating : 0,
+            };
+
+            // Lấy thêm trường riêng biệt tùy Tab
+            if(currentTab === 'food') {
+                newPlace.type = document.getElementById('input-food-type').value;
+                newPlace.format = document.getElementById('input-format').value;
+            } else {
+                newPlace.type = document.getElementById('input-home-type').value;
+                newPlace.price = document.getElementById('input-price').value;
+            }
+
+            // Thêm vào mảng, lưu vào LocalStorage và Render lại web
+            places.push(newPlace);
+            savePlaces();
+            renderPlaces();
+            closeModal();
         }
     </script>
 </body>
