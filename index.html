@@ -51,7 +51,7 @@
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
         }
 
-        .bubble-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .bubble-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
         .bubble-card:hover {
             transform: scale(1.03) translateY(-5px);
             box-shadow: 0 20px 40px rgba(91, 155, 255, 0.15);
@@ -83,9 +83,10 @@
         ::-webkit-scrollbar-thumb:hover { background: #5B9BFF; }
         .no-scroll { overflow: hidden; height: 100vh; }
         
-        /* Star Rating */
         .star { cursor: pointer; color: #cbd5e1; transition: color 0.2s; }
         .star.active { color: #fbbf24; }
+        .star-view { color: #cbd5e1; }
+        .star-view.active { color: #fbbf24; }
     </style>
 </head>
 <body class="text-textDark antialiased no-scroll" id="body">
@@ -117,48 +118,99 @@
             <p class="text-textGray mb-8 max-w-lg mx-auto font-sans leading-relaxed">
                 Lưu giữ từng góc phố, từng món ngon và những ngày thong thả đi dạo cùng em bé Mỹ Mỹ ☁️
             </p>
-            <button onclick="openModal()" class="bg-primary hover:bg-[#4FC3F7] text-white px-8 py-3 rounded-full font-medium transition-all transform hover:scale-105 shadow-lg shadow-primary/30 flex items-center gap-2 mx-auto">
+            <button onclick="openFormModal()" class="bg-primary hover:bg-[#4FC3F7] text-white px-8 py-3 rounded-full font-medium transition-all transform hover:scale-105 shadow-lg shadow-primary/30 flex items-center gap-2 mx-auto">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                 Thêm địa điểm mới
             </button>
         </header>
 
-        <!-- Cards Grid (Được render động bằng JS) -->
-        <main id="places-grid" class="max-w-5xl mx-auto mt-12 px-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Các địa điểm sẽ được chèn vào đây -->
+        <main id="places-grid" class="max-w-5xl mx-auto mt-12 px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Render động bằng JS -->
         </main>
     </div>
 
-    <!-- ================= MODAL THÊM ĐỊA ĐIỂM ================= -->
-    <div id="modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4">
-        <div id="modal-content" class="bg-white rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl modal-enter relative">
-            
-            <!-- Nút đóng -->
-            <button onclick="closeModal()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
+    <!-- ================= MODAL XEM CHI TIẾT ================= -->
+    <div id="view-modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4">
+        <div id="view-modal-content" class="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl modal-enter relative">
+            <button onclick="closeViewModal()" class="absolute top-4 right-4 z-10 p-2 bg-black/20 text-white backdrop-blur-md rounded-full hover:bg-black/40 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <!-- Ảnh bìa lớn -->
+            <div class="h-56 bg-gray-200 w-full relative">
+                <img id="view-image" src="" alt="" class="w-full h-full object-cover">
+                <div id="view-status-badge" class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1 shadow-sm">
+                    <!-- Trạng thái (Đã đi/Sẽ đi) update bằng JS -->
+                </div>
+            </div>
+
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-2">
+                    <h2 id="view-name" class="text-2xl font-serif font-bold text-textDark">Tên địa điểm</h2>
+                </div>
+                
+                <p id="view-address" class="text-sm text-textGray flex items-center gap-1 mb-4">
+                    <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                    <span>Địa chỉ chi tiết</span>
+                </p>
+
+                <div class="bg-accent/30 rounded-2xl p-4 mb-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs text-textGray mb-1">Loại hình</p>
+                            <p id="view-type" class="font-medium text-sm text-textDark">Nhà hàng</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-textGray mb-1" id="view-extra-label">Hình thức / Giá</p>
+                            <p id="view-extra-value" class="font-medium text-sm text-textDark">Ăn tại chỗ</p>
+                        </div>
+                        <div class="col-span-2">
+                            <p class="text-xs text-textGray mb-1">Đánh giá của tụi mình</p>
+                            <div class="flex items-center gap-1" id="view-stars">
+                                <!-- Stars render by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <button onclick="editCurrentPlace()" class="flex-1 py-2.5 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 font-medium transition-colors flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        Chỉnh sửa
+                    </button>
+                    <button onclick="deleteCurrentPlace()" class="py-2.5 px-4 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 font-medium transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL THÊM / SỬA ĐỊA ĐIỂM ================= -->
+    <div id="form-modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4">
+        <div id="form-modal-content" class="bg-white rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl modal-enter relative">
+            <button onclick="closeFormModal()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
                 <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
 
             <div class="p-6">
-                <h2 class="text-2xl font-serif font-bold text-textDark mb-4">Lưu lại một kỷ niệm ☁️</h2>
+                <h2 id="form-title" class="text-2xl font-serif font-bold text-textDark mb-4">Lưu lại một kỷ niệm ☁️</h2>
                 
-                <!-- Tabs loại địa điểm -->
                 <div class="flex p-1 bg-gray-100 rounded-xl mb-6">
                     <button id="tab-food" onclick="switchTab('food')" class="flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm transition-all">Ăn uống</button>
                     <button id="tab-homestay" onclick="switchTab('homestay')" class="flex-1 py-2 rounded-lg text-textGray font-medium text-sm hover:text-primary transition-all">Homestay / Net</button>
                 </div>
 
                 <form id="add-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
-                    <!-- Tên & Địa chỉ -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Tên địa điểm *</label>
-                        <input type="text" id="input-name" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                        <input type="text" id="input-name" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Địa chỉ</label>
-                        <input type="text" id="input-address" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                        <input type="text" id="input-address" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20">
                     </div>
 
-                    <!-- Trạng thái đi & Đánh giá -->
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Đã đi chưa?</label>
@@ -170,7 +222,6 @@
                         <div id="rating-container">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Đánh giá</label>
                             <div class="flex items-center gap-1 mt-2" id="star-group">
-                                <!-- Tạo 5 sao bằng JS -->
                                 <svg onclick="setRating(1)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                                 <svg onclick="setRating(2)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                                 <svg onclick="setRating(3)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
@@ -180,15 +231,12 @@
                         </div>
                     </div>
 
-                    <!-- Link ảnh -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Link hình ảnh (postimg.cc, imgur...)</label>
-                        <input type="url" id="input-image" placeholder="https://..." class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Link hình ảnh (Lấy dòng Liên kết trực tiếp)</label>
+                        <input type="url" id="input-image" placeholder="https://i.postimg.cc/..." class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20">
                     </div>
 
-                    <!-- ================= PHẦN ĐỘNG (Dựa vào Tab) ================= -->
-                    
-                    <!-- Dành cho Ăn Uống -->
+                    <!-- Fields for Food -->
                     <div id="form-food-fields" class="space-y-4">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
@@ -210,7 +258,7 @@
                         </div>
                     </div>
 
-                    <!-- Dành cho Homestay/Net -->
+                    <!-- Fields for Homestay -->
                     <div id="form-homestay-fields" class="space-y-4 hidden">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
@@ -227,7 +275,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full mt-4 bg-primary hover:bg-[#4FC3F7] text-white py-3 rounded-xl font-medium transition-colors shadow-lg shadow-primary/20">
+                    <button type="submit" id="btn-submit" class="w-full mt-4 bg-primary hover:bg-[#4FC3F7] text-white py-3 rounded-xl font-medium transition-colors shadow-lg shadow-primary/20">
                         Lưu vào Bản Đồ
                     </button>
                 </form>
@@ -235,9 +283,8 @@
         </div>
     </div>
 
-    <!-- JavaScript Logic -->
     <script>
-        // --- LOGIC GIAO DIỆN KHỞI ĐỘNG (VIDEO) ---
+        // --- INTRO SCREEN LOGIC ---
         document.addEventListener('DOMContentLoaded', () => {
             const video = document.getElementById('bg-video');
             const startBtn = document.getElementById('start-btn');
@@ -269,74 +316,45 @@
                 }, 300);
             });
 
-            // Load dữ liệu khi trang vừa tải
             loadPlaces();
         });
 
-        // --- QUẢN LÝ DỮ LIỆU BẰNG LOCAL STORAGE ---
+        // --- DATA STATE ---
         let places = [];
         let currentTab = 'food';
         let currentRating = 4;
+        let editingId = null; // Biến cờ theo dõi xem đang Sửa hay Thêm mới
+        let viewingId = null; // Biến cờ theo dõi xem đang Xem địa điểm nào
 
         function loadPlaces() {
-            const savedData = localStorage.getItem('myDatesData');
+            const savedData = localStorage.getItem('myDatesDataV2');
             if (savedData) {
                 places = JSON.parse(savedData);
-            } else {
-                // Dữ liệu mẫu ban đầu nếu chưa có gì
-                places = [
-                    {
-                        id: 1,
-                        category: 'food',
-                        name: 'A Mà Kitchen (Cống Quỳnh)',
-                        address: 'Quận 1, TP.HCM',
-                        image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                        visited: true,
-                        rating: 5,
-                        type: 'Nhà hàng',
-                        format: 'Ăn tại chỗ'
-                    },
-                    {
-                        id: 2,
-                        category: 'food',
-                        name: 'Tiệm Cà phê Vườn Yên',
-                        address: 'Quận 3, TP.HCM',
-                        image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                        visited: false,
-                        rating: 0,
-                        type: 'Quán Cà Phê',
-                        format: 'Cả hai'
-                    }
-                ];
-                savePlaces(); // Lưu dữ liệu mẫu vào máy
             }
             renderPlaces();
         }
 
         function savePlaces() {
-            localStorage.setItem('myDatesData', JSON.stringify(places));
+            localStorage.setItem('myDatesDataV2', JSON.stringify(places));
         }
 
-        // --- RENDER GIAO DIỆN DANH SÁCH ĐỊA ĐIỂM ---
+        // --- RENDER GIAO DIỆN CHÍNH ---
         function renderPlaces() {
             const grid = document.getElementById('places-grid');
-            grid.innerHTML = ''; // Xóa trắng trước khi render lại
+            grid.innerHTML = ''; 
 
-            // Đảo ngược mảng để địa điểm mới thêm hiện lên đầu
             const reversedPlaces = [...places].reverse(); 
 
             reversedPlaces.forEach(place => {
-                // Render sao
                 let starsHtml = '';
                 if (place.visited) {
                     for(let i=1; i<=5; i++) {
                         starsHtml += `<svg class="w-3.5 h-3.5 ${i <= place.rating ? 'text-yellow-400' : 'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`;
                     }
                 } else {
-                    starsHtml = `<span class="text-xs text-gray-400 font-medium italic">Chưa đánh giá</span>`;
+                    starsHtml = `<span class="text-xs text-gray-400 font-medium italic">Chưa đi</span>`;
                 }
 
-                // Render Tag loại & format / giá
                 let extraInfoHtml = '';
                 if(place.category === 'food') {
                     extraInfoHtml = `
@@ -346,29 +364,28 @@
                 } else {
                     extraInfoHtml = `
                         <span class="bg-purple-50 text-purple-600 px-2 py-0.5 rounded-md text-xs font-medium">${place.type}</span>
-                        <span class="bg-green-50 text-green-600 px-2 py-0.5 rounded-md text-xs font-medium">${place.price || 'Chưa rõ giá'}</span>
                     `;
                 }
                 
-                // Fallback hình ảnh nếu không có link
                 const defaultImage = place.category === 'food' 
                     ? 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
                     : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
 
+                // Thêm sự kiện onclick="openViewModal(place.id)" cho Card
                 const cardHtml = `
-                    <article class="glass-card rounded-3xl p-4 bubble-card group relative overflow-hidden flex flex-col">
+                    <article onclick="openViewModal(${place.id})" class="glass-card rounded-3xl p-4 bubble-card group relative overflow-hidden flex flex-col">
                         <div class="h-48 rounded-2xl bg-gray-200 overflow-hidden relative mb-4 shrink-0">
                             <img src="${place.image || defaultImage}" alt="${place.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold ${place.visited ? 'text-[#10B981]' : 'text-primary'} flex items-center gap-1 shadow-sm">
-                                <span class="w-2 h-2 rounded-full ${place.visited ? 'bg-[#10B981]' : 'bg-primary animate-pulse'}"></span> 
+                                <span class="w-2 h-2 rounded-full ${place.visited ? 'bg-[#10B981]' : 'bg-primary'}"></span> 
                                 ${place.visited ? 'Đã đi' : 'Sẽ đi'}
                             </div>
                         </div>
                         <div class="px-2 flex-1 flex flex-col">
                             <h3 class="font-serif text-xl font-semibold text-textDark leading-tight mb-1">${place.name}</h3>
-                            <p class="text-sm text-textGray flex items-center gap-1 mb-2">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
-                                ${place.address || 'Chưa cập nhật địa chỉ'}
+                            <p class="text-sm text-textGray flex items-center gap-1 mb-2 truncate">
+                                <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                                ${place.address || 'Chưa cập nhật'}
                             </p>
                             
                             <div class="flex items-center gap-2 mb-3 mt-auto">
@@ -387,38 +404,149 @@
             });
         }
 
-        // --- MODAL LOGIC ---
-        function openModal() {
-            const overlay = document.getElementById('modal-overlay');
-            const content = document.getElementById('modal-content');
+        // --- MODAL XEM CHI TIẾT ĐỊA ĐIỂM ---
+        function openViewModal(id) {
+            const place = places.find(p => p.id === id);
+            if(!place) return;
+            viewingId = id; // Lưu lại ID đang xem
+
+            document.getElementById('view-name').innerText = place.name;
+            document.getElementById('view-address').innerHTML = `<svg class="w-4 h-4 text-primary shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg> <span>${place.address || 'Chưa cập nhật địa chỉ'}</span>`;
+            
+            const defaultImage = place.category === 'food' 
+                ? 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+            document.getElementById('view-image').src = place.image || defaultImage;
+
+            const badge = document.getElementById('view-status-badge');
+            if (place.visited) {
+                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-[#10B981]"></span><span class="text-[#10B981]">Đã đi</span>`;
+            } else {
+                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-primary"></span><span class="text-primary">Sẽ đi</span>`;
+            }
+
+            document.getElementById('view-type').innerText = place.type;
+            
+            if (place.category === 'food') {
+                document.getElementById('view-extra-label').innerText = "Hình thức";
+                document.getElementById('view-extra-value').innerText = place.format;
+            } else {
+                document.getElementById('view-extra-label').innerText = "Mức giá";
+                document.getElementById('view-extra-value').innerText = place.price || 'Chưa có thông tin';
+            }
+
+            // Render Stars cho view
+            let starsHtml = '';
+            if (place.visited) {
+                for(let i=1; i<=5; i++) {
+                    starsHtml += `<svg class="w-5 h-5 ${i <= place.rating ? 'text-yellow-400' : 'text-gray-200'}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`;
+                }
+            } else {
+                starsHtml = `<span class="text-sm text-gray-400 italic">Chưa có đánh giá</span>`;
+            }
+            document.getElementById('view-stars').innerHTML = starsHtml;
+
+            // Hiển thị modal
+            const overlay = document.getElementById('view-modal-overlay');
+            const content = document.getElementById('view-modal-content');
             overlay.classList.remove('hidden');
             overlay.classList.add('flex');
-            
-            // Trigger animation
             content.classList.remove('modal-leave', 'modal-leave-active');
             content.classList.add('modal-enter', 'modal-enter-active');
-            setTimeout(() => {
-                content.classList.remove('modal-enter', 'modal-enter-active');
-            }, 300);
+            setTimeout(() => { content.classList.remove('modal-enter', 'modal-enter-active'); }, 300);
         }
 
-        function closeModal() {
-            const overlay = document.getElementById('modal-overlay');
-            const content = document.getElementById('modal-content');
-            
+        function closeViewModal() {
+            const overlay = document.getElementById('view-modal-overlay');
+            const content = document.getElementById('view-modal-content');
             content.classList.add('modal-leave-active');
             setTimeout(() => {
                 overlay.classList.add('hidden');
                 overlay.classList.remove('flex');
                 content.classList.remove('modal-leave-active');
-                // Reset form khi đóng
-                document.getElementById('add-form').reset();
-                setRating(4); 
-                toggleRating();
+                viewingId = null;
             }, 200);
         }
 
-        // --- FORM TABS LOGIC ---
+        // --- NÚT CHỈNH SỬA & XÓA TRONG VIEW MODAL ---
+        function editCurrentPlace() {
+            const place = places.find(p => p.id === viewingId);
+            if(!place) return;
+            
+            closeViewModal(); // Đóng form xem
+
+            // Đặt biến cờ sang chế độ sửa
+            editingId = place.id; 
+            document.getElementById('form-title').innerText = "Chỉnh sửa kỷ niệm ✏️";
+            document.getElementById('btn-submit').innerText = "Cập nhật";
+
+            // Điền dữ liệu cũ vào Form
+            switchTab(place.category);
+            document.getElementById('input-name').value = place.name;
+            document.getElementById('input-address').value = place.address;
+            document.getElementById('input-image').value = place.image;
+            document.getElementById('input-visited').value = place.visited ? "true" : "false";
+            
+            if (place.category === 'food') {
+                document.getElementById('input-food-type').value = place.type;
+                document.getElementById('input-format').value = place.format;
+            } else {
+                document.getElementById('input-home-type').value = place.type;
+                document.getElementById('input-price').value = place.price;
+            }
+
+            toggleRating();
+            if(place.visited) setRating(place.rating);
+
+            // Mở form modal chậm một nhịp cho mượt
+            setTimeout(() => {
+                openFormModalOnlyUI();
+            }, 300);
+        }
+
+        function deleteCurrentPlace() {
+            if(confirm("Bạn có chắc muốn xóa kỷ niệm này không?")) {
+                places = places.filter(p => p.id !== viewingId);
+                savePlaces();
+                renderPlaces();
+                closeViewModal();
+            }
+        }
+
+        // --- MODAL THÊM / SỬA LOGIC UI ---
+        function openFormModal() {
+            // Khi nhấn nút "Thêm mới" ở ngoài trang chủ -> Reset form
+            editingId = null;
+            document.getElementById('add-form').reset();
+            document.getElementById('form-title').innerText = "Lưu lại một kỷ niệm ☁️";
+            document.getElementById('btn-submit').innerText = "Lưu vào Bản Đồ";
+            switchTab('food');
+            setRating(4); 
+            toggleRating();
+            openFormModalOnlyUI();
+        }
+
+        function openFormModalOnlyUI() {
+            const overlay = document.getElementById('form-modal-overlay');
+            const content = document.getElementById('form-modal-content');
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+            content.classList.remove('modal-leave', 'modal-leave-active');
+            content.classList.add('modal-enter', 'modal-enter-active');
+            setTimeout(() => { content.classList.remove('modal-enter', 'modal-enter-active'); }, 300);
+        }
+
+        function closeFormModal() {
+            const overlay = document.getElementById('form-modal-overlay');
+            const content = document.getElementById('form-modal-content');
+            content.classList.add('modal-leave-active');
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
+                content.classList.remove('modal-leave-active');
+            }, 200);
+        }
+
         function switchTab(tab) {
             currentTab = tab;
             const btnFood = document.getElementById('tab-food');
@@ -439,44 +567,37 @@
             }
         }
 
-        // --- RATING LOGIC ---
         function setRating(val) {
-            if(document.getElementById('input-visited').value === 'false') return; // Chưa đi không cho đánh giá
+            if(document.getElementById('input-visited').value === 'false') return;
             currentRating = val;
-            const stars = document.querySelectorAll('.star');
+            const stars = document.querySelectorAll('#star-group .star');
             stars.forEach((star, index) => {
-                if(index < val) {
-                    star.classList.add('active');
-                } else {
-                    star.classList.remove('active');
-                }
+                if(index < val) star.classList.add('active');
+                else star.classList.remove('active');
             });
         }
 
         function toggleRating() {
             const isVisited = document.getElementById('input-visited').value === 'true';
             const ratingContainer = document.getElementById('rating-container');
-            const stars = document.querySelectorAll('.star');
+            const stars = document.querySelectorAll('#star-group .star');
             
             if(isVisited) {
                 ratingContainer.style.opacity = '1';
-                setRating(4); // Mặc định 4 sao
+                if(currentRating === 0) setRating(4); // Mặc định 4 nếu chưa có
+                else setRating(currentRating);
             } else {
                 ratingContainer.style.opacity = '0.4';
-                currentRating = 0;
                 stars.forEach(s => s.classList.remove('active'));
             }
         }
 
-        // --- XỬ LÝ LƯU FORM ---
+        // --- XỬ LÝ LƯU (SUBMIT) ---
         function handleFormSubmit(e) {
             e.preventDefault();
-            
             const isVisited = document.getElementById('input-visited').value === 'true';
             
-            // Tạo Object lưu trữ dữ liệu
-            const newPlace = {
-                id: Date.now(),
+            const newPlaceData = {
                 category: currentTab,
                 name: document.getElementById('input-name').value,
                 address: document.getElementById('input-address').value,
@@ -485,20 +606,29 @@
                 rating: isVisited ? currentRating : 0,
             };
 
-            // Lấy thêm trường riêng biệt tùy Tab
             if(currentTab === 'food') {
-                newPlace.type = document.getElementById('input-food-type').value;
-                newPlace.format = document.getElementById('input-format').value;
+                newPlaceData.type = document.getElementById('input-food-type').value;
+                newPlaceData.format = document.getElementById('input-format').value;
             } else {
-                newPlace.type = document.getElementById('input-home-type').value;
-                newPlace.price = document.getElementById('input-price').value;
+                newPlaceData.type = document.getElementById('input-home-type').value;
+                newPlaceData.price = document.getElementById('input-price').value;
             }
 
-            // Thêm vào mảng, lưu vào LocalStorage và Render lại web
-            places.push(newPlace);
+            if (editingId) {
+                // ĐANG CHỈNH SỬA
+                const index = places.findIndex(p => p.id === editingId);
+                if(index !== -1) {
+                    places[index] = { ...places[index], ...newPlaceData };
+                }
+            } else {
+                // THÊM MỚI
+                newPlaceData.id = Date.now();
+                places.push(newPlaceData);
+            }
+
             savePlaces();
             renderPlaces();
-            closeModal();
+            closeFormModal();
         }
     </script>
 </body>
