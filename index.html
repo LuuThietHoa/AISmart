@@ -34,13 +34,16 @@
         }
     </script>
 
-    <!-- Custom Styles cho Glassmorphism và Animation -->
+    <!-- Custom Styles -->
     <style>
         body {
             background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 50%, #7DD3FC 100%);
             min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
         }
         
+        /* Hiệu ứng Glassmorphism */
         .glass-card {
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(12px);
@@ -59,6 +62,24 @@
             border-color: rgba(91, 155, 255, 0.3);
         }
 
+        /* Nút Bong bóng khởi động (Start Bubble) */
+        .start-bubble {
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.2));
+            box-shadow: 
+                inset 0 0 20px rgba(255,255,255,0.8),
+                0 0 20px rgba(255,255,255,0.4),
+                0 15px 30px rgba(91, 155, 255, 0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.6);
+            animation: floatBubble 3s ease-in-out infinite;
+        }
+
+        @keyframes floatBubble {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-15px) scale(1.05); }
+        }
+
+        /* Trái tim bay lúc đánh dấu đã đi */
         .floating-heart {
             position: absolute;
             animation: floatUp 1.5s ease-out forwards;
@@ -71,121 +92,181 @@
             100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
         }
 
-        /* Tùy chỉnh thanh scroll */
+        /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #A5D8FF; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #5B9BFF; }
+        
+        /* Ẩn thanh cuộn lúc Intro đang chạy */
+        .no-scroll { overflow: hidden; height: 100vh; }
     </style>
 </head>
-<body class="text-textDark antialiased pb-20 relative overflow-x-hidden">
+<body class="text-textDark antialiased no-scroll" id="body">
 
-    <!-- Header / Hero Section -->
-    <header class="max-w-4xl mx-auto pt-16 px-6 text-center">
-        <div class="inline-block mb-4 px-4 py-1.5 rounded-full glass-card text-primary font-medium text-sm flex items-center gap-2 w-max mx-auto">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
-            Nhật ký Date của tụi mình
-        </div>
-        <h1 class="font-serif text-4xl md:text-5xl font-semibold mb-4 text-textDark">
-            Bản đồ những <br/> <span class="text-primary italic">khoảnh khắc xanh</span>
-        </h1>
-        <p class="text-textGray mb-8 max-w-lg mx-auto font-sans leading-relaxed">
-            Lưu giữ từng góc phố, từng món ngon và những ngày thong thả đi dạo cùng em bé Mỹ Mỹ ☁️
-        </p>
-        <button class="bg-primary hover:bg-[#4FC3F7] text-white px-8 py-3 rounded-full font-medium transition-all transform hover:scale-105 shadow-lg shadow-primary/30 flex items-center gap-2 mx-auto">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            Thêm địa điểm mới
-        </button>
-    </header>
-
-    <!-- Filter Section -->
-    <section class="max-w-4xl mx-auto mt-12 px-6">
-        <div class="flex flex-wrap gap-3 justify-center">
-            <button class="px-5 py-2 rounded-full bg-white text-primary shadow-sm border border-transparent font-medium hover:border-primary/30 transition-colors">Tất cả</button>
-            <button class="px-5 py-2 rounded-full glass-card text-textGray hover:text-primary transition-colors">Đã đi 🌸</button>
-            <button class="px-5 py-2 rounded-full glass-card text-textGray hover:text-primary transition-colors">Sẽ đi 📌</button>
-            <button class="px-5 py-2 rounded-full glass-card text-textGray hover:text-primary transition-colors">Favorite ⭐</button>
-        </div>
-    </section>
-
-    <!-- Cards Grid -->
-    <main class="max-w-4xl mx-auto mt-10 px-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- ================= INTRO SCREEN (VIDEO NỀN) ================= -->
+    <div id="intro-screen" class="fixed inset-0 z-[100] flex items-center justify-center bg-[#E0F2FE] transition-all duration-1000 ease-in-out">
+        <!-- Video nền -->
+        <video id="bg-video" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000" muted playsinline autoplay>
+            <source src="nenweb.mp4" type="video/mp4">
+            <!-- Nếu video lỗi, thông báo mờ -->
+            Trình duyệt của bạn không hỗ trợ thẻ video.
+        </video>
         
-        <!-- Card 1: A Mà Kitchen -->
-        <article class="glass-card rounded-3xl p-4 bubble-card group cursor-pointer relative overflow-hidden">
-            <div class="h-48 rounded-2xl bg-gray-200 overflow-hidden relative mb-4">
-                <!-- Chỗ này thực tế sẽ gọi ảnh từ URL hoặc database -->
-                <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Nhà hàng" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                <div class="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-[#10B981] flex items-center gap-1">
-                    <span class="w-2 h-2 rounded-full bg-[#10B981]"></span> Đã đi
-                </div>
-                <div class="absolute top-3 right-3 bg-white/80 backdrop-blur-sm p-1.5 rounded-full text-pink-500">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
-                </div>
-            </div>
-            <div class="px-2">
-                <div class="flex justify-between items-start mb-1">
-                    <h3 class="font-serif text-xl font-semibold text-textDark">A Mà Kitchen (Cống Quỳnh)</h3>
-                    <span class="text-sm font-medium text-primary">$$</span>
-                </div>
-                <p class="text-sm text-textGray flex items-center gap-1 mb-3">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    Quận 1, TP.HCM
-                </p>
-                <p class="text-sm text-textGray italic bg-accent/50 p-2 rounded-xl border border-white/50">
-                    "Giao ca làm thêm xong rủ em bé ăn đồ hoa luôn, vịt quay rất ưng ý 🥢"
-                </p>
-            </div>
-        </article>
+        <!-- Overlay làm mờ video một chút để nút nổi bật hơn -->
+        <div class="absolute inset-0 bg-black/10"></div>
 
-        <!-- Card 2: Cà phê học tiếng Trung -->
-        <article class="glass-card rounded-3xl p-4 bubble-card group cursor-pointer relative overflow-hidden">
-            <div class="h-48 rounded-2xl bg-gray-200 overflow-hidden relative mb-4">
-                <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Quán cà phê" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                <div class="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-primary flex items-center gap-1">
-                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> Sẽ đi
-                </div>
-            </div>
-            <div class="px-2">
-                <div class="flex justify-between items-start mb-1">
-                    <h3 class="font-serif text-xl font-semibold text-textDark">Tiệm Cà phê Vườn Yên</h3>
-                    <span class="text-sm font-medium text-primary">$</span>
-                </div>
-                <p class="text-sm text-textGray flex items-center gap-1 mb-3">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    Quận 3, TP.HCM
-                </p>
-                <p class="text-sm text-textGray italic bg-accent/50 p-2 rounded-xl border border-white/50 mb-3">
-                    "Góc yên tĩnh có ánh nắng, cuối tuần mang sách giáo trình Boya ra đây ôn chung 📚☕"
-                </p>
-                
-                <!-- Nút chuyển trạng thái tương tác -->
-                <button onclick="markAsDone(event, this)" class="w-full mt-2 py-2 rounded-xl bg-white/60 hover:bg-white text-primary text-sm font-medium transition-colors border border-primary/20 flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                    Đánh dấu đã đi
-                </button>
-            </div>
-        </article>
+        <!-- Bong bóng Khởi động (Ẩn mặc định, scale-0) -->
+        <button id="start-btn" class="start-bubble relative z-10 w-40 h-40 rounded-full flex flex-col items-center justify-center gap-2 cursor-pointer transition-all duration-700 scale-0 opacity-0 group">
+            <span class="font-serif text-2xl font-bold text-primary drop-shadow-sm group-hover:text-[#4FC3F7] transition-colors">Mở ra</span>
+            <svg class="w-6 h-6 text-primary group-hover:text-[#4FC3F7]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+        </button>
+    </div>
 
-    </main>
 
-    <!-- JavaScript cho tương tác nhẹ nhàng (Micro-interactions) -->
+    <!-- ================= MAIN CONTENT (BẢN ĐỒ WEB) ================= -->
+    <div id="main-content" class="opacity-0 transition-opacity duration-1000 ease-in-out pb-20">
+        <!-- Header / Hero Section -->
+        <header class="max-w-4xl mx-auto pt-16 px-6 text-center">
+            <div class="inline-block mb-4 px-4 py-1.5 rounded-full glass-card text-primary font-medium text-sm flex items-center gap-2 w-max mx-auto">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
+                Nhật ký Date của tụi mình
+            </div>
+            <h1 class="font-serif text-4xl md:text-5xl font-semibold mb-4 text-textDark">
+                Bản đồ những <br/> <span class="text-primary italic">khoảnh khắc xanh</span>
+            </h1>
+            <p class="text-textGray mb-8 max-w-lg mx-auto font-sans leading-relaxed">
+                Lưu giữ từng góc phố, từng món ngon và những ngày thong thả đi dạo cùng em bé Mỹ Mỹ ☁️
+            </p>
+            <button class="bg-primary hover:bg-[#4FC3F7] text-white px-8 py-3 rounded-full font-medium transition-all transform hover:scale-105 shadow-lg shadow-primary/30 flex items-center gap-2 mx-auto">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                Thêm địa điểm mới
+            </button>
+        </header>
+
+        <!-- Filter Section -->
+        <section class="max-w-4xl mx-auto mt-12 px-6">
+            <div class="flex flex-wrap gap-3 justify-center">
+                <button class="px-5 py-2 rounded-full bg-white text-primary shadow-sm border border-transparent font-medium hover:border-primary/30 transition-colors">Tất cả</button>
+                <button class="px-5 py-2 rounded-full glass-card text-textGray hover:text-primary transition-colors">Đã đi 🌸</button>
+                <button class="px-5 py-2 rounded-full glass-card text-textGray hover:text-primary transition-colors">Sẽ đi 📌</button>
+                <button class="px-5 py-2 rounded-full glass-card text-textGray hover:text-primary transition-colors">Favorite ⭐</button>
+            </div>
+        </section>
+
+        <!-- Cards Grid -->
+        <main class="max-w-4xl mx-auto mt-10 px-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Card 1 -->
+            <article class="glass-card rounded-3xl p-4 bubble-card group cursor-pointer relative overflow-hidden">
+                <div class="h-48 rounded-2xl bg-gray-200 overflow-hidden relative mb-4">
+                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Nhà hàng" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-[#10B981] flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-[#10B981]"></span> Đã đi
+                    </div>
+                </div>
+                <div class="px-2">
+                    <div class="flex justify-between items-start mb-1">
+                        <h3 class="font-serif text-xl font-semibold text-textDark">A Mà Kitchen (Cống Quỳnh)</h3>
+                        <span class="text-sm font-medium text-primary">$$</span>
+                    </div>
+                    <p class="text-sm text-textGray flex items-center gap-1 mb-3">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        Quận 1, TP.HCM
+                    </p>
+                    <p class="text-sm text-textGray italic bg-accent/50 p-2 rounded-xl border border-white/50">
+                        "Giao ca làm thêm xong rủ em bé ăn đồ hoa luôn, vịt quay rất ưng ý 🥢"
+                    </p>
+                </div>
+            </article>
+
+            <!-- Card 2 -->
+            <article class="glass-card rounded-3xl p-4 bubble-card group cursor-pointer relative overflow-hidden">
+                <div class="h-48 rounded-2xl bg-gray-200 overflow-hidden relative mb-4">
+                    <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Quán cà phê" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-primary flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> Sẽ đi
+                    </div>
+                </div>
+                <div class="px-2">
+                    <div class="flex justify-between items-start mb-1">
+                        <h3 class="font-serif text-xl font-semibold text-textDark">Tiệm Cà phê Vườn Yên</h3>
+                        <span class="text-sm font-medium text-primary">$</span>
+                    </div>
+                    <p class="text-sm text-textGray flex items-center gap-1 mb-3">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        Quận 3, TP.HCM
+                    </p>
+                    <p class="text-sm text-textGray italic bg-accent/50 p-2 rounded-xl border border-white/50 mb-3">
+                        "Góc yên tĩnh có ánh nắng, cuối tuần mang sách giáo trình Boya ra đây ôn chung 📚☕"
+                    </p>
+                    
+                    <button onclick="markAsDone(event, this)" class="w-full mt-2 py-2 rounded-xl bg-white/60 hover:bg-white text-primary text-sm font-medium transition-colors border border-primary/20 flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        Đánh dấu đã đi
+                    </button>
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <!-- JavaScript Xử lý Logic Video & Bong bóng -->
     <script>
-        function markAsDone(event, buttonElement) {
-            // Ngăn sự kiện click lan ra thẻ card cha
-            event.stopPropagation();
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('bg-video');
+            const startBtn = document.getElementById('start-btn');
+            const introScreen = document.getElementById('intro-screen');
+            const mainContent = document.getElementById('main-content');
+            const body = document.getElementById('body');
+
+            // 1. Khi Video kết thúc -> Hiện nút bong bóng
+            video.addEventListener('ended', () => {
+                showStartBubble();
+            });
+
+            // Dự phòng: Nếu video bị lỗi không tải được hoặc người dùng chạm màn hình trước khi hết video
+            video.addEventListener('error', showStartBubble);
             
-            // Animation đổi màu nút và text
+            function showStartBubble() {
+                startBtn.classList.remove('scale-0', 'opacity-0');
+                startBtn.classList.add('scale-100', 'opacity-100');
+            }
+
+            // 2. Khi Click vào nút bong bóng -> Vỡ bong bóng & Mở Web
+            startBtn.addEventListener('click', () => {
+                // Hiệu ứng bong bóng vỡ (phóng to và mờ dần)
+                startBtn.style.animation = 'none'; // Dừng hiệu ứng nổi
+                startBtn.classList.replace('scale-100', 'scale-150');
+                startBtn.classList.replace('opacity-100', 'opacity-0');
+                
+                setTimeout(() => {
+                    // Tắt dần màn hình video
+                    introScreen.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        // Ẩn hẳn Intro Screen khỏi DOM
+                        introScreen.style.display = 'none';
+                        
+                        // Cho phép cuộn trang lại và hiện Content chính
+                        body.classList.remove('no-scroll');
+                        mainContent.classList.remove('opacity-0');
+                        mainContent.classList.add('opacity-100');
+                    }, 1000); // Đợi màn hình intro tắt hẳn
+                }, 300); // Đợi bong bóng vỡ xong
+            });
+        });
+
+        // Hàm click trái tim ở card (như cũ)
+        function markAsDone(event, buttonElement) {
+            event.stopPropagation();
             buttonElement.innerHTML = `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Đã lưu kỷ niệm!`;
             buttonElement.classList.remove('bg-white/60', 'text-primary', 'hover:bg-white');
             buttonElement.classList.add('bg-[#10B981]', 'text-white', 'border-transparent');
             
-            // Lấy vị trí chuột để tạo hiệu ứng trái tim bay (Confetti/Heart effect)
-            const rect = buttonElement.getBoundingClientRect();
             const x = event.clientX;
             const y = event.clientY;
 
-            // Tạo 5-6 trái tim bay lên
             for (let i = 0; i < 6; i++) {
                 createFloatingHeart(x, y);
             }
@@ -194,22 +275,18 @@
         function createFloatingHeart(x, y) {
             const heart = document.createElement('div');
             heart.classList.add('floating-heart');
-            // SVG trái tim màu xanh pastel/hồng
             heart.innerHTML = `<svg class="w-6 h-6 text-pinkLight fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>`;
             
-            // Random vị trí lệch ra xung quanh một chút
             const offsetX = (Math.random() - 0.5) * 50;
             heart.style.left = `${x + offsetX}px`;
             heart.style.top = `${y}px`;
             
-            // Random màu sắc giữa xanh và hồng
             const colors = ['#A5D8FF', '#FFD6E0', '#5B9BFF'];
             heart.querySelector('svg').classList.remove('text-pinkLight');
             heart.querySelector('svg').style.color = colors[Math.floor(Math.random() * colors.length)];
 
             document.body.appendChild(heart);
 
-            // Xóa DOM sau khi animation kết thúc (1.5s)
             setTimeout(() => {
                 heart.remove();
             }, 1500);
