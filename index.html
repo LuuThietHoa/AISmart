@@ -85,8 +85,6 @@
         
         .star { cursor: pointer; color: #cbd5e1; transition: color 0.2s; }
         .star.active { color: #fbbf24; }
-        .star-view { color: #cbd5e1; }
-        .star-view.active { color: #fbbf24; }
     </style>
 </head>
 <body class="text-textDark antialiased no-scroll" id="body">
@@ -125,7 +123,7 @@
         </header>
 
         <main id="places-grid" class="max-w-5xl mx-auto mt-12 px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Render động bằng JS -->
+            <p class="text-textGray col-span-full text-center py-10">Đang tải bản đồ...</p>
         </main>
     </div>
 
@@ -135,25 +133,16 @@
             <button onclick="closeViewModal()" class="absolute top-4 right-4 z-10 p-2 bg-black/20 text-white backdrop-blur-md rounded-full hover:bg-black/40 transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
-
-            <!-- Ảnh bìa lớn -->
             <div class="h-56 bg-gray-200 w-full relative">
                 <img id="view-image" src="" alt="" class="w-full h-full object-cover">
                 <div id="view-status-badge" class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1 shadow-sm">
-                    <!-- Trạng thái (Đã đi/Sẽ đi) update bằng JS -->
                 </div>
             </div>
-
             <div class="p-6">
                 <div class="flex justify-between items-start mb-2">
                     <h2 id="view-name" class="text-2xl font-serif font-bold text-textDark">Tên địa điểm</h2>
                 </div>
-                
-                <p id="view-address" class="text-sm text-textGray flex items-center gap-1 mb-4">
-                    <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
-                    <span>Địa chỉ chi tiết</span>
-                </p>
-
+                <p id="view-address" class="text-sm text-textGray flex items-center gap-1 mb-4"></p>
                 <div class="bg-accent/30 rounded-2xl p-4 mb-6">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
@@ -166,13 +155,10 @@
                         </div>
                         <div class="col-span-2">
                             <p class="text-xs text-textGray mb-1">Đánh giá của tụi mình</p>
-                            <div class="flex items-center gap-1" id="view-stars">
-                                <!-- Stars render by JS -->
-                            </div>
+                            <div class="flex items-center gap-1" id="view-stars"></div>
                         </div>
                     </div>
                 </div>
-
                 <div class="flex gap-3">
                     <button onclick="editCurrentPlace()" class="flex-1 py-2.5 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 font-medium transition-colors flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
@@ -188,19 +174,16 @@
 
     <!-- ================= MODAL THÊM / SỬA ĐỊA ĐIỂM ================= -->
     <div id="form-modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4">
-        <div id="form-modal-content" class="bg-white rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl modal-enter relative">
+        <div id="form-modal-content" class="bg-white rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl modal-enter relative max-h-[90vh] overflow-y-auto">
             <button onclick="closeFormModal()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
                 <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
-
             <div class="p-6">
                 <h2 id="form-title" class="text-2xl font-serif font-bold text-textDark mb-4">Lưu lại một kỷ niệm ☁️</h2>
-                
                 <div class="flex p-1 bg-gray-100 rounded-xl mb-6">
-                    <button id="tab-food" onclick="switchTab('food')" class="flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm transition-all">Ăn uống</button>
-                    <button id="tab-homestay" onclick="switchTab('homestay')" class="flex-1 py-2 rounded-lg text-textGray font-medium text-sm hover:text-primary transition-all">Homestay / Net</button>
+                    <button id="tab-food" type="button" onclick="switchTab('food')" class="flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm transition-all">Ăn uống</button>
+                    <button id="tab-homestay" type="button" onclick="switchTab('homestay')" class="flex-1 py-2 rounded-lg text-textGray font-medium text-sm hover:text-primary transition-all">Homestay / Net</button>
                 </div>
-
                 <form id="add-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Tên địa điểm *</label>
@@ -210,7 +193,6 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">Địa chỉ</label>
                         <input type="text" id="input-address" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20">
                     </div>
-
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Đã đi chưa?</label>
@@ -230,13 +212,10 @@
                             </div>
                         </div>
                     </div>
-
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Link hình ảnh (Lấy dòng Liên kết trực tiếp)</label>
                         <input type="url" id="input-image" placeholder="https://i.postimg.cc/..." class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20">
                     </div>
-
-                    <!-- Fields for Food -->
                     <div id="form-food-fields" class="space-y-4">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
@@ -257,8 +236,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Fields for Homestay -->
                     <div id="form-homestay-fields" class="space-y-4 hidden">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
@@ -274,7 +251,6 @@
                             </div>
                         </div>
                     </div>
-
                     <button type="submit" id="btn-submit" class="w-full mt-4 bg-primary hover:bg-[#4FC3F7] text-white py-3 rounded-xl font-medium transition-colors shadow-lg shadow-primary/20">
                         Lưu vào Bản Đồ
                     </button>
@@ -283,8 +259,33 @@
         </div>
     </div>
 
+    <!-- TẢI THƯ VIỆN FIREBASE -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+
     <script>
-        // --- INTRO SCREEN LOGIC ---
+        // CẤU HÌNH FIREBASE CỦA BẠN
+        const firebaseConfig = {
+            apiKey: "AIzaSyAm5PXedBf4HH4OhzHOKJ4_-ESrJNSABYk",
+            authDomain: "bautroi-738c9.firebaseapp.com",
+            projectId: "bautroi-738c9",
+            storageBucket: "bautroi-738c9.firebasestorage.app",
+            messagingSenderId: "233336125295",
+            appId: "1:233336125295:web:806a8dd1f42fe027721a9a",
+            measurementId: "G-TTQHJEZMQG"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // CÁC BIẾN QUẢN LÝ
+        let places = [];
+        let currentTab = 'food';
+        let currentRating = 4;
+        let editingId = null; 
+        let viewingId = null;
+
+        // LOGIC MÀN HÌNH CHỜ
         document.addEventListener('DOMContentLoaded', () => {
             const video = document.getElementById('bg-video');
             const startBtn = document.getElementById('start-btn');
@@ -304,7 +305,6 @@
                 startBtn.style.animation = 'none';
                 startBtn.classList.replace('scale-100', 'scale-150');
                 startBtn.classList.replace('opacity-100', 'opacity-0');
-                
                 setTimeout(() => {
                     introScreen.style.opacity = '0';
                     setTimeout(() => {
@@ -316,36 +316,30 @@
                 }, 300);
             });
 
-            loadPlaces();
+            // KẾT NỐI REAL-TIME VỚI FIREBASE
+            db.collection("places").orderBy("createdAt", "desc").onSnapshot((querySnapshot) => {
+                places = [];
+                querySnapshot.forEach((doc) => {
+                    places.push({ id: doc.id, ...doc.data() });
+                });
+                renderPlaces(); 
+            }, (error) => {
+                console.error("Lỗi khi tải dữ liệu: ", error);
+                document.getElementById('places-grid').innerHTML = '<p class="text-red-500 col-span-full text-center">Lỗi kết nối cơ sở dữ liệu. Vui lòng kiểm tra quyền Firestore (Start in test mode).</p>';
+            });
         });
 
-        // --- DATA STATE ---
-        let places = [];
-        let currentTab = 'food';
-        let currentRating = 4;
-        let editingId = null; // Biến cờ theo dõi xem đang Sửa hay Thêm mới
-        let viewingId = null; // Biến cờ theo dõi xem đang Xem địa điểm nào
-
-        function loadPlaces() {
-            const savedData = localStorage.getItem('myDatesDataV2');
-            if (savedData) {
-                places = JSON.parse(savedData);
-            }
-            renderPlaces();
-        }
-
-        function savePlaces() {
-            localStorage.setItem('myDatesDataV2', JSON.stringify(places));
-        }
-
-        // --- RENDER GIAO DIỆN CHÍNH ---
+        // RENDER GIAO DIỆN
         function renderPlaces() {
             const grid = document.getElementById('places-grid');
             grid.innerHTML = ''; 
+            
+            if(places.length === 0) {
+                grid.innerHTML = '<p class="text-textGray col-span-full text-center py-10">Bản đồ đang trống, hãy thêm kỷ niệm đầu tiên nhé!</p>';
+                return;
+            }
 
-            const reversedPlaces = [...places].reverse(); 
-
-            reversedPlaces.forEach(place => {
+            places.forEach(place => {
                 let starsHtml = '';
                 if (place.visited) {
                     for(let i=1; i<=5; i++) {
@@ -357,28 +351,21 @@
 
                 let extraInfoHtml = '';
                 if(place.category === 'food') {
-                    extraInfoHtml = `
-                        <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded-md text-xs font-medium">${place.type}</span>
-                        <span class="bg-blue-50 text-primary px-2 py-0.5 rounded-md text-xs font-medium">${place.format}</span>
-                    `;
+                    extraInfoHtml = `<span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded-md text-xs font-medium">${place.type}</span><span class="bg-blue-50 text-primary px-2 py-0.5 rounded-md text-xs font-medium">${place.format}</span>`;
                 } else {
-                    extraInfoHtml = `
-                        <span class="bg-purple-50 text-purple-600 px-2 py-0.5 rounded-md text-xs font-medium">${place.type}</span>
-                    `;
+                    extraInfoHtml = `<span class="bg-purple-50 text-purple-600 px-2 py-0.5 rounded-md text-xs font-medium">${place.type}</span>`;
                 }
                 
                 const defaultImage = place.category === 'food' 
                     ? 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
                     : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
 
-                // Thêm sự kiện onclick="openViewModal(place.id)" cho Card
                 const cardHtml = `
-                    <article onclick="openViewModal(${place.id})" class="glass-card rounded-3xl p-4 bubble-card group relative overflow-hidden flex flex-col">
+                    <article onclick="openViewModal('${place.id}')" class="glass-card rounded-3xl p-4 bubble-card group relative overflow-hidden flex flex-col">
                         <div class="h-48 rounded-2xl bg-gray-200 overflow-hidden relative mb-4 shrink-0">
                             <img src="${place.image || defaultImage}" alt="${place.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold ${place.visited ? 'text-[#10B981]' : 'text-primary'} flex items-center gap-1 shadow-sm">
-                                <span class="w-2 h-2 rounded-full ${place.visited ? 'bg-[#10B981]' : 'bg-primary'}"></span> 
-                                ${place.visited ? 'Đã đi' : 'Sẽ đi'}
+                                <span class="w-2 h-2 rounded-full ${place.visited ? 'bg-[#10B981]' : 'bg-primary'}"></span> ${place.visited ? 'Đã đi' : 'Sẽ đi'}
                             </div>
                         </div>
                         <div class="px-2 flex-1 flex flex-col">
@@ -387,15 +374,9 @@
                                 <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
                                 ${place.address || 'Chưa cập nhật'}
                             </p>
-                            
-                            <div class="flex items-center gap-2 mb-3 mt-auto">
-                                ${extraInfoHtml}
-                            </div>
-                            
+                            <div class="flex items-center gap-2 mb-3 mt-auto">${extraInfoHtml}</div>
                             <div class="flex justify-between items-center bg-white/50 p-2.5 rounded-xl border border-white">
-                                <div class="flex gap-1 items-center">
-                                    ${starsHtml}
-                                </div>
+                                <div class="flex gap-1 items-center">${starsHtml}</div>
                             </div>
                         </div>
                     </article>
@@ -404,11 +385,11 @@
             });
         }
 
-        // --- MODAL XEM CHI TIẾT ĐỊA ĐIỂM ---
+        // HÀM MỞ MODAL XEM
         function openViewModal(id) {
             const place = places.find(p => p.id === id);
             if(!place) return;
-            viewingId = id; // Lưu lại ID đang xem
+            viewingId = id; 
 
             document.getElementById('view-name').innerText = place.name;
             document.getElementById('view-address').innerHTML = `<svg class="w-4 h-4 text-primary shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg> <span>${place.address || 'Chưa cập nhật địa chỉ'}</span>`;
@@ -426,7 +407,6 @@
             }
 
             document.getElementById('view-type').innerText = place.type;
-            
             if (place.category === 'food') {
                 document.getElementById('view-extra-label').innerText = "Hình thức";
                 document.getElementById('view-extra-value').innerText = place.format;
@@ -435,7 +415,6 @@
                 document.getElementById('view-extra-value').innerText = place.price || 'Chưa có thông tin';
             }
 
-            // Render Stars cho view
             let starsHtml = '';
             if (place.visited) {
                 for(let i=1; i<=5; i++) {
@@ -446,7 +425,6 @@
             }
             document.getElementById('view-stars').innerHTML = starsHtml;
 
-            // Hiển thị modal
             const overlay = document.getElementById('view-modal-overlay');
             const content = document.getElementById('view-modal-content');
             overlay.classList.remove('hidden');
@@ -468,19 +446,23 @@
             }, 200);
         }
 
-        // --- NÚT CHỈNH SỬA & XÓA TRONG VIEW MODAL ---
+        // XÓA TRÊN FIREBASE
+        function deleteCurrentPlace() {
+            if(confirm("Bạn có chắc muốn xóa kỷ niệm này không?")) {
+                db.collection("places").doc(viewingId).delete()
+                  .then(() => { closeViewModal(); })
+                  .catch((error) => { console.error("Lỗi khi xóa: ", error); alert("Lỗi khi xóa. Hãy chắc chắn Firestore Database của bạn đang mở ở Test Mode."); });
+            }
+        }
+
         function editCurrentPlace() {
             const place = places.find(p => p.id === viewingId);
             if(!place) return;
-            
-            closeViewModal(); // Đóng form xem
-
-            // Đặt biến cờ sang chế độ sửa
+            closeViewModal(); 
             editingId = place.id; 
             document.getElementById('form-title').innerText = "Chỉnh sửa kỷ niệm ✏️";
             document.getElementById('btn-submit').innerText = "Cập nhật";
 
-            // Điền dữ liệu cũ vào Form
             switchTab(place.category);
             document.getElementById('input-name').value = place.name;
             document.getElementById('input-address').value = place.address;
@@ -497,25 +479,10 @@
 
             toggleRating();
             if(place.visited) setRating(place.rating);
-
-            // Mở form modal chậm một nhịp cho mượt
-            setTimeout(() => {
-                openFormModalOnlyUI();
-            }, 300);
+            setTimeout(() => { openFormModalOnlyUI(); }, 300);
         }
 
-        function deleteCurrentPlace() {
-            if(confirm("Bạn có chắc muốn xóa kỷ niệm này không?")) {
-                places = places.filter(p => p.id !== viewingId);
-                savePlaces();
-                renderPlaces();
-                closeViewModal();
-            }
-        }
-
-        // --- MODAL THÊM / SỬA LOGIC UI ---
         function openFormModal() {
-            // Khi nhấn nút "Thêm mới" ở ngoài trang chủ -> Reset form
             editingId = null;
             document.getElementById('add-form').reset();
             document.getElementById('form-title').innerText = "Lưu lại một kỷ niệm ☁️";
@@ -584,7 +551,7 @@
             
             if(isVisited) {
                 ratingContainer.style.opacity = '1';
-                if(currentRating === 0) setRating(4); // Mặc định 4 nếu chưa có
+                if(currentRating === 0) setRating(4); 
                 else setRating(currentRating);
             } else {
                 ratingContainer.style.opacity = '0.4';
@@ -592,10 +559,12 @@
             }
         }
 
-        // --- XỬ LÝ LƯU (SUBMIT) ---
+        // LƯU DỮ LIỆU LÊN FIREBASE
         function handleFormSubmit(e) {
             e.preventDefault();
             const isVisited = document.getElementById('input-visited').value === 'true';
+            const btnSubmit = document.getElementById('btn-submit');
+            btnSubmit.innerText = "Đang lưu...";
             
             const newPlaceData = {
                 category: currentTab,
@@ -615,20 +584,17 @@
             }
 
             if (editingId) {
-                // ĐANG CHỈNH SỬA
-                const index = places.findIndex(p => p.id === editingId);
-                if(index !== -1) {
-                    places[index] = { ...places[index], ...newPlaceData };
-                }
+                // Sửa Dữ Liệu
+                db.collection("places").doc(editingId).update(newPlaceData)
+                  .then(() => { closeFormModal(); })
+                  .catch((error) => { console.error("Lỗi:", error); alert("Lỗi kết nối. Hãy chắc chắn bạn đã tạo Firestore Database."); });
             } else {
-                // THÊM MỚI
-                newPlaceData.id = Date.now();
-                places.push(newPlaceData);
+                // Thêm Mới Dữ Liệu
+                newPlaceData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                db.collection("places").add(newPlaceData)
+                  .then(() => { closeFormModal(); })
+                  .catch((error) => { console.error("Lỗi:", error); alert("Lỗi kết nối. Hãy chắc chắn bạn đã tạo Firestore Database."); });
             }
-
-            savePlaces();
-            renderPlaces();
-            closeFormModal();
         }
     </script>
 </body>
