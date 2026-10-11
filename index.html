@@ -89,6 +89,22 @@
 </head>
 <body class="text-textDark antialiased no-scroll" id="body">
 
+    <!-- AUDIO NỀN -->
+    <audio id="bg-music" loop src="https://files.catbox.moe/by6h11.mp4"></audio>
+
+    <!-- NÚT BẬT TẮT NHẠC (Nổi ở góc dưới phải) -->
+    <button id="music-toggle" class="fixed bottom-6 right-6 w-12 h-12 rounded-full glass-card flex items-center justify-center cursor-pointer z-[150] text-primary hover:bg-white transition-all duration-500 transform hover:scale-110 shadow-lg shadow-primary/30 opacity-0 pointer-events-none translate-y-4">
+        <!-- Icon Phát Nhạc (Mặc định) -->
+        <svg id="icon-music-play" class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+        </svg>
+        <!-- Icon Tắt Nhạc (Ẩn) -->
+        <svg id="icon-music-pause" class="w-6 h-6 hidden text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path>
+        </svg>
+    </button>
+
     <!-- ================= INTRO SCREEN ================= -->
     <div id="intro-screen" class="fixed inset-0 z-[100] flex items-center justify-center bg-[#E0F2FE] transition-all duration-1000 ease-in-out">
         <video id="bg-video" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000" muted playsinline autoplay>
@@ -264,7 +280,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
     <script>
-        // CẤU HÌNH FIREBASE CỦA BẠN
+        // CẤU HÌNH FIREBASE CỦA BẠN (DÁN CONFIG VÀO ĐÂY)
         const firebaseConfig = {
             apiKey: "AIzaSyAm5PXedBf4HH4OhzHOKJ4_-ESrJNSABYk",
             authDomain: "bautroi-738c9.firebaseapp.com",
@@ -285,13 +301,19 @@
         let editingId = null; 
         let viewingId = null;
 
-        // LOGIC MÀN HÌNH CHỜ
+        // LOGIC MÀN HÌNH CHỜ & XỬ LÝ NHẠC NỀN
         document.addEventListener('DOMContentLoaded', () => {
             const video = document.getElementById('bg-video');
             const startBtn = document.getElementById('start-btn');
             const introScreen = document.getElementById('intro-screen');
             const mainContent = document.getElementById('main-content');
             const body = document.getElementById('body');
+            
+            // Xử lý Audio
+            const bgMusic = document.getElementById('bg-music');
+            const musicToggle = document.getElementById('music-toggle');
+            const iconPlay = document.getElementById('icon-music-play');
+            const iconPause = document.getElementById('icon-music-pause');
 
             video.addEventListener('ended', showStartBubble);
             video.addEventListener('error', showStartBubble);
@@ -301,10 +323,18 @@
                 startBtn.classList.add('scale-100', 'opacity-100');
             }
 
+            // Khi nhấn MỞ RA -> Phát nhạc & Mở Web
             startBtn.addEventListener('click', () => {
                 startBtn.style.animation = 'none';
                 startBtn.classList.replace('scale-100', 'scale-150');
                 startBtn.classList.replace('opacity-100', 'opacity-0');
+                
+                // Play music & Show toggle button
+                bgMusic.volume = 0.5; // Âm lượng 50% cho dễ nghe
+                bgMusic.play().catch(e => console.log("Trình duyệt chặn autoplay audio"));
+                musicToggle.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+                musicToggle.classList.add('opacity-100', 'translate-y-0');
+
                 setTimeout(() => {
                     introScreen.style.opacity = '0';
                     setTimeout(() => {
@@ -314,6 +344,19 @@
                         mainContent.classList.add('opacity-100');
                     }, 1000);
                 }, 300);
+            });
+
+            // Logic nút Tắt / Bật nhạc
+            musicToggle.addEventListener('click', () => {
+                if (bgMusic.paused) {
+                    bgMusic.play();
+                    iconPlay.classList.remove('hidden');
+                    iconPause.classList.add('hidden');
+                } else {
+                    bgMusic.pause();
+                    iconPlay.classList.add('hidden');
+                    iconPause.classList.remove('hidden');
+                }
             });
 
             // KẾT NỐI REAL-TIME VỚI FIREBASE
