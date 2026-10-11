@@ -41,6 +41,7 @@
             min-height: 100vh;
             margin: 0;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
         
         .glass-card {
@@ -92,13 +93,13 @@
     <!-- AUDIO NỀN -->
     <audio id="bg-music" loop src="https://files.catbox.moe/by6h11.mp4"></audio>
 
-    <!-- NÚT BẬT TẮT NHẠC (Nổi ở góc dưới phải) -->
+    <!-- NÚT BẬT TẮT NHẠC -->
     <button id="music-toggle" class="fixed bottom-6 right-6 w-12 h-12 rounded-full glass-card flex items-center justify-center cursor-pointer z-[150] text-primary hover:bg-white transition-all duration-500 transform hover:scale-110 shadow-lg shadow-primary/30 opacity-0 pointer-events-none translate-y-4">
-        <!-- Icon Phát Nhạc (Mặc định) -->
+        <!-- Icon Phát Nhạc -->
         <svg id="icon-music-play" class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
         </svg>
-        <!-- Icon Tắt Nhạc (Ẩn) -->
+        <!-- Icon Tắt Nhạc -->
         <svg id="icon-music-pause" class="w-6 h-6 hidden text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path>
@@ -144,22 +145,26 @@
     </div>
 
     <!-- ================= MODAL XEM CHI TIẾT ================= -->
-    <div id="view-modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4">
-        <div id="view-modal-content" class="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl modal-enter relative">
-            <button onclick="closeViewModal()" class="absolute top-4 right-4 z-10 p-2 bg-black/20 text-white backdrop-blur-md rounded-full hover:bg-black/40 transition-colors">
+    <div id="view-modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 transition-opacity">
+        <div id="view-modal-content" class="bg-white rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto scroll-smooth shadow-2xl modal-enter relative">
+            
+            <button onclick="closeViewModal()" class="absolute top-4 right-4 z-10 p-2 bg-black/30 text-white backdrop-blur-md rounded-full hover:bg-black/50 transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
-            <div class="h-56 bg-gray-200 w-full relative">
+
+            <!-- Ảnh bìa -->
+            <div class="h-56 bg-gray-200 w-full relative shrink-0">
                 <img id="view-image" src="" alt="" class="w-full h-full object-cover">
                 <div id="view-status-badge" class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1 shadow-sm">
                 </div>
             </div>
+
             <div class="p-6">
-                <div class="flex justify-between items-start mb-2">
-                    <h2 id="view-name" class="text-2xl font-serif font-bold text-textDark">Tên địa điểm</h2>
-                </div>
+                <h2 id="view-name" class="text-2xl font-serif font-bold text-textDark mb-1">Tên địa điểm</h2>
                 <p id="view-address" class="text-sm text-textGray flex items-center gap-1 mb-4"></p>
-                <div class="bg-accent/30 rounded-2xl p-4 mb-6">
+                
+                <!-- Bảng thông tin cơ bản -->
+                <div class="bg-accent/30 rounded-2xl p-4 mb-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <p class="text-xs text-textGray mb-1">Loại hình</p>
@@ -175,12 +180,36 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Ưu & Nhược điểm (Ẩn nếu chưa đi hoặc k viết) -->
+                <div id="view-pros-cons" class="mb-4 space-y-3 hidden">
+                    <!-- Pros -->
+                    <div id="view-pros-container" class="bg-emerald-50 border border-emerald-100 rounded-2xl p-3.5 hidden">
+                        <p class="text-xs text-emerald-600 font-semibold mb-1 flex items-center gap-1">💖 Điểm cộng</p>
+                        <p id="view-pros" class="text-sm text-emerald-800 leading-relaxed"></p>
+                    </div>
+                    <!-- Cons -->
+                    <div id="view-cons-container" class="bg-rose-50 border border-rose-100 rounded-2xl p-3.5 hidden">
+                        <p class="text-xs text-rose-500 font-semibold mb-1 flex items-center gap-1">🥺 Điểm trừ</p>
+                        <p id="view-cons" class="text-sm text-rose-800 leading-relaxed"></p>
+                    </div>
+                </div>
+
+                <!-- Xem Menu -->
+                <div id="view-menu-container" class="mb-6 hidden transition-all">
+                    <p class="text-sm font-semibold text-textDark mb-2 flex items-center gap-1">📖 Menu của quán</p>
+                    <div class="rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+                        <img id="view-menu-image" src="" alt="Menu" class="w-full h-auto object-cover hover:scale-105 transition-transform duration-500">
+                    </div>
+                </div>
+
+                <!-- Nút thao tác -->
                 <div class="flex gap-3">
-                    <button onclick="editCurrentPlace()" class="flex-1 py-2.5 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 font-medium transition-colors flex items-center justify-center gap-2">
+                    <button onclick="editCurrentPlace()" class="flex-1 py-3 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 font-medium transition-colors flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                        Chỉnh sửa
+                        Chỉnh sửa kỷ niệm
                     </button>
-                    <button onclick="deleteCurrentPlace()" class="py-2.5 px-4 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 font-medium transition-colors">
+                    <button onclick="deleteCurrentPlace()" class="py-3 px-4 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 font-medium transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     </button>
                 </div>
@@ -189,49 +218,31 @@
     </div>
 
     <!-- ================= MODAL THÊM / SỬA ĐỊA ĐIỂM ================= -->
-    <div id="form-modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4">
-        <div id="form-modal-content" class="bg-white rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl modal-enter relative max-h-[90vh] overflow-y-auto">
+    <div id="form-modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 transition-opacity">
+        <div id="form-modal-content" class="bg-white rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl modal-enter relative max-h-[90vh] overflow-y-auto scroll-smooth">
             <button onclick="closeFormModal()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
                 <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
             <div class="p-6">
                 <h2 id="form-title" class="text-2xl font-serif font-bold text-textDark mb-4">Lưu lại một kỷ niệm ☁️</h2>
+                
                 <div class="flex p-1 bg-gray-100 rounded-xl mb-6">
                     <button id="tab-food" type="button" onclick="switchTab('food')" class="flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm transition-all">Ăn uống</button>
                     <button id="tab-homestay" type="button" onclick="switchTab('homestay')" class="flex-1 py-2 rounded-lg text-textGray font-medium text-sm hover:text-primary transition-all">Homestay / Net</button>
                 </div>
+
                 <form id="add-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                    <!-- Cơ bản -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Tên địa điểm *</label>
-                        <input type="text" id="input-name" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20">
+                        <input type="text" id="input-name" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Địa chỉ</label>
-                        <input type="text" id="input-address" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20">
+                        <input type="text" id="input-address" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary">
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Đã đi chưa?</label>
-                            <select id="input-visited" onchange="toggleRating()" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary">
-                                <option value="true">Đi rồi</option>
-                                <option value="false">Chưa đi</option>
-                            </select>
-                        </div>
-                        <div id="rating-container">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Đánh giá</label>
-                            <div class="flex items-center gap-1 mt-2" id="star-group">
-                                <svg onclick="setRating(1)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                <svg onclick="setRating(2)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                <svg onclick="setRating(3)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                <svg onclick="setRating(4)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                <svg onclick="setRating(5)" class="w-6 h-6 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Link hình ảnh (Lấy dòng Liên kết trực tiếp)</label>
-                        <input type="url" id="input-image" placeholder="https://i.postimg.cc/..." class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20">
-                    </div>
+
+                    <!-- Tùy chọn Loại hình theo Tab -->
                     <div id="form-food-fields" class="space-y-4">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
@@ -252,6 +263,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div id="form-homestay-fields" class="space-y-4 hidden">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
@@ -267,7 +279,53 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" id="btn-submit" class="w-full mt-4 bg-primary hover:bg-[#4FC3F7] text-white py-3 rounded-xl font-medium transition-colors shadow-lg shadow-primary/20">
+
+                    <!-- Trạng thái & Đánh giá -->
+                    <div class="grid grid-cols-2 gap-4 pt-2 border-t border-gray-100">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Trạng thái</label>
+                            <select id="input-visited" onchange="toggleRating()" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-primary font-medium bg-blue-50/50">
+                                <option value="true">Đã đi rùi 🌸</option>
+                                <option value="false">Sẽ đi 📌</option>
+                            </select>
+                        </div>
+                        <div id="rating-container">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Chấm điểm</label>
+                            <div class="flex items-center gap-1 mt-2.5" id="star-group">
+                                <svg onclick="setRating(1)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg onclick="setRating(2)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg onclick="setRating(3)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg onclick="setRating(4)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg onclick="setRating(5)" class="w-6 h-6 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MỚI: Phần Ưu/Nhược điểm (Chỉ hiện khi Đã Đi) -->
+                    <div id="review-details" class="space-y-4 transition-all duration-300">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Điểm cộng 💖</label>
+                            <input type="text" id="input-pros" placeholder="Đồ ăn siêu ngon, view đẹp lãng mạn..." class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-green-400 focus:ring-2 focus:ring-green-100 transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Điểm trừ 🥺</label>
+                            <input type="text" id="input-cons" placeholder="Hơi xa một chút, gửi xe hơi khó..." class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 transition-all">
+                        </div>
+                    </div>
+
+                    <!-- MỚI: Hình ảnh và Menu -->
+                    <div class="pt-2 border-t border-gray-100 space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Link ảnh bìa quán</label>
+                            <input type="url" id="input-image" placeholder="https://i.postimg.cc/... (Link trực tiếp)" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Link ảnh Menu 📖 (Tùy chọn)</label>
+                            <input type="url" id="input-menu" placeholder="https://i.postimg.cc/... (Link trực tiếp)" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary">
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btn-submit" class="w-full mt-6 bg-primary hover:bg-[#4FC3F7] text-white py-3.5 rounded-xl font-semibold transition-all shadow-lg shadow-primary/20 transform hover:-translate-y-1">
                         Lưu vào Bản Đồ
                     </button>
                 </form>
@@ -280,7 +338,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
     <script>
-        // CẤU HÌNH FIREBASE CỦA BẠN (DÁN CONFIG VÀO ĐÂY)
+        // CẤU HÌNH FIREBASE CỦA BẠN
         const firebaseConfig = {
             apiKey: "AIzaSyAm5PXedBf4HH4OhzHOKJ4_-ESrJNSABYk",
             authDomain: "bautroi-738c9.firebaseapp.com",
@@ -294,14 +352,13 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // CÁC BIẾN QUẢN LÝ
         let places = [];
         let currentTab = 'food';
         let currentRating = 4;
         let editingId = null; 
         let viewingId = null;
 
-        // LOGIC MÀN HÌNH CHỜ & XỬ LÝ NHẠC NỀN
+        // LOGIC MÀN HÌNH CHỜ & NHẠC NỀN
         document.addEventListener('DOMContentLoaded', () => {
             const video = document.getElementById('bg-video');
             const startBtn = document.getElementById('start-btn');
@@ -309,7 +366,6 @@
             const mainContent = document.getElementById('main-content');
             const body = document.getElementById('body');
             
-            // Xử lý Audio
             const bgMusic = document.getElementById('bg-music');
             const musicToggle = document.getElementById('music-toggle');
             const iconPlay = document.getElementById('icon-music-play');
@@ -323,14 +379,13 @@
                 startBtn.classList.add('scale-100', 'opacity-100');
             }
 
-            // Khi nhấn MỞ RA -> Phát nhạc & Mở Web
             startBtn.addEventListener('click', () => {
                 startBtn.style.animation = 'none';
                 startBtn.classList.replace('scale-100', 'scale-150');
                 startBtn.classList.replace('opacity-100', 'opacity-0');
                 
                 // Play music & Show toggle button
-                bgMusic.volume = 0.5; // Âm lượng 50% cho dễ nghe
+                bgMusic.volume = 0.4; 
                 bgMusic.play().catch(e => console.log("Trình duyệt chặn autoplay audio"));
                 musicToggle.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
                 musicToggle.classList.add('opacity-100', 'translate-y-0');
@@ -346,7 +401,6 @@
                 }, 300);
             });
 
-            // Logic nút Tắt / Bật nhạc
             musicToggle.addEventListener('click', () => {
                 if (bgMusic.paused) {
                     bgMusic.play();
@@ -359,7 +413,7 @@
                 }
             });
 
-            // KẾT NỐI REAL-TIME VỚI FIREBASE
+            // KẾT NỐI FIREBASE
             db.collection("places").orderBy("createdAt", "desc").onSnapshot((querySnapshot) => {
                 places = [];
                 querySnapshot.forEach((doc) => {
@@ -367,18 +421,18 @@
                 });
                 renderPlaces(); 
             }, (error) => {
-                console.error("Lỗi khi tải dữ liệu: ", error);
-                document.getElementById('places-grid').innerHTML = '<p class="text-red-500 col-span-full text-center">Lỗi kết nối cơ sở dữ liệu. Vui lòng kiểm tra quyền Firestore (Start in test mode).</p>';
+                console.error("Lỗi: ", error);
+                document.getElementById('places-grid').innerHTML = '<p class="text-red-500 col-span-full text-center">Lỗi kết nối cơ sở dữ liệu.</p>';
             });
         });
 
-        // RENDER GIAO DIỆN
+        // RENDER GIAO DIỆN CARDS
         function renderPlaces() {
             const grid = document.getElementById('places-grid');
             grid.innerHTML = ''; 
             
             if(places.length === 0) {
-                grid.innerHTML = '<p class="text-textGray col-span-full text-center py-10">Bản đồ đang trống, hãy thêm kỷ niệm đầu tiên nhé!</p>';
+                grid.innerHTML = '<div class="col-span-full text-center py-16"><p class="text-textGray text-lg">Bản đồ đang trống 🥺<br/>Hãy thêm kỷ niệm date đầu tiên nhé!</p></div>';
                 return;
             }
 
@@ -408,7 +462,7 @@
                         <div class="h-48 rounded-2xl bg-gray-200 overflow-hidden relative mb-4 shrink-0">
                             <img src="${place.image || defaultImage}" alt="${place.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold ${place.visited ? 'text-[#10B981]' : 'text-primary'} flex items-center gap-1 shadow-sm">
-                                <span class="w-2 h-2 rounded-full ${place.visited ? 'bg-[#10B981]' : 'bg-primary'}"></span> ${place.visited ? 'Đã đi' : 'Sẽ đi'}
+                                <span class="w-2 h-2 rounded-full ${place.visited ? 'bg-[#10B981]' : 'bg-primary animate-pulse'}"></span> ${place.visited ? 'Đã đi' : 'Sẽ đi'}
                             </div>
                         </div>
                         <div class="px-2 flex-1 flex flex-col">
@@ -420,6 +474,7 @@
                             <div class="flex items-center gap-2 mb-3 mt-auto">${extraInfoHtml}</div>
                             <div class="flex justify-between items-center bg-white/50 p-2.5 rounded-xl border border-white">
                                 <div class="flex gap-1 items-center">${starsHtml}</div>
+                                ${place.menu ? `<span class="text-xs text-primary font-medium flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg> Có Menu</span>` : ''}
                             </div>
                         </div>
                     </article>
@@ -428,7 +483,7 @@
             });
         }
 
-        // HÀM MỞ MODAL XEM
+        // MỞ MODAL XEM CHI TIẾT
         function openViewModal(id) {
             const place = places.find(p => p.id === id);
             if(!place) return;
@@ -444,9 +499,9 @@
 
             const badge = document.getElementById('view-status-badge');
             if (place.visited) {
-                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-[#10B981]"></span><span class="text-[#10B981]">Đã đi</span>`;
+                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-[#10B981]"></span><span class="text-[#10B981]">Đã đi rùi</span>`;
             } else {
-                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-primary"></span><span class="text-primary">Sẽ đi</span>`;
+                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span><span class="text-primary">Sắp đi</span>`;
             }
 
             document.getElementById('view-type').innerText = place.type;
@@ -455,18 +510,53 @@
                 document.getElementById('view-extra-value').innerText = place.format;
             } else {
                 document.getElementById('view-extra-label').innerText = "Mức giá";
-                document.getElementById('view-extra-value').innerText = place.price || 'Chưa có thông tin';
+                document.getElementById('view-extra-value').innerText = place.price || 'Chưa rõ';
             }
 
+            // Stars
             let starsHtml = '';
             if (place.visited) {
                 for(let i=1; i<=5; i++) {
                     starsHtml += `<svg class="w-5 h-5 ${i <= place.rating ? 'text-yellow-400' : 'text-gray-200'}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`;
                 }
             } else {
-                starsHtml = `<span class="text-sm text-gray-400 italic">Chưa có đánh giá</span>`;
+                starsHtml = `<span class="text-sm text-gray-400 italic">Chưa trải nghiệm</span>`;
             }
             document.getElementById('view-stars').innerHTML = starsHtml;
+
+            // Ưu / Nhược điểm
+            const prosConsBlock = document.getElementById('view-pros-cons');
+            const prosBlock = document.getElementById('view-pros-container');
+            const consBlock = document.getElementById('view-cons-container');
+
+            if (place.visited && (place.pros || place.cons)) {
+                prosConsBlock.classList.remove('hidden');
+                
+                if (place.pros) {
+                    prosBlock.classList.remove('hidden');
+                    document.getElementById('view-pros').innerText = place.pros;
+                } else {
+                    prosBlock.classList.add('hidden');
+                }
+
+                if (place.cons) {
+                    consBlock.classList.remove('hidden');
+                    document.getElementById('view-cons').innerText = place.cons;
+                } else {
+                    consBlock.classList.add('hidden');
+                }
+            } else {
+                prosConsBlock.classList.add('hidden');
+            }
+
+            // Menu Image
+            const menuBlock = document.getElementById('view-menu-container');
+            if (place.menu) {
+                menuBlock.classList.remove('hidden');
+                document.getElementById('view-menu-image').src = place.menu;
+            } else {
+                menuBlock.classList.add('hidden');
+            }
 
             const overlay = document.getElementById('view-modal-overlay');
             const content = document.getElementById('view-modal-content');
@@ -474,6 +564,10 @@
             overlay.classList.add('flex');
             content.classList.remove('modal-leave', 'modal-leave-active');
             content.classList.add('modal-enter', 'modal-enter-active');
+            
+            // Reset cuộn chuột lên trên cùng
+            content.scrollTop = 0;
+
             setTimeout(() => { content.classList.remove('modal-enter', 'modal-enter-active'); }, 300);
         }
 
@@ -489,12 +583,11 @@
             }, 200);
         }
 
-        // XÓA TRÊN FIREBASE
         function deleteCurrentPlace() {
             if(confirm("Bạn có chắc muốn xóa kỷ niệm này không?")) {
                 db.collection("places").doc(viewingId).delete()
                   .then(() => { closeViewModal(); })
-                  .catch((error) => { console.error("Lỗi khi xóa: ", error); alert("Lỗi khi xóa. Hãy chắc chắn Firestore Database của bạn đang mở ở Test Mode."); });
+                  .catch((error) => { console.error("Lỗi khi xóa: ", error); });
             }
         }
 
@@ -509,7 +602,10 @@
             switchTab(place.category);
             document.getElementById('input-name').value = place.name;
             document.getElementById('input-address').value = place.address;
-            document.getElementById('input-image').value = place.image;
+            document.getElementById('input-image').value = place.image || "";
+            document.getElementById('input-menu').value = place.menu || "";
+            document.getElementById('input-pros').value = place.pros || "";
+            document.getElementById('input-cons').value = place.cons || "";
             document.getElementById('input-visited').value = place.visited ? "true" : "false";
             
             if (place.category === 'food') {
@@ -543,6 +639,7 @@
             overlay.classList.add('flex');
             content.classList.remove('modal-leave', 'modal-leave-active');
             content.classList.add('modal-enter', 'modal-enter-active');
+            content.scrollTop = 0;
             setTimeout(() => { content.classList.remove('modal-enter', 'modal-enter-active'); }, 300);
         }
 
@@ -590,19 +687,26 @@
         function toggleRating() {
             const isVisited = document.getElementById('input-visited').value === 'true';
             const ratingContainer = document.getElementById('rating-container');
+            const reviewDetails = document.getElementById('review-details');
             const stars = document.querySelectorAll('#star-group .star');
             
             if(isVisited) {
+                // Hiển thị phần rating & Ưu nhược điểm
                 ratingContainer.style.opacity = '1';
+                reviewDetails.classList.remove('opacity-40', 'pointer-events-none');
+                
                 if(currentRating === 0) setRating(4); 
                 else setRating(currentRating);
             } else {
+                // Làm mờ và tắt tương tác
                 ratingContainer.style.opacity = '0.4';
+                reviewDetails.classList.add('opacity-40', 'pointer-events-none');
+                
                 stars.forEach(s => s.classList.remove('active'));
             }
         }
 
-        // LƯU DỮ LIỆU LÊN FIREBASE
+        // LƯU DATA LÊN FIREBASE
         function handleFormSubmit(e) {
             e.preventDefault();
             const isVisited = document.getElementById('input-visited').value === 'true';
@@ -614,8 +718,11 @@
                 name: document.getElementById('input-name').value,
                 address: document.getElementById('input-address').value,
                 image: document.getElementById('input-image').value,
+                menu: document.getElementById('input-menu').value,
                 visited: isVisited,
                 rating: isVisited ? currentRating : 0,
+                pros: isVisited ? document.getElementById('input-pros').value : "",
+                cons: isVisited ? document.getElementById('input-cons').value : "",
             };
 
             if(currentTab === 'food') {
@@ -627,16 +734,14 @@
             }
 
             if (editingId) {
-                // Sửa Dữ Liệu
                 db.collection("places").doc(editingId).update(newPlaceData)
                   .then(() => { closeFormModal(); })
-                  .catch((error) => { console.error("Lỗi:", error); alert("Lỗi kết nối. Hãy chắc chắn bạn đã tạo Firestore Database."); });
+                  .catch((error) => { console.error("Lỗi:", error); alert("Lỗi kết nối."); });
             } else {
-                // Thêm Mới Dữ Liệu
                 newPlaceData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
                 db.collection("places").add(newPlaceData)
                   .then(() => { closeFormModal(); })
-                  .catch((error) => { console.error("Lỗi:", error); alert("Lỗi kết nối. Hãy chắc chắn bạn đã tạo Firestore Database."); });
+                  .catch((error) => { console.error("Lỗi:", error); alert("Lỗi kết nối."); });
             }
         }
     </script>
