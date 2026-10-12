@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bản Đồ Những Khoảnh Khắc Xanh</title>
+    <title>Trạm Kỷ Niệm & Học Tập</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -33,6 +33,9 @@
             }
         }
     </script>
+    
+    <!-- JS Confetti cho hiệu ứng bắn pháo hoa -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <!-- Custom Styles -->
     <style>
@@ -45,18 +48,19 @@
         }
         
         .glass-card {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(91, 155, 255, 0.1);
         }
 
+        /* Animations */
         .bubble-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
         .bubble-card:hover {
             transform: scale(1.03) translateY(-5px);
-            box-shadow: 0 20px 40px rgba(91, 155, 255, 0.15);
-            border-color: rgba(91, 155, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(91, 155, 255, 0.2);
+            border-color: rgba(91, 155, 255, 0.4);
         }
 
         .start-bubble {
@@ -72,18 +76,27 @@
             50% { transform: translateY(-15px) scale(1.05); }
         }
 
-        /* Modal transitions */
-        .modal-enter { opacity: 0; transform: scale(0.95) translateY(10px); }
-        .modal-enter-active { opacity: 1; transform: scale(1) translateY(0); transition: all 0.3s ease-out; }
-        .modal-leave { opacity: 1; transform: scale(1) translateY(0); }
-        .modal-leave-active { opacity: 0; transform: scale(0.95) translateY(10px); transition: all 0.2s ease-in; }
+        .hub-icon {
+            animation: floatSlow 4s ease-in-out infinite;
+        }
+        .hub-icon:nth-child(2) { animation-delay: 1s; }
+        
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* View Transitions */
+        .fade-enter { opacity: 0; transform: scale(0.95); transition: all 0.5s ease; }
+        .fade-enter-active { opacity: 1; transform: scale(1); }
+        .fade-exit { opacity: 1; transform: scale(1); transition: all 0.4s ease; }
+        .fade-exit-active { opacity: 0; transform: scale(0.95); }
 
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #A5D8FF; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #5B9BFF; }
         .no-scroll { overflow: hidden; height: 100vh; }
-        
         .star { cursor: pointer; color: #cbd5e1; transition: color 0.2s; }
         .star.active { color: #fbbf24; }
     </style>
@@ -93,20 +106,12 @@
     <!-- AUDIO NỀN -->
     <audio id="bg-music" loop src="https://files.catbox.moe/by6h11.mp4"></audio>
 
-    <!-- NÚT BẬT TẮT NHẠC -->
     <button id="music-toggle" class="fixed bottom-6 right-6 w-12 h-12 rounded-full glass-card flex items-center justify-center cursor-pointer z-[150] text-primary hover:bg-white transition-all duration-500 transform hover:scale-110 shadow-lg shadow-primary/30 opacity-0 pointer-events-none translate-y-4">
-        <!-- Icon Phát Nhạc -->
-        <svg id="icon-music-play" class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
-        </svg>
-        <!-- Icon Tắt Nhạc -->
-        <svg id="icon-music-pause" class="w-6 h-6 hidden text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path>
-        </svg>
+        <svg id="icon-music-play" class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
+        <svg id="icon-music-pause" class="w-6 h-6 hidden text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path></svg>
     </button>
 
-    <!-- ================= INTRO SCREEN ================= -->
+    <!-- ================= 1. INTRO SCREEN ================= -->
     <div id="intro-screen" class="fixed inset-0 z-[100] flex items-center justify-center bg-[#E0F2FE] transition-all duration-1000 ease-in-out">
         <video id="bg-video" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000" muted playsinline autoplay>
             <source src="nenweb.mp4" type="video/mp4">
@@ -114,56 +119,153 @@
         <div class="absolute inset-0 bg-black/10"></div>
         <button id="start-btn" class="start-bubble relative z-10 w-40 h-40 rounded-full flex flex-col items-center justify-center gap-2 cursor-pointer transition-all duration-700 scale-0 opacity-0 group">
             <span class="font-serif text-2xl font-bold text-primary drop-shadow-sm group-hover:text-[#4FC3F7] transition-colors">Mở ra</span>
-            <svg class="w-6 h-6 text-primary group-hover:text-[#4FC3F7]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-            </svg>
         </button>
     </div>
 
-    <!-- ================= MAIN CONTENT ================= -->
-    <div id="main-content" class="opacity-0 transition-opacity duration-1000 ease-in-out pb-20">
-        <header class="max-w-4xl mx-auto pt-16 px-6 text-center">
-            <div class="inline-block mb-4 px-4 py-1.5 rounded-full glass-card text-primary font-medium text-sm flex items-center gap-2 w-max mx-auto">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
-                Nhật ký Date của tụi mình
+    <!-- ================= 2. HUB SCREEN (SẢNH CHÍNH) ================= -->
+    <div id="hub-screen" class="fixed inset-0 z-[90] flex flex-col items-center justify-center hidden opacity-0 transition-opacity duration-1000">
+        <h1 class="font-serif text-4xl md:text-5xl font-bold text-textDark mb-16 drop-shadow-sm tracking-wide">Không gian của tụi mình ✨</h1>
+        
+        <div class="flex gap-10 md:gap-20">
+            <!-- Icon Địa Điểm -->
+            <div class="group relative cursor-pointer hub-icon" onclick="switchView('places')">
+                <div class="w-32 h-32 md:w-40 md:h-40 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20">
+                    <img src="diadiem.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/854/854878.png'" class="w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-md">
+                </div>
+                <div class="absolute -bottom-12 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-primary shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    Địa điểm đã đi 🗺️
+                </div>
             </div>
-            <h1 class="font-serif text-4xl md:text-5xl font-semibold mb-4 text-textDark">
-                Bản đồ những <br/> <span class="text-primary italic">khoảnh khắc xanh</span>
+
+            <!-- Icon Học Tập -->
+            <div class="group relative cursor-pointer hub-icon" onclick="switchView('study')">
+                <div class="w-32 h-32 md:w-40 md:h-40 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20">
+                    <img src="studyE.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/330/330731.png'" class="w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-md">
+                </div>
+                <div class="absolute -bottom-12 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-primary shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    Học Tiếng Anh 📚
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================= 3. MODULE ĐỊA ĐIỂM (BẢN ĐỒ CŨ) ================= -->
+    <div id="places-module" class="hidden opacity-0 pb-20 fade-enter">
+        <button onclick="switchView('hub')" class="fixed top-6 left-6 z-[80] glass-card px-4 py-2 rounded-full text-primary font-medium hover:bg-white transition-colors flex items-center gap-2 shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Sảnh chính
+        </button>
+
+        <header class="max-w-4xl mx-auto pt-24 px-6 text-center">
+            <h1 class="font-serif text-4xl font-semibold mb-4 text-textDark">
+                Bản đồ <span class="text-primary italic">khoảnh khắc xanh</span>
             </h1>
-            <p class="text-textGray mb-8 max-w-lg mx-auto font-sans leading-relaxed">
-                Lưu giữ từng góc phố, từng món ngon và những ngày thong thả đi dạo cùng em bé Mỹ Mỹ ☁️
-            </p>
-            <button onclick="openFormModal()" class="bg-primary hover:bg-[#4FC3F7] text-white px-8 py-3 rounded-full font-medium transition-all transform hover:scale-105 shadow-lg shadow-primary/30 flex items-center gap-2 mx-auto">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                Thêm địa điểm mới
+            <p class="text-textGray mb-8 max-w-lg mx-auto">Lưu giữ từng góc phố, từng món ngon cùng nhau ☁️</p>
+            <button onclick="openFormModal()" class="bg-primary hover:bg-[#4FC3F7] text-white px-8 py-3 rounded-full font-medium transition-transform transform hover:scale-105 shadow-lg shadow-primary/30 flex items-center gap-2 mx-auto">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg> Thêm địa điểm mới
             </button>
         </header>
 
         <main id="places-grid" class="max-w-5xl mx-auto mt-12 px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <p class="text-textGray col-span-full text-center py-10">Đang tải bản đồ...</p>
+            <!-- Render từ Firebase -->
         </main>
     </div>
 
-    <!-- ================= MODAL XEM CHI TIẾT ================= -->
+
+    <!-- ================= 4. MODULE HỌC TIẾNG ANH (MỚI) ================= -->
+    <div id="study-module" class="hidden opacity-0 pb-20 fade-enter">
+        <button onclick="switchView('hub')" class="fixed top-6 left-6 z-[80] glass-card px-4 py-2 rounded-full text-primary font-medium hover:bg-white transition-colors flex items-center gap-2 shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Sảnh chính
+        </button>
+
+        <header class="max-w-4xl mx-auto pt-24 px-6 text-center mb-10">
+            <h1 class="font-serif text-4xl font-semibold mb-4 text-textDark">
+                Góc <span class="text-primary italic">Tiếng Anh</span>
+            </h1>
+            <p class="text-textGray">Cùng nhau ôn tập và nhớ từ vựng nhé! 📖</p>
+        </header>
+
+        <!-- Menu chức năng học -->
+        <main class="max-w-3xl mx-auto px-6">
+            <div id="study-menu" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <button onclick="openStudyMode('list')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group">
+                    <div class="text-3xl mb-3">📝</div>
+                    <h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Danh sách từ vựng</h3>
+                    <p class="text-sm text-textGray">Xem 10 từ vựng hiện tại</p>
+                </button>
+                <button onclick="openStudyMode('en-vi')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-blue-200">
+                    <div class="text-3xl mb-3">🇬🇧 ➡️ 🇻🇳</div>
+                    <h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Dịch sang Tiếng Việt</h3>
+                    <p class="text-sm text-textGray">Đưa tiếng Anh, dịch tiếng Việt</p>
+                </button>
+                <button onclick="openStudyMode('vi-en')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-green-200">
+                    <div class="text-3xl mb-3">🇻🇳 ➡️ 🇬🇧</div>
+                    <h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Dịch sang Tiếng Anh</h3>
+                    <p class="text-sm text-textGray">Đưa tiếng Việt, dịch tiếng Anh</p>
+                </button>
+                <button onclick="openStudyMode('type')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-purple-200">
+                    <div class="text-3xl mb-3">🔍</div>
+                    <h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Phân tích loại từ</h3>
+                    <p class="text-sm text-textGray">Nhập loại từ (Noun, Verb...)</p>
+                </button>
+                <button onclick="openStudyMode('memory')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group sm:col-span-2 border-rose-200 bg-white/50">
+                    <div class="text-3xl mb-3 text-center">🧠</div>
+                    <h3 class="text-xl font-bold text-rose-600 mb-1 text-center">Kiểm tra trí nhớ (Hardcore)</h3>
+                    <p class="text-sm text-textGray text-center">Nhập đúng thứ tự 10 từ vựng đã học</p>
+                </button>
+            </div>
+
+            <!-- Khu vực hiển thị Động (List / Quiz / Memory) -->
+            <div id="study-content" class="hidden glass-card rounded-3xl p-6 md:p-10 relative">
+                <button onclick="backToStudyMenu()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
+                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                
+                <h2 id="study-content-title" class="text-2xl font-bold text-primary mb-6 border-b border-primary/20 pb-4">Tiêu đề</h2>
+                
+                <!-- Bảng từ vựng -->
+                <div id="vocab-list-container" class="hidden grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+
+                <!-- Quiz Container -->
+                <div id="quiz-container" class="hidden flex flex-col items-center">
+                    <div class="text-sm text-textGray mb-2 font-medium" id="quiz-progress">Câu 1 / 10</div>
+                    <div class="w-full bg-white rounded-2xl p-8 text-center shadow-sm border border-gray-100 mb-6">
+                        <p class="text-xs text-primary font-bold uppercase tracking-widest mb-2" id="quiz-hint">Dịch sang tiếng Việt</p>
+                        <h3 class="text-3xl font-serif font-bold text-textDark" id="quiz-question">Word</h3>
+                    </div>
+                    <input type="text" id="quiz-input" autocomplete="off" placeholder="Nhập đáp án của bạn..." class="w-full max-w-md px-5 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-primary text-center text-lg mb-4 transition-colors">
+                    <button id="quiz-submit-btn" onclick="checkQuizAnswer()" class="bg-primary hover:bg-[#4FC3F7] text-white px-8 py-3 rounded-xl font-bold transition-all shadow-md w-full max-w-md">Kiểm tra</button>
+                    
+                    <div id="quiz-feedback" class="mt-4 p-4 rounded-xl w-full max-w-md hidden text-center font-medium"></div>
+                </div>
+
+                <!-- Memory Container -->
+                <div id="memory-container" class="hidden flex flex-col items-center">
+                    <p class="text-textGray text-center mb-6">Hãy nhập lại <b class="text-rose-500">10 từ tiếng Anh</b> theo đúng thứ tự đã học.<br/>(Cách nhau bằng dấu phẩy hoặc khoảng trắng)</p>
+                    <textarea id="memory-input" rows="4" placeholder="Ví dụ: about, above, across..." class="w-full px-5 py-4 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-rose-400 text-lg mb-6 transition-colors resize-none leading-relaxed"></textarea>
+                    <button onclick="checkMemory()" class="bg-rose-500 hover:bg-rose-600 text-white px-8 py-3 rounded-xl font-bold transition-all shadow-md shadow-rose-200 w-full md:w-auto min-w-[200px]">Nộp bài 🚀</button>
+                    <div id="memory-feedback" class="mt-6 p-4 rounded-xl w-full hidden text-center font-medium"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- CÁC MODAL CỦA BẢN ĐỒ GIỮ NGUYÊN BÊN DƯỚI -->
+    <!-- Modal Xem -->
     <div id="view-modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 transition-opacity">
-        <div id="view-modal-content" class="bg-white rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto scroll-smooth shadow-2xl modal-enter relative">
-            
+        <div id="view-modal-content" class="bg-white rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto scroll-smooth shadow-2xl relative">
             <button onclick="closeViewModal()" class="absolute top-4 right-4 z-10 p-2 bg-black/30 text-white backdrop-blur-md rounded-full hover:bg-black/50 transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
-
-            <!-- Ảnh bìa -->
             <div class="h-56 bg-gray-200 w-full relative shrink-0">
-                <img id="view-image" src="" alt="" class="w-full h-full object-cover">
-                <div id="view-status-badge" class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1 shadow-sm">
-                </div>
+                <img id="view-image" src="" class="w-full h-full object-cover">
+                <div id="view-status-badge" class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1 shadow-sm"></div>
             </div>
-
             <div class="p-6">
                 <h2 id="view-name" class="text-2xl font-serif font-bold text-textDark mb-1">Tên địa điểm</h2>
                 <p id="view-address" class="text-sm text-textGray flex items-center gap-1 mb-4"></p>
-                
-                <!-- Bảng thông tin cơ bản -->
                 <div class="bg-accent/30 rounded-2xl p-4 mb-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
@@ -171,127 +273,74 @@
                             <p id="view-type" class="font-medium text-sm text-textDark">Nhà hàng</p>
                         </div>
                         <div>
-                            <p class="text-xs text-textGray mb-1" id="view-extra-label">Hình thức / Giá</p>
+                            <p class="text-xs text-textGray mb-1" id="view-extra-label">Hình / Giá</p>
                             <p id="view-extra-value" class="font-medium text-sm text-textDark">Ăn tại chỗ</p>
                         </div>
                         <div class="col-span-2">
-                            <p class="text-xs text-textGray mb-1">Đánh giá của tụi mình</p>
+                            <p class="text-xs text-textGray mb-1">Đánh giá</p>
                             <div class="flex items-center gap-1" id="view-stars"></div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Ưu & Nhược điểm (Ẩn nếu chưa đi hoặc k viết) -->
                 <div id="view-pros-cons" class="mb-4 space-y-3 hidden">
-                    <!-- Pros -->
                     <div id="view-pros-container" class="bg-emerald-50 border border-emerald-100 rounded-2xl p-3.5 hidden">
                         <p class="text-xs text-emerald-600 font-semibold mb-1 flex items-center gap-1">💖 Điểm cộng</p>
                         <p id="view-pros" class="text-sm text-emerald-800 leading-relaxed"></p>
                     </div>
-                    <!-- Cons -->
                     <div id="view-cons-container" class="bg-rose-50 border border-rose-100 rounded-2xl p-3.5 hidden">
                         <p class="text-xs text-rose-500 font-semibold mb-1 flex items-center gap-1">🥺 Điểm trừ</p>
                         <p id="view-cons" class="text-sm text-rose-800 leading-relaxed"></p>
                     </div>
                 </div>
-
-                <!-- Xem Menu -->
                 <div id="view-menu-container" class="mb-6 hidden transition-all">
-                    <p class="text-sm font-semibold text-textDark mb-2 flex items-center gap-1">📖 Menu của quán</p>
+                    <p class="text-sm font-semibold text-textDark mb-2 flex items-center gap-1">📖 Menu</p>
                     <div class="rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
-                        <img id="view-menu-image" src="" alt="Menu" class="w-full h-auto object-cover hover:scale-105 transition-transform duration-500">
+                        <img id="view-menu-image" src="" class="w-full h-auto object-cover hover:scale-105 transition-transform duration-500">
                     </div>
                 </div>
-
-                <!-- Nút thao tác -->
                 <div class="flex gap-3">
-                    <button onclick="editCurrentPlace()" class="flex-1 py-3 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 font-medium transition-colors flex items-center justify-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                        Chỉnh sửa kỷ niệm
-                    </button>
-                    <button onclick="deleteCurrentPlace()" class="py-3 px-4 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 font-medium transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    </button>
+                    <button onclick="editCurrentPlace()" class="flex-1 py-3 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 font-medium flex items-center justify-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg> Sửa</button>
+                    <button onclick="deleteCurrentPlace()" class="py-3 px-4 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 font-medium"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ================= MODAL THÊM / SỬA ĐỊA ĐIỂM ================= -->
+    <!-- Modal Form -->
     <div id="form-modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 transition-opacity">
-        <div id="form-modal-content" class="bg-white rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl modal-enter relative max-h-[90vh] overflow-y-auto scroll-smooth">
-            <button onclick="closeFormModal()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
-                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        <div id="form-modal-content" class="bg-white rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl relative max-h-[90vh] overflow-y-auto scroll-smooth">
+            <button onclick="closeFormModal()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
             <div class="p-6">
                 <h2 id="form-title" class="text-2xl font-serif font-bold text-textDark mb-4">Lưu lại một kỷ niệm ☁️</h2>
-                
                 <div class="flex p-1 bg-gray-100 rounded-xl mb-6">
-                    <button id="tab-food" type="button" onclick="switchTab('food')" class="flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm transition-all">Ăn uống</button>
-                    <button id="tab-homestay" type="button" onclick="switchTab('homestay')" class="flex-1 py-2 rounded-lg text-textGray font-medium text-sm hover:text-primary transition-all">Homestay / Net</button>
+                    <button id="tab-food" type="button" onclick="switchFormTab('food')" class="flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm">Ăn uống</button>
+                    <button id="tab-homestay" type="button" onclick="switchFormTab('homestay')" class="flex-1 py-2 rounded-lg text-textGray font-medium text-sm">Homestay / Net</button>
                 </div>
-
                 <form id="add-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
-                    <!-- Cơ bản -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Tên địa điểm *</label>
-                        <input type="text" id="input-name" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Địa chỉ</label>
-                        <input type="text" id="input-address" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary">
-                    </div>
-
-                    <!-- Tùy chọn Loại hình theo Tab -->
+                    <div><label class="block text-sm font-medium mb-1">Tên địa điểm *</label><input type="text" id="input-name" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary focus:outline-none"></div>
+                    <div><label class="block text-sm font-medium mb-1">Địa chỉ</label><input type="text" id="input-address" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary focus:outline-none"></div>
                     <div id="form-food-fields" class="space-y-4">
                         <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Loại</label>
-                                <select id="input-food-type" class="w-full px-4 py-2.5 rounded-xl border border-gray-200">
-                                    <option value="Lề đường">Lề đường</option>
-                                    <option value="Nhà hàng">Nhà hàng</option>
-                                    <option value="Quán Cà Phê">Quán Cà Phê</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Hình thức</label>
-                                <select id="input-format" class="w-full px-4 py-2.5 rounded-xl border border-gray-200">
-                                    <option value="Ăn tại chỗ">Ăn tại chỗ</option>
-                                    <option value="Mang đi">Mang đi</option>
-                                    <option value="Cả hai">Cả hai</option>
-                                </select>
-                            </div>
+                            <div><label class="block text-sm font-medium mb-1">Loại</label><select id="input-food-type" class="w-full px-4 py-2.5 rounded-xl border border-gray-200"><option>Lề đường</option><option>Nhà hàng</option><option>Quán Cà Phê</option></select></div>
+                            <div><label class="block text-sm font-medium mb-1">Hình thức</label><select id="input-format" class="w-full px-4 py-2.5 rounded-xl border border-gray-200"><option>Ăn tại chỗ</option><option>Mang đi</option><option>Cả hai</option></select></div>
                         </div>
                     </div>
-
                     <div id="form-homestay-fields" class="space-y-4 hidden">
                         <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Loại</label>
-                                <select id="input-home-type" class="w-full px-4 py-2.5 rounded-xl border border-gray-200">
-                                    <option value="Homestay">Homestay</option>
-                                    <option value="Phòng Net">Phòng Net</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Giá / Đêm / Giờ</label>
-                                <input type="text" id="input-price" placeholder="VD: 500k/đêm" class="w-full px-4 py-2.5 rounded-xl border border-gray-200">
-                            </div>
+                            <div><label class="block text-sm font-medium mb-1">Loại</label><select id="input-home-type" class="w-full px-4 py-2.5 rounded-xl border border-gray-200"><option>Homestay</option><option>Phòng Net</option></select></div>
+                            <div><label class="block text-sm font-medium mb-1">Giá / Đêm / Giờ</label><input type="text" id="input-price" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary"></div>
                         </div>
                     </div>
-
-                    <!-- Trạng thái & Đánh giá -->
                     <div class="grid grid-cols-2 gap-4 pt-2 border-t border-gray-100">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Trạng thái</label>
-                            <select id="input-visited" onchange="toggleRating()" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-primary font-medium bg-blue-50/50">
-                                <option value="true">Đã đi rùi 🌸</option>
-                                <option value="false">Sẽ đi 📌</option>
-                            </select>
+                            <label class="block text-sm font-medium mb-1">Trạng thái</label>
+                            <select id="input-visited" onchange="toggleRating()" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-primary font-medium bg-blue-50/50"><option value="true">Đã đi rùi 🌸</option><option value="false">Sẽ đi 📌</option></select>
                         </div>
                         <div id="rating-container">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Chấm điểm</label>
-                            <div class="flex items-center gap-1 mt-2.5" id="star-group">
+                            <label class="block text-sm font-medium mb-1">Chấm điểm</label>
+                            <div class="flex gap-1 mt-2.5" id="star-group">
                                 <svg onclick="setRating(1)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                                 <svg onclick="setRating(2)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                                 <svg onclick="setRating(3)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
@@ -300,45 +349,27 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- MỚI: Phần Ưu/Nhược điểm (Chỉ hiện khi Đã Đi) -->
-                    <div id="review-details" class="space-y-4 transition-all duration-300">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Điểm cộng 💖</label>
-                            <input type="text" id="input-pros" placeholder="Đồ ăn siêu ngon, view đẹp lãng mạn..." class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-green-400 focus:ring-2 focus:ring-green-100 transition-all">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Điểm trừ 🥺</label>
-                            <input type="text" id="input-cons" placeholder="Hơi xa một chút, gửi xe hơi khó..." class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 transition-all">
-                        </div>
+                    <div id="review-details" class="space-y-4">
+                        <div><label class="block text-sm font-medium mb-1">Điểm cộng 💖</label><input type="text" id="input-pros" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-green-400 focus:outline-none"></div>
+                        <div><label class="block text-sm font-medium mb-1">Điểm trừ 🥺</label><input type="text" id="input-cons" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-rose-400 focus:outline-none"></div>
                     </div>
-
-                    <!-- MỚI: Hình ảnh và Menu -->
                     <div class="pt-2 border-t border-gray-100 space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Link ảnh bìa quán</label>
-                            <input type="url" id="input-image" placeholder="https://i.postimg.cc/... (Link trực tiếp)" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Link ảnh Menu 📖 (Tùy chọn)</label>
-                            <input type="url" id="input-menu" placeholder="https://i.postimg.cc/... (Link trực tiếp)" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-primary">
-                        </div>
+                        <div><label class="block text-sm font-medium mb-1">Link ảnh bìa (Trực tiếp)</label><input type="url" id="input-image" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary focus:outline-none"></div>
+                        <div><label class="block text-sm font-medium mb-1">Link ảnh Menu 📖 (Tùy chọn)</label><input type="url" id="input-menu" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary focus:outline-none"></div>
                     </div>
-
-                    <button type="submit" id="btn-submit" class="w-full mt-6 bg-primary hover:bg-[#4FC3F7] text-white py-3.5 rounded-xl font-semibold transition-all shadow-lg shadow-primary/20 transform hover:-translate-y-1">
-                        Lưu vào Bản Đồ
-                    </button>
+                    <button type="submit" id="btn-submit" class="w-full mt-6 bg-primary text-white py-3.5 rounded-xl font-semibold shadow-lg">Lưu vào Bản Đồ</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- TẢI THƯ VIỆN FIREBASE -->
+
+    <!-- ================= SCRIPTS ================= -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
     <script>
-        // CẤU HÌNH FIREBASE CỦA BẠN
+        // ---------------- FIREBASE CONFIG ----------------
         const firebaseConfig = {
             apiKey: "AIzaSyAm5PXedBf4HH4OhzHOKJ4_-ESrJNSABYk",
             authDomain: "bautroi-738c9.firebaseapp.com",
@@ -348,29 +379,43 @@
             appId: "1:233336125295:web:806a8dd1f42fe027721a9a",
             measurementId: "G-TTQHJEZMQG"
         };
-        
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        // ---------------- VARIABLES ----------------
+        // Places
         let places = [];
-        let currentTab = 'food';
+        let formCurrentTab = 'food';
         let currentRating = 4;
         let editingId = null; 
         let viewingId = null;
 
-        // LOGIC MÀN HÌNH CHỜ & NHẠC NỀN
+        // Vocab Data (Hardcoded based on user prompt)
+        const vocabData = [
+            { en: 'about', type: 'Adverb/Preposition', vi: 'Về cái gì đó?' },
+            { en: 'above', type: 'Adverb/Preposition', vi: 'Hơn cái gì đó?' },
+            { en: 'across', type: 'Adverb/Preposition', vi: 'Băng qua, Ngang qua' },
+            { en: 'action', type: 'Noun', vi: 'Hành động' },
+            { en: 'actor', type: 'Noun', vi: 'Diễn Viên' },
+            { en: 'actress', type: 'Noun', vi: 'Nữ diễn viên' },
+            { en: 'activity', type: 'Noun', vi: 'Hoạt động' },
+            { en: 'add', type: 'Verb', vi: 'Thêm' },
+            { en: 'address', type: 'Noun', vi: 'Địa chỉ' },
+            { en: 'adult', type: 'Noun', vi: 'Người lớn' }
+        ];
+
+        let studyState = {
+            mode: '', // 'list', 'en-vi', 'vi-en', 'type', 'memory'
+            currentIndex: 0,
+            shuffledData: []
+        };
+
+
+        // ---------------- INTRO & VIEW SWITCHING ----------------
         document.addEventListener('DOMContentLoaded', () => {
             const video = document.getElementById('bg-video');
             const startBtn = document.getElementById('start-btn');
-            const introScreen = document.getElementById('intro-screen');
-            const mainContent = document.getElementById('main-content');
-            const body = document.getElementById('body');
             
-            const bgMusic = document.getElementById('bg-music');
-            const musicToggle = document.getElementById('music-toggle');
-            const iconPlay = document.getElementById('icon-music-play');
-            const iconPause = document.getElementById('icon-music-pause');
-
             video.addEventListener('ended', showStartBubble);
             video.addEventListener('error', showStartBubble);
             
@@ -384,49 +429,263 @@
                 startBtn.classList.replace('scale-100', 'scale-150');
                 startBtn.classList.replace('opacity-100', 'opacity-0');
                 
-                // Play music & Show toggle button
+                const bgMusic = document.getElementById('bg-music');
                 bgMusic.volume = 0.4; 
                 bgMusic.play().catch(e => console.log("Trình duyệt chặn autoplay audio"));
-                musicToggle.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
-                musicToggle.classList.add('opacity-100', 'translate-y-0');
+                
+                document.getElementById('music-toggle').classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+                document.getElementById('music-toggle').classList.add('opacity-100', 'translate-y-0');
 
                 setTimeout(() => {
-                    introScreen.style.opacity = '0';
+                    document.getElementById('intro-screen').style.opacity = '0';
                     setTimeout(() => {
-                        introScreen.style.display = 'none';
-                        body.classList.remove('no-scroll');
-                        mainContent.classList.remove('opacity-0');
-                        mainContent.classList.add('opacity-100');
+                        document.getElementById('intro-screen').style.display = 'none';
+                        document.getElementById('body').classList.remove('no-scroll');
+                        
+                        // Show Hub
+                        switchView('hub');
                     }, 1000);
                 }, 300);
             });
 
-            musicToggle.addEventListener('click', () => {
+            // Music Toggle
+            document.getElementById('music-toggle').addEventListener('click', () => {
+                const bgMusic = document.getElementById('bg-music');
                 if (bgMusic.paused) {
                     bgMusic.play();
-                    iconPlay.classList.remove('hidden');
-                    iconPause.classList.add('hidden');
+                    document.getElementById('icon-music-play').classList.remove('hidden');
+                    document.getElementById('icon-music-pause').classList.add('hidden');
                 } else {
                     bgMusic.pause();
-                    iconPlay.classList.add('hidden');
-                    iconPause.classList.remove('hidden');
+                    document.getElementById('icon-music-play').classList.add('hidden');
+                    document.getElementById('icon-music-pause').classList.remove('hidden');
                 }
             });
 
-            // KẾT NỐI FIREBASE
+            // Connect Firebase Realtime for Places
             db.collection("places").orderBy("createdAt", "desc").onSnapshot((querySnapshot) => {
                 places = [];
-                querySnapshot.forEach((doc) => {
-                    places.push({ id: doc.id, ...doc.data() });
-                });
+                querySnapshot.forEach((doc) => { places.push({ id: doc.id, ...doc.data() }); });
                 renderPlaces(); 
-            }, (error) => {
-                console.error("Lỗi: ", error);
-                document.getElementById('places-grid').innerHTML = '<p class="text-red-500 col-span-full text-center">Lỗi kết nối cơ sở dữ liệu.</p>';
             });
         });
 
-        // RENDER GIAO DIỆN CARDS
+        function switchView(viewName) {
+            // Hide all
+            const hub = document.getElementById('hub-screen');
+            const placesMod = document.getElementById('places-module');
+            const studyMod = document.getElementById('study-module');
+            
+            [hub, placesMod, studyMod].forEach(el => {
+                el.classList.add('opacity-0');
+                setTimeout(() => el.classList.add('hidden'), 500); // Wait for fade out
+            });
+
+            // Show selected
+            setTimeout(() => {
+                if(viewName === 'hub') {
+                    hub.classList.remove('hidden');
+                    setTimeout(() => hub.classList.remove('opacity-0'), 50);
+                } else if(viewName === 'places') {
+                    placesMod.classList.remove('hidden');
+                    setTimeout(() => placesMod.classList.remove('opacity-0'), 50);
+                } else if(viewName === 'study') {
+                    studyMod.classList.remove('hidden');
+                    setTimeout(() => studyMod.classList.remove('opacity-0'), 50);
+                }
+            }, 500);
+        }
+
+        // =====================================================================
+        // ===================== LOGIC GÓC HỌC TIẾNG ANH =======================
+        // =====================================================================
+
+        function openStudyMode(mode) {
+            studyState.mode = mode;
+            studyState.currentIndex = 0;
+            // Shuffle mảng để câu hỏi random (Trừ lúc xem list và kiểm tra trí nhớ)
+            studyState.shuffledData = [...vocabData].sort(() => Math.random() - 0.5);
+            
+            document.getElementById('study-menu').classList.add('hidden');
+            const contentBlock = document.getElementById('study-content');
+            contentBlock.classList.remove('hidden');
+
+            // Hide all inner containers
+            document.getElementById('vocab-list-container').classList.add('hidden');
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('memory-container').classList.add('hidden');
+
+            const title = document.getElementById('study-content-title');
+
+            if(mode === 'list') {
+                title.innerText = '📝 Danh sách từ vựng';
+                renderVocabList();
+            } else if (mode === 'memory') {
+                title.innerText = '🧠 Kiểm tra trí nhớ';
+                document.getElementById('memory-container').classList.remove('hidden');
+                document.getElementById('memory-input').value = "";
+                document.getElementById('memory-feedback').classList.add('hidden');
+            } else {
+                // Chế độ Quiz (en-vi, vi-en, type)
+                if(mode === 'en-vi') title.innerText = '🇬🇧 ➡️ 🇻🇳 Dịch sang Tiếng Việt';
+                if(mode === 'vi-en') title.innerText = '🇻🇳 ➡️ 🇬🇧 Dịch sang Tiếng Anh';
+                if(mode === 'type') title.innerText = '🔍 Phân tích loại từ';
+                
+                document.getElementById('quiz-container').classList.remove('hidden');
+                loadQuizQuestion();
+            }
+        }
+
+        function backToStudyMenu() {
+            document.getElementById('study-content').classList.add('hidden');
+            document.getElementById('study-menu').classList.remove('hidden');
+        }
+
+        function renderVocabList() {
+            const listContainer = document.getElementById('vocab-list-container');
+            listContainer.classList.remove('hidden');
+            listContainer.innerHTML = '';
+            
+            vocabData.forEach(item => {
+                listContainer.innerHTML += `
+                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-center text-center">
+                        <span class="text-xs font-semibold text-gray-400 mb-1">${item.type}</span>
+                        <h4 class="text-xl font-bold text-primary mb-1">${item.en}</h4>
+                        <p class="text-sm text-textDark">${item.vi}</p>
+                    </div>
+                `;
+            });
+        }
+
+        function loadQuizQuestion() {
+            if(studyState.currentIndex >= vocabData.length) {
+                // Hoàn thành bộ câu hỏi
+                document.getElementById('quiz-question').innerText = "🎉 Hoàn thành!";
+                document.getElementById('quiz-hint').innerText = "Xuất sắc!";
+                document.getElementById('quiz-input').classList.add('hidden');
+                document.getElementById('quiz-submit-btn').classList.add('hidden');
+                document.getElementById('quiz-feedback').classList.add('hidden');
+                fireConfetti();
+                return;
+            }
+
+            document.getElementById('quiz-input').classList.remove('hidden');
+            document.getElementById('quiz-submit-btn').classList.remove('hidden');
+            document.getElementById('quiz-feedback').classList.add('hidden');
+            document.getElementById('quiz-input').value = "";
+            document.getElementById('quiz-input').focus();
+            
+            document.getElementById('quiz-progress').innerText = `Câu ${studyState.currentIndex + 1} / ${vocabData.length}`;
+            
+            const currentItem = studyState.shuffledData[studyState.currentIndex];
+            
+            if(studyState.mode === 'en-vi') {
+                document.getElementById('quiz-hint').innerText = "Dịch sang tiếng Việt";
+                document.getElementById('quiz-question').innerText = currentItem.en;
+            } else if(studyState.mode === 'vi-en') {
+                document.getElementById('quiz-hint').innerText = "Dịch sang tiếng Anh";
+                document.getElementById('quiz-question').innerText = currentItem.vi;
+            } else if(studyState.mode === 'type') {
+                document.getElementById('quiz-hint').innerText = "Loại từ là gì? (Noun, Verb, Adverb...)";
+                document.getElementById('quiz-question').innerText = currentItem.en;
+            }
+        }
+
+        // Bắt sự kiện Enter khi input quiz
+        document.getElementById('quiz-input').addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                checkQuizAnswer();
+            }
+        });
+
+        function checkQuizAnswer() {
+            if(studyState.currentIndex >= vocabData.length) return;
+            
+            const currentItem = studyState.shuffledData[studyState.currentIndex];
+            const userInput = document.getElementById('quiz-input').value.trim().toLowerCase();
+            let isCorrect = false;
+            let expectedAnswer = "";
+
+            if(studyState.mode === 'en-vi') {
+                expectedAnswer = currentItem.vi.toLowerCase();
+                // Check xem user có gõ đúng hoặc gần đúng (chứa từ khóa chính)
+                if(expectedAnswer.includes(userInput) && userInput.length > 3 || userInput === expectedAnswer) isCorrect = true;
+            } else if(studyState.mode === 'vi-en') {
+                expectedAnswer = currentItem.en.toLowerCase();
+                if(userInput === expectedAnswer) isCorrect = true;
+            } else if(studyState.mode === 'type') {
+                expectedAnswer = currentItem.type.toLowerCase();
+                if(expectedAnswer.includes(userInput) && userInput.length > 2) isCorrect = true;
+            }
+
+            const feedbackBox = document.getElementById('quiz-feedback');
+            feedbackBox.classList.remove('hidden', 'bg-green-100', 'text-green-700', 'bg-red-100', 'text-red-700');
+
+            if(isCorrect) {
+                feedbackBox.classList.add('bg-green-100', 'text-green-700');
+                feedbackBox.innerHTML = `✅ Chính xác! Đáp án: <b>${studyState.mode === 'en-vi' ? currentItem.vi : (studyState.mode === 'vi-en' ? currentItem.en : currentItem.type)}</b>`;
+                studyState.currentIndex++;
+                setTimeout(() => { loadQuizQuestion(); }, 1200);
+            } else {
+                feedbackBox.classList.add('bg-red-100', 'text-red-700');
+                feedbackBox.innerHTML = `❌ Chưa chính xác. Đáp án đúng là: <b>${studyState.mode === 'en-vi' ? currentItem.vi : (studyState.mode === 'vi-en' ? currentItem.en : currentItem.type)}</b>`;
+                // Sai thì k tăng index liền, để user nhìn, bấm nút hoặc tự xóa gõ lại (hoặc cho qua lun sau 2s)
+                setTimeout(() => { studyState.currentIndex++; loadQuizQuestion(); }, 2500);
+            }
+        }
+
+        function checkMemory() {
+            const userInput = document.getElementById('memory-input').value.toLowerCase();
+            const feedbackBox = document.getElementById('memory-feedback');
+            feedbackBox.classList.remove('hidden', 'bg-green-100', 'text-green-700', 'bg-red-100', 'text-red-700');
+
+            // Regex để lấy tất cả các từ tiếng anh trong đoạn text
+            const userWords = userInput.match(/\b[a-z]+\b/g) || [];
+            
+            // Lấy danh sách 10 từ tiếng Anh đúng thứ tự
+            const correctOrder = vocabData.map(item => item.en.toLowerCase());
+            
+            // Check
+            let isSuccess = true;
+            let errorText = "";
+
+            if(userWords.length < 10) {
+                isSuccess = false;
+                errorText = `Bạn mới nhập được ${userWords.length} từ. Vẫn còn thiếu!`;
+            } else {
+                for(let i = 0; i < 10; i++) {
+                    if(userWords[i] !== correctOrder[i]) {
+                        isSuccess = false;
+                        errorText = `Sai ở từ thứ ${i+1}. Bạn nhập "${userWords[i]}" nhưng đáp án là "${correctOrder[i]}".`;
+                        break;
+                    }
+                }
+            }
+
+            if(isSuccess) {
+                feedbackBox.classList.add('bg-green-100', 'text-green-700');
+                feedbackBox.innerHTML = `🎉 Tuyệt vờiiiii! Bạn nhớ đúng 100% không sai một ly!`;
+                fireConfetti();
+            } else {
+                feedbackBox.classList.add('bg-red-100', 'text-red-700');
+                feedbackBox.innerHTML = `🥺 Cố lên! ${errorText}`;
+            }
+        }
+
+        function fireConfetti() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+
+
+        // =====================================================================
+        // ===================== LOGIC ĐỊA ĐIỂM (GIỮ NGUYÊN) ===================
+        // =====================================================================
+
         function renderPlaces() {
             const grid = document.getElementById('places-grid');
             grid.innerHTML = ''; 
@@ -460,21 +719,21 @@
                 const cardHtml = `
                     <article onclick="openViewModal('${place.id}')" class="glass-card rounded-3xl p-4 bubble-card group relative overflow-hidden flex flex-col">
                         <div class="h-48 rounded-2xl bg-gray-200 overflow-hidden relative mb-4 shrink-0">
-                            <img src="${place.image || defaultImage}" alt="${place.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <img src="${place.image || defaultImage}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold ${place.visited ? 'text-[#10B981]' : 'text-primary'} flex items-center gap-1 shadow-sm">
-                                <span class="w-2 h-2 rounded-full ${place.visited ? 'bg-[#10B981]' : 'bg-primary animate-pulse'}"></span> ${place.visited ? 'Đã đi' : 'Sẽ đi'}
+                                <span class="w-2 h-2 rounded-full ${place.visited ? 'bg-[#10B981]' : 'bg-primary'}"></span> ${place.visited ? 'Đã đi' : 'Sẽ đi'}
                             </div>
                         </div>
                         <div class="px-2 flex-1 flex flex-col">
                             <h3 class="font-serif text-xl font-semibold text-textDark leading-tight mb-1">${place.name}</h3>
                             <p class="text-sm text-textGray flex items-center gap-1 mb-2 truncate">
-                                <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                                <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
                                 ${place.address || 'Chưa cập nhật'}
                             </p>
                             <div class="flex items-center gap-2 mb-3 mt-auto">${extraInfoHtml}</div>
                             <div class="flex justify-between items-center bg-white/50 p-2.5 rounded-xl border border-white">
                                 <div class="flex gap-1 items-center">${starsHtml}</div>
-                                ${place.menu ? `<span class="text-xs text-primary font-medium flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg> Có Menu</span>` : ''}
+                                ${place.menu ? `<span class="text-xs text-primary font-medium">📖 Có Menu</span>` : ''}
                             </div>
                         </div>
                     </article>
@@ -483,80 +742,44 @@
             });
         }
 
-        // MỞ MODAL XEM CHI TIẾT
+        // VIEW CHI TIẾT
         function openViewModal(id) {
             const place = places.find(p => p.id === id);
             if(!place) return;
             viewingId = id; 
-
             document.getElementById('view-name').innerText = place.name;
-            document.getElementById('view-address').innerHTML = `<svg class="w-4 h-4 text-primary shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg> <span>${place.address || 'Chưa cập nhật địa chỉ'}</span>`;
+            document.getElementById('view-address').innerHTML = `<svg class="w-4 h-4 text-primary shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg> <span>${place.address || 'Chưa cập nhật địa chỉ'}</span>`;
             
-            const defaultImage = place.category === 'food' 
-                ? 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-                : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
-            document.getElementById('view-image').src = place.image || defaultImage;
+            const defImage = place.category === 'food' ? 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80' : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80';
+            document.getElementById('view-image').src = place.image || defImage;
 
             const badge = document.getElementById('view-status-badge');
-            if (place.visited) {
-                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-[#10B981]"></span><span class="text-[#10B981]">Đã đi rùi</span>`;
-            } else {
-                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span><span class="text-primary">Sắp đi</span>`;
-            }
+            badge.innerHTML = place.visited ? `<span class="w-2 h-2 rounded-full bg-[#10B981]"></span><span class="text-[#10B981]">Đã đi rùi</span>` : `<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span><span class="text-primary">Sắp đi</span>`;
 
             document.getElementById('view-type').innerText = place.type;
-            if (place.category === 'food') {
-                document.getElementById('view-extra-label').innerText = "Hình thức";
-                document.getElementById('view-extra-value').innerText = place.format;
-            } else {
-                document.getElementById('view-extra-label').innerText = "Mức giá";
-                document.getElementById('view-extra-value').innerText = place.price || 'Chưa rõ';
-            }
+            document.getElementById('view-extra-label').innerText = place.category === 'food' ? "Hình thức" : "Mức giá";
+            document.getElementById('view-extra-value').innerText = place.category === 'food' ? place.format : (place.price || 'Chưa rõ');
 
-            // Stars
             let starsHtml = '';
             if (place.visited) {
                 for(let i=1; i<=5; i++) {
                     starsHtml += `<svg class="w-5 h-5 ${i <= place.rating ? 'text-yellow-400' : 'text-gray-200'}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`;
                 }
-            } else {
-                starsHtml = `<span class="text-sm text-gray-400 italic">Chưa trải nghiệm</span>`;
-            }
+            } else { starsHtml = `<span class="text-sm text-gray-400 italic">Chưa trải nghiệm</span>`; }
             document.getElementById('view-stars').innerHTML = starsHtml;
 
-            // Ưu / Nhược điểm
             const prosConsBlock = document.getElementById('view-pros-cons');
             const prosBlock = document.getElementById('view-pros-container');
             const consBlock = document.getElementById('view-cons-container');
-
             if (place.visited && (place.pros || place.cons)) {
                 prosConsBlock.classList.remove('hidden');
-                
-                if (place.pros) {
-                    prosBlock.classList.remove('hidden');
-                    document.getElementById('view-pros').innerText = place.pros;
-                } else {
-                    prosBlock.classList.add('hidden');
-                }
+                if (place.pros) { prosBlock.classList.remove('hidden'); document.getElementById('view-pros').innerText = place.pros; } else prosBlock.classList.add('hidden');
+                if (place.cons) { consBlock.classList.remove('hidden'); document.getElementById('view-cons').innerText = place.cons; } else consBlock.classList.add('hidden');
+            } else { prosConsBlock.classList.add('hidden'); }
 
-                if (place.cons) {
-                    consBlock.classList.remove('hidden');
-                    document.getElementById('view-cons').innerText = place.cons;
-                } else {
-                    consBlock.classList.add('hidden');
-                }
-            } else {
-                prosConsBlock.classList.add('hidden');
-            }
-
-            // Menu Image
             const menuBlock = document.getElementById('view-menu-container');
-            if (place.menu) {
-                menuBlock.classList.remove('hidden');
-                document.getElementById('view-menu-image').src = place.menu;
-            } else {
-                menuBlock.classList.add('hidden');
-            }
+            if (place.menu) { menuBlock.classList.remove('hidden'); document.getElementById('view-menu-image').src = place.menu; }
+            else { menuBlock.classList.add('hidden'); }
 
             const overlay = document.getElementById('view-modal-overlay');
             const content = document.getElementById('view-modal-content');
@@ -564,20 +787,16 @@
             overlay.classList.add('flex');
             content.classList.remove('modal-leave', 'modal-leave-active');
             content.classList.add('modal-enter', 'modal-enter-active');
-            
-            // Reset cuộn chuột lên trên cùng
             content.scrollTop = 0;
-
-            setTimeout(() => { content.classList.remove('modal-enter', 'modal-enter-active'); }, 300);
+            setTimeout(() => content.classList.remove('modal-enter', 'modal-enter-active'), 300);
         }
 
         function closeViewModal() {
-            const overlay = document.getElementById('view-modal-overlay');
             const content = document.getElementById('view-modal-content');
             content.classList.add('modal-leave-active');
             setTimeout(() => {
-                overlay.classList.add('hidden');
-                overlay.classList.remove('flex');
+                document.getElementById('view-modal-overlay').classList.add('hidden');
+                document.getElementById('view-modal-overlay').classList.remove('flex');
                 content.classList.remove('modal-leave-active');
                 viewingId = null;
             }, 200);
@@ -586,8 +805,8 @@
         function deleteCurrentPlace() {
             if(confirm("Bạn có chắc muốn xóa kỷ niệm này không?")) {
                 db.collection("places").doc(viewingId).delete()
-                  .then(() => { closeViewModal(); })
-                  .catch((error) => { console.error("Lỗi khi xóa: ", error); });
+                  .then(() => closeViewModal())
+                  .catch(error => console.error("Lỗi khi xóa: ", error));
             }
         }
 
@@ -599,7 +818,7 @@
             document.getElementById('form-title').innerText = "Chỉnh sửa kỷ niệm ✏️";
             document.getElementById('btn-submit').innerText = "Cập nhật";
 
-            switchTab(place.category);
+            switchFormTab(place.category);
             document.getElementById('input-name').value = place.name;
             document.getElementById('input-address').value = place.address;
             document.getElementById('input-image').value = place.image || "";
@@ -618,15 +837,16 @@
 
             toggleRating();
             if(place.visited) setRating(place.rating);
-            setTimeout(() => { openFormModalOnlyUI(); }, 300);
+            setTimeout(() => openFormModalOnlyUI(), 300);
         }
 
+        // TẠO/SỬA FORM
         function openFormModal() {
             editingId = null;
             document.getElementById('add-form').reset();
             document.getElementById('form-title').innerText = "Lưu lại một kỷ niệm ☁️";
             document.getElementById('btn-submit').innerText = "Lưu vào Bản Đồ";
-            switchTab('food');
+            switchFormTab('food');
             setRating(4); 
             toggleRating();
             openFormModalOnlyUI();
@@ -640,27 +860,25 @@
             content.classList.remove('modal-leave', 'modal-leave-active');
             content.classList.add('modal-enter', 'modal-enter-active');
             content.scrollTop = 0;
-            setTimeout(() => { content.classList.remove('modal-enter', 'modal-enter-active'); }, 300);
+            setTimeout(() => content.classList.remove('modal-enter', 'modal-enter-active'), 300);
         }
 
         function closeFormModal() {
-            const overlay = document.getElementById('form-modal-overlay');
             const content = document.getElementById('form-modal-content');
             content.classList.add('modal-leave-active');
             setTimeout(() => {
-                overlay.classList.add('hidden');
-                overlay.classList.remove('flex');
+                document.getElementById('form-modal-overlay').classList.add('hidden');
+                document.getElementById('form-modal-overlay').classList.remove('flex');
                 content.classList.remove('modal-leave-active');
             }, 200);
         }
 
-        function switchTab(tab) {
-            currentTab = tab;
+        function switchFormTab(tab) {
+            formCurrentTab = tab;
             const btnFood = document.getElementById('tab-food');
             const btnHome = document.getElementById('tab-homestay');
             const foodFields = document.getElementById('form-food-fields');
             const homeFields = document.getElementById('form-homestay-fields');
-
             if(tab === 'food') {
                 btnFood.className = "flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm transition-all";
                 btnHome.className = "flex-1 py-2 rounded-lg text-textGray font-medium text-sm hover:text-primary transition-all";
@@ -689,32 +907,24 @@
             const ratingContainer = document.getElementById('rating-container');
             const reviewDetails = document.getElementById('review-details');
             const stars = document.querySelectorAll('#star-group .star');
-            
             if(isVisited) {
-                // Hiển thị phần rating & Ưu nhược điểm
                 ratingContainer.style.opacity = '1';
                 reviewDetails.classList.remove('opacity-40', 'pointer-events-none');
-                
-                if(currentRating === 0) setRating(4); 
-                else setRating(currentRating);
+                if(currentRating === 0) setRating(4); else setRating(currentRating);
             } else {
-                // Làm mờ và tắt tương tác
                 ratingContainer.style.opacity = '0.4';
                 reviewDetails.classList.add('opacity-40', 'pointer-events-none');
-                
                 stars.forEach(s => s.classList.remove('active'));
             }
         }
 
-        // LƯU DATA LÊN FIREBASE
         function handleFormSubmit(e) {
             e.preventDefault();
             const isVisited = document.getElementById('input-visited').value === 'true';
-            const btnSubmit = document.getElementById('btn-submit');
-            btnSubmit.innerText = "Đang lưu...";
+            document.getElementById('btn-submit').innerText = "Đang lưu...";
             
             const newPlaceData = {
-                category: currentTab,
+                category: formCurrentTab,
                 name: document.getElementById('input-name').value,
                 address: document.getElementById('input-address').value,
                 image: document.getElementById('input-image').value,
@@ -725,7 +935,7 @@
                 cons: isVisited ? document.getElementById('input-cons').value : "",
             };
 
-            if(currentTab === 'food') {
+            if(formCurrentTab === 'food') {
                 newPlaceData.type = document.getElementById('input-food-type').value;
                 newPlaceData.format = document.getElementById('input-format').value;
             } else {
@@ -735,13 +945,13 @@
 
             if (editingId) {
                 db.collection("places").doc(editingId).update(newPlaceData)
-                  .then(() => { closeFormModal(); })
-                  .catch((error) => { console.error("Lỗi:", error); alert("Lỗi kết nối."); });
+                  .then(() => closeFormModal())
+                  .catch(error => alert("Lỗi kết nối."));
             } else {
                 newPlaceData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
                 db.collection("places").add(newPlaceData)
-                  .then(() => { closeFormModal(); })
-                  .catch((error) => { console.error("Lỗi:", error); alert("Lỗi kết nối."); });
+                  .then(() => closeFormModal())
+                  .catch(error => alert("Lỗi kết nối."));
             }
         }
     </script>
