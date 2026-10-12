@@ -86,11 +86,11 @@
             50% { transform: translateY(-10px); }
         }
 
-        /* View Transitions */
-        .fade-enter { opacity: 0; transform: scale(0.95); transition: all 0.5s ease; }
-        .fade-enter-active { opacity: 1; transform: scale(1); }
-        .fade-exit { opacity: 1; transform: scale(1); transition: all 0.4s ease; }
-        .fade-exit-active { opacity: 0; transform: scale(0.95); }
+        /* Modal View Transitions */
+        .modal-enter { opacity: 0; transform: scale(0.95) translateY(10px); }
+        .modal-enter-active { opacity: 1; transform: scale(1) translateY(0); transition: all 0.3s ease-out; }
+        .modal-leave { opacity: 1; transform: scale(1) translateY(0); }
+        .modal-leave-active { opacity: 0; transform: scale(0.95) translateY(10px); transition: all 0.2s ease-in; }
 
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -123,8 +123,9 @@
     </div>
 
     <!-- ================= 2. HUB SCREEN (SẢNH CHÍNH) ================= -->
-    <div id="hub-screen" class="fixed inset-0 z-[90] flex flex-col items-center justify-center hidden opacity-0 transition-opacity duration-1000">
-        <h1 class="font-serif text-4xl md:text-5xl font-bold text-textDark mb-16 drop-shadow-sm tracking-wide">Không gian của tụi mình ✨</h1>
+    <!-- Thêm class transition-all duration-500 transform scale-95 để chuyển cảnh mượt -->
+    <div id="hub-screen" class="fixed inset-0 z-[90] flex flex-col items-center justify-center hidden opacity-0 scale-95 transition-all duration-500">
+        <h1 class="font-serif text-4xl md:text-5xl font-bold text-textDark mb-16 drop-shadow-sm tracking-wide text-center px-4">Không gian của tụi mình ✨</h1>
         
         <div class="flex gap-10 md:gap-20">
             <!-- Icon Địa Điểm -->
@@ -150,8 +151,8 @@
     </div>
 
 
-    <!-- ================= 3. MODULE ĐỊA ĐIỂM (BẢN ĐỒ CŨ) ================= -->
-    <div id="places-module" class="hidden opacity-0 pb-20 fade-enter">
+    <!-- ================= 3. MODULE ĐỊA ĐIỂM (BẢN ĐỒ) ================= -->
+    <div id="places-module" class="hidden opacity-0 scale-95 pb-20 transition-all duration-500">
         <button onclick="switchView('hub')" class="fixed top-6 left-6 z-[80] glass-card px-4 py-2 rounded-full text-primary font-medium hover:bg-white transition-colors flex items-center gap-2 shadow-sm">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             Sảnh chính
@@ -173,8 +174,8 @@
     </div>
 
 
-    <!-- ================= 4. MODULE HỌC TIẾNG ANH (MỚI) ================= -->
-    <div id="study-module" class="hidden opacity-0 pb-20 fade-enter">
+    <!-- ================= 4. MODULE HỌC TIẾNG ANH ================= -->
+    <div id="study-module" class="hidden opacity-0 scale-95 pb-20 transition-all duration-500">
         <button onclick="switchView('hub')" class="fixed top-6 left-6 z-[80] glass-card px-4 py-2 rounded-full text-primary font-medium hover:bg-white transition-colors flex items-center gap-2 shadow-sm">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             Sảnh chính
@@ -187,7 +188,6 @@
             <p class="text-textGray">Cùng nhau ôn tập và nhớ từ vựng nhé! 📖</p>
         </header>
 
-        <!-- Menu chức năng học -->
         <main class="max-w-3xl mx-auto px-6">
             <div id="study-menu" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <button onclick="openStudyMode('list')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group">
@@ -217,7 +217,6 @@
                 </button>
             </div>
 
-            <!-- Khu vực hiển thị Động (List / Quiz / Memory) -->
             <div id="study-content" class="hidden glass-card rounded-3xl p-6 md:p-10 relative">
                 <button onclick="backToStudyMenu()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
                     <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -225,10 +224,8 @@
                 
                 <h2 id="study-content-title" class="text-2xl font-bold text-primary mb-6 border-b border-primary/20 pb-4">Tiêu đề</h2>
                 
-                <!-- Bảng từ vựng -->
                 <div id="vocab-list-container" class="hidden grid grid-cols-1 md:grid-cols-2 gap-3"></div>
 
-                <!-- Quiz Container -->
                 <div id="quiz-container" class="hidden flex flex-col items-center">
                     <div class="text-sm text-textGray mb-2 font-medium" id="quiz-progress">Câu 1 / 10</div>
                     <div class="w-full bg-white rounded-2xl p-8 text-center shadow-sm border border-gray-100 mb-6">
@@ -241,7 +238,6 @@
                     <div id="quiz-feedback" class="mt-4 p-4 rounded-xl w-full max-w-md hidden text-center font-medium"></div>
                 </div>
 
-                <!-- Memory Container -->
                 <div id="memory-container" class="hidden flex flex-col items-center">
                     <p class="text-textGray text-center mb-6">Hãy nhập lại <b class="text-rose-500">10 từ tiếng Anh</b> theo đúng thứ tự đã học.<br/>(Cách nhau bằng dấu phẩy hoặc khoảng trắng)</p>
                     <textarea id="memory-input" rows="4" placeholder="Ví dụ: about, above, across..." class="w-full px-5 py-4 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-rose-400 text-lg mb-6 transition-colors resize-none leading-relaxed"></textarea>
@@ -252,7 +248,7 @@
         </main>
     </div>
 
-    <!-- CÁC MODAL CỦA BẢN ĐỒ GIỮ NGUYÊN BÊN DƯỚI -->
+    <!-- CÁC MODAL ĐỊA ĐIỂM -->
     <!-- Modal Xem -->
     <div id="view-modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 transition-opacity">
         <div id="view-modal-content" class="bg-white rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto scroll-smooth shadow-2xl relative">
@@ -383,14 +379,12 @@
         const db = firebase.firestore();
 
         // ---------------- VARIABLES ----------------
-        // Places
         let places = [];
         let formCurrentTab = 'food';
         let currentRating = 4;
         let editingId = null; 
         let viewingId = null;
 
-        // Vocab Data (Hardcoded based on user prompt)
         const vocabData = [
             { en: 'about', type: 'Adverb/Preposition', vi: 'Về cái gì đó?' },
             { en: 'above', type: 'Adverb/Preposition', vi: 'Hơn cái gì đó?' },
@@ -405,13 +399,13 @@
         ];
 
         let studyState = {
-            mode: '', // 'list', 'en-vi', 'vi-en', 'type', 'memory'
+            mode: '', 
             currentIndex: 0,
             shuffledData: []
         };
 
 
-        // ---------------- INTRO & VIEW SWITCHING ----------------
+        // ---------------- INTRO & VIEW SWITCHING (ĐÃ FIX LỖI TÀNG HÌNH) ----------------
         document.addEventListener('DOMContentLoaded', () => {
             const video = document.getElementById('bg-video');
             const startBtn = document.getElementById('start-btn');
@@ -448,7 +442,6 @@
                 }, 300);
             });
 
-            // Music Toggle
             document.getElementById('music-toggle').addEventListener('click', () => {
                 const bgMusic = document.getElementById('bg-music');
                 if (bgMusic.paused) {
@@ -462,7 +455,6 @@
                 }
             });
 
-            // Connect Firebase Realtime for Places
             db.collection("places").orderBy("createdAt", "desc").onSnapshot((querySnapshot) => {
                 places = [];
                 querySnapshot.forEach((doc) => { places.push({ id: doc.id, ...doc.data() }); });
@@ -470,30 +462,40 @@
             });
         });
 
+        // HÀM CHUYỂN CẢNH MỚI (Khắc phục lỗi đụng độ làm tàng hình block)
         function switchView(viewName) {
-            // Hide all
             const hub = document.getElementById('hub-screen');
             const placesMod = document.getElementById('places-module');
             const studyMod = document.getElementById('study-module');
-            
-            [hub, placesMod, studyMod].forEach(el => {
-                el.classList.add('opacity-0');
-                setTimeout(() => el.classList.add('hidden'), 500); // Wait for fade out
-            });
 
-            // Show selected
+            // 1. Làm mờ và thu nhỏ tất cả
+            hub.classList.add('opacity-0', 'scale-95');
+            placesMod.classList.add('opacity-0', 'scale-95');
+            studyMod.classList.add('opacity-0', 'scale-95');
+
+            // 2. Chờ 500ms cho quá trình làm mờ xong, sau đó gắn thẻ ẩn hoàn toàn (display: none)
             setTimeout(() => {
-                if(viewName === 'hub') {
-                    hub.classList.remove('hidden');
-                    setTimeout(() => hub.classList.remove('opacity-0'), 50);
-                } else if(viewName === 'places') {
-                    placesMod.classList.remove('hidden');
-                    setTimeout(() => placesMod.classList.remove('opacity-0'), 50);
-                } else if(viewName === 'study') {
-                    studyMod.classList.remove('hidden');
-                    setTimeout(() => studyMod.classList.remove('opacity-0'), 50);
+                hub.classList.add('hidden');
+                placesMod.classList.add('hidden');
+                studyMod.classList.add('hidden');
+
+                // Lấy đối tượng cần bật
+                let target;
+                if(viewName === 'hub') target = hub;
+                else if(viewName === 'places') target = placesMod;
+                else if(viewName === 'study') target = studyMod;
+
+                if (target) {
+                    // Tháo thẻ ẩn (display: block trở lại)
+                    target.classList.remove('hidden');
+                    
+                    // Buộc trình duyệt nhận diện thay đổi CSS để kích hoạt hiệu ứng Transition
+                    void target.offsetWidth;
+                    
+                    // Phóng to và hiện rõ
+                    target.classList.remove('opacity-0', 'scale-95');
                 }
-            }, 500);
+            }, 500); // 500ms này khớp với duration-500 ở các thẻ HTML
         }
 
         // =====================================================================
@@ -503,14 +505,12 @@
         function openStudyMode(mode) {
             studyState.mode = mode;
             studyState.currentIndex = 0;
-            // Shuffle mảng để câu hỏi random (Trừ lúc xem list và kiểm tra trí nhớ)
             studyState.shuffledData = [...vocabData].sort(() => Math.random() - 0.5);
             
             document.getElementById('study-menu').classList.add('hidden');
             const contentBlock = document.getElementById('study-content');
             contentBlock.classList.remove('hidden');
 
-            // Hide all inner containers
             document.getElementById('vocab-list-container').classList.add('hidden');
             document.getElementById('quiz-container').classList.add('hidden');
             document.getElementById('memory-container').classList.add('hidden');
@@ -526,7 +526,6 @@
                 document.getElementById('memory-input').value = "";
                 document.getElementById('memory-feedback').classList.add('hidden');
             } else {
-                // Chế độ Quiz (en-vi, vi-en, type)
                 if(mode === 'en-vi') title.innerText = '🇬🇧 ➡️ 🇻🇳 Dịch sang Tiếng Việt';
                 if(mode === 'vi-en') title.innerText = '🇻🇳 ➡️ 🇬🇧 Dịch sang Tiếng Anh';
                 if(mode === 'type') title.innerText = '🔍 Phân tích loại từ';
@@ -548,7 +547,7 @@
             
             vocabData.forEach(item => {
                 listContainer.innerHTML += `
-                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-center text-center">
+                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-center text-center hover:scale-105 transition-transform">
                         <span class="text-xs font-semibold text-gray-400 mb-1">${item.type}</span>
                         <h4 class="text-xl font-bold text-primary mb-1">${item.en}</h4>
                         <p class="text-sm text-textDark">${item.vi}</p>
@@ -559,7 +558,6 @@
 
         function loadQuizQuestion() {
             if(studyState.currentIndex >= vocabData.length) {
-                // Hoàn thành bộ câu hỏi
                 document.getElementById('quiz-question').innerText = "🎉 Hoàn thành!";
                 document.getElementById('quiz-hint').innerText = "Xuất sắc!";
                 document.getElementById('quiz-input').classList.add('hidden');
@@ -591,7 +589,6 @@
             }
         }
 
-        // Bắt sự kiện Enter khi input quiz
         document.getElementById('quiz-input').addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 event.preventDefault();
@@ -609,7 +606,6 @@
 
             if(studyState.mode === 'en-vi') {
                 expectedAnswer = currentItem.vi.toLowerCase();
-                // Check xem user có gõ đúng hoặc gần đúng (chứa từ khóa chính)
                 if(expectedAnswer.includes(userInput) && userInput.length > 3 || userInput === expectedAnswer) isCorrect = true;
             } else if(studyState.mode === 'vi-en') {
                 expectedAnswer = currentItem.en.toLowerCase();
@@ -630,7 +626,6 @@
             } else {
                 feedbackBox.classList.add('bg-red-100', 'text-red-700');
                 feedbackBox.innerHTML = `❌ Chưa chính xác. Đáp án đúng là: <b>${studyState.mode === 'en-vi' ? currentItem.vi : (studyState.mode === 'vi-en' ? currentItem.en : currentItem.type)}</b>`;
-                // Sai thì k tăng index liền, để user nhìn, bấm nút hoặc tự xóa gõ lại (hoặc cho qua lun sau 2s)
                 setTimeout(() => { studyState.currentIndex++; loadQuizQuestion(); }, 2500);
             }
         }
@@ -640,13 +635,9 @@
             const feedbackBox = document.getElementById('memory-feedback');
             feedbackBox.classList.remove('hidden', 'bg-green-100', 'text-green-700', 'bg-red-100', 'text-red-700');
 
-            // Regex để lấy tất cả các từ tiếng anh trong đoạn text
             const userWords = userInput.match(/\b[a-z]+\b/g) || [];
-            
-            // Lấy danh sách 10 từ tiếng Anh đúng thứ tự
             const correctOrder = vocabData.map(item => item.en.toLowerCase());
             
-            // Check
             let isSuccess = true;
             let errorText = "";
 
@@ -674,16 +665,11 @@
         }
 
         function fireConfetti() {
-            confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { y: 0.6 }
-            });
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
         }
 
-
         // =====================================================================
-        // ===================== LOGIC ĐỊA ĐIỂM (GIỮ NGUYÊN) ===================
+        // ===================== LOGIC ĐỊA ĐIỂM ================================
         // =====================================================================
 
         function renderPlaces() {
@@ -840,7 +826,6 @@
             setTimeout(() => openFormModalOnlyUI(), 300);
         }
 
-        // TẠO/SỬA FORM
         function openFormModal() {
             editingId = null;
             document.getElementById('add-form').reset();
