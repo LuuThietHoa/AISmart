@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trạm Kỷ Niệm & Học Tập</title>
+    <title>Trạm Kỷ Niệm & Không Gian VIP</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,17 +24,34 @@
                         textGray: '#64748B',
                         pinkLight: '#FFD6E0',
                         yellowLight: '#FFF3C4',
+                        // VIP Colors
+                        vipRed: '#E63946',
+                        vipDark: '#0A0A0A',
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         serif: ['Playfair Display', 'serif'],
+                    },
+                    animation: {
+                        'ken-burns': 'kenBurns 20s ease-in-out infinite alternate',
+                        'float-glow': 'floatGlow 3s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        kenBurns: {
+                            '0%': { transform: 'scale(1)' },
+                            '100%': { transform: 'scale(1.15)' },
+                        },
+                        floatGlow: {
+                            '0%': { transform: 'translateY(0)', textShadow: '0 0 10px rgba(230, 57, 70, 0.5)' },
+                            '100%': { transform: 'translateY(-10px)', textShadow: '0 0 30px rgba(230, 57, 70, 1)' },
+                        }
                     }
                 }
             }
         }
     </script>
     
-    <!-- JS Confetti cho hiệu ứng bắn pháo hoa -->
+    <!-- JS Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <!-- Custom Styles -->
@@ -53,6 +70,14 @@
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.5);
             box-shadow: 0 8px 32px rgba(91, 155, 255, 0.1);
+        }
+
+        .vip-glass {
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
         }
 
         /* Animations */
@@ -76,21 +101,26 @@
             50% { transform: translateY(-15px) scale(1.05); }
         }
 
-        .hub-icon {
-            animation: floatSlow 4s ease-in-out infinite;
-        }
+        .hub-icon { animation: floatSlow 4s ease-in-out infinite; }
         .hub-icon:nth-child(2) { animation-delay: 1s; }
+        .hub-icon:nth-child(3) { animation-delay: 2s; }
         
         @keyframes floatSlow {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
         }
 
-        /* Modal View Transitions */
+        /* View Transitions */
         .modal-enter { opacity: 0; transform: scale(0.95) translateY(10px); }
         .modal-enter-active { opacity: 1; transform: scale(1) translateY(0); transition: all 0.3s ease-out; }
         .modal-leave { opacity: 1; transform: scale(1) translateY(0); }
         .modal-leave-active { opacity: 0; transform: scale(0.95) translateY(10px); transition: all 0.2s ease-in; }
+
+        /* Custom Scrollbar for dark theme */
+        .dark-scroll::-webkit-scrollbar { width: 6px; }
+        .dark-scroll::-webkit-scrollbar-track { background: transparent; }
+        .dark-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        .dark-scroll::-webkit-scrollbar-thumb:hover { background: #E63946; }
 
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -103,10 +133,10 @@
 </head>
 <body class="text-textDark antialiased no-scroll" id="body">
 
-    <!-- AUDIO NỀN -->
+    <!-- AUDIO NỀN (Sảnh thường) -->
     <audio id="bg-music" loop src="https://files.catbox.moe/by6h11.mp4"></audio>
 
-    <button id="music-toggle" class="fixed bottom-6 right-6 w-12 h-12 rounded-full glass-card flex items-center justify-center cursor-pointer z-[150] text-primary hover:bg-white transition-all duration-500 transform hover:scale-110 shadow-lg shadow-primary/30 opacity-0 pointer-events-none translate-y-4">
+    <button id="music-toggle" class="fixed bottom-6 right-6 w-12 h-12 rounded-full glass-card flex items-center justify-center cursor-pointer z-[80] text-primary hover:bg-white transition-all duration-500 transform hover:scale-110 shadow-lg shadow-primary/30 opacity-0 pointer-events-none translate-y-4">
         <svg id="icon-music-play" class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
         <svg id="icon-music-pause" class="w-6 h-6 hidden text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path></svg>
     </button>
@@ -123,39 +153,133 @@
     </div>
 
     <!-- ================= 2. HUB SCREEN (SẢNH CHÍNH) ================= -->
-    <!-- Thêm class transition-all duration-500 transform scale-95 để chuyển cảnh mượt -->
     <div id="hub-screen" class="fixed inset-0 z-[90] flex flex-col items-center justify-center hidden opacity-0 scale-95 transition-all duration-500">
         <h1 class="font-serif text-4xl md:text-5xl font-bold text-textDark mb-16 drop-shadow-sm tracking-wide text-center px-4">Không gian của tụi mình ✨</h1>
         
-        <div class="flex gap-10 md:gap-20">
+        <div class="flex flex-wrap justify-center gap-8 md:gap-16 px-6">
             <!-- Icon Địa Điểm -->
             <div class="group relative cursor-pointer hub-icon" onclick="switchView('places')">
-                <div class="w-32 h-32 md:w-40 md:h-40 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20">
-                    <img src="diadiem.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/854/854878.png'" class="w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-md">
+                <div class="w-28 h-28 md:w-36 md:h-36 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20">
+                    <img src="diadiem.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/854/854878.png'" class="w-14 h-14 md:w-20 md:h-20 object-contain drop-shadow-md">
                 </div>
-                <div class="absolute -bottom-12 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-primary shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-primary shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                     Địa điểm đã đi 🗺️
+                </div>
+            </div>
+
+            <!-- Icon Nghe Nhạc (MỚI) -->
+            <div class="group relative cursor-pointer hub-icon" onclick="openMusicConfirm()">
+                <div class="w-28 h-28 md:w-36 md:h-36 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20">
+                    <img src="nghenhac.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3011/3011236.png'" class="w-14 h-14 md:w-20 md:h-20 object-contain drop-shadow-md">
+                </div>
+                <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-rose-500 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    Sảnh Nghe Nhạc 🎧
                 </div>
             </div>
 
             <!-- Icon Học Tập -->
             <div class="group relative cursor-pointer hub-icon" onclick="switchView('study')">
-                <div class="w-32 h-32 md:w-40 md:h-40 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20">
-                    <img src="studyE.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/330/330731.png'" class="w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-md">
+                <div class="w-28 h-28 md:w-36 md:h-36 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20">
+                    <img src="studyE.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/330/330731.png'" class="w-14 h-14 md:w-20 md:h-20 object-contain drop-shadow-md">
                 </div>
-                <div class="absolute -bottom-12 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-primary shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-primary shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                     Học Tiếng Anh 📚
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Modal Xác nhận vào sảnh nhạc -->
+    <div id="music-confirm-modal" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 transition-opacity">
+        <div id="music-confirm-content" class="bg-white rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl p-6 text-center modal-enter relative">
+            <h3 class="text-xl font-bold text-textDark mb-3">Vào Sảnh V.I.P? 🎧</h3>
+            <p class="text-sm text-textGray mb-6 leading-relaxed">Bạn muốn vào sảnh nghe nhạc chứ?<br/>(Nhạc GD vẫn sẽ tự động phát khi bạn ra ngoài sảnh chính)</p>
+            <div class="flex gap-3">
+                <button onclick="closeMusicConfirm()" class="flex-1 py-2.5 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 font-medium transition-colors">Hủy</button>
+                <button onclick="enterMusicHub()" class="flex-1 py-2.5 rounded-xl bg-rose-500 text-white hover:bg-rose-600 font-medium transition-colors shadow-lg shadow-rose-200">Vào ngay 🔥</button>
+            </div>
+        </div>
+    </div>
 
-    <!-- ================= 3. MODULE ĐỊA ĐIỂM (BẢN ĐỒ) ================= -->
-    <div id="places-module" class="hidden opacity-0 scale-95 pb-20 transition-all duration-500">
-        <button onclick="switchView('hub')" class="fixed top-6 left-6 z-[80] glass-card px-4 py-2 rounded-full text-primary font-medium hover:bg-white transition-colors flex items-center gap-2 shadow-sm">
+
+    <!-- ================= 3. MODULE NGHE NHẠC (SẢNH V.I.P G-DRAGON) ================= -->
+    <div id="music-module" class="fixed inset-0 z-[95] hidden opacity-0 transition-all duration-1000 bg-vipDark overflow-hidden flex flex-col md:flex-row">
+        
+        <!-- Nền ảnh G-Dragon Ảo diệu -->
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-[url('g-dragon.jpg')] bg-cover bg-center opacity-40 animate-ken-burns"></div>
+            <!-- Lớp sương mù gradient đỏ/đen -->
+            <div class="absolute inset-0 bg-gradient-to-br from-vipDark/90 via-vipDark/50 to-[#E63946]/30"></div>
+            <!-- Lưới grid line art overlay -->
+            <div class="absolute inset-0" style="background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px); background-size: 50px 50px;"></div>
+        </div>
+
+        <button onclick="switchView('hub')" class="absolute top-6 left-6 z-[100] bg-white/10 backdrop-blur-md border border-white/20 px-5 py-2.5 rounded-full text-white font-medium hover:bg-white/20 transition-all flex items-center gap-2 shadow-lg">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             Sảnh chính
+        </button>
+
+        <!-- Trái: Visual Ảo diệu -->
+        <div class="relative z-10 flex-1 flex items-center justify-center p-10 mt-16 md:mt-0">
+            <div class="text-center">
+                <h1 class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 uppercase tracking-[0.2em] mb-4 animate-float-glow">
+                    G-DRAGON
+                </h1>
+                <p class="text-white/60 tracking-[0.3em] uppercase text-sm md:text-lg font-light">V.I.P Lounge Collection</p>
+                
+                <!-- Hình tròn đĩa nhạc xoay (hiệu ứng) -->
+                <div class="mt-12 relative w-48 h-48 md:w-64 md:h-64 mx-auto">
+                    <div id="record-disk" class="absolute inset-0 rounded-full border-4 border-[#E63946]/30 shadow-[0_0_50px_rgba(230,57,70,0.3)] transition-transform duration-1000 ease-linear">
+                        <div class="absolute inset-2 rounded-full border border-white/10 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                            <div class="w-16 h-16 rounded-full border-2 border-[#E63946] bg-vipDark flex items-center justify-center shadow-inner">
+                                <div class="w-4 h-4 bg-white rounded-full"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phải: Playlist Kính mờ -->
+        <div class="relative z-10 w-full md:w-96 lg:w-[450px] h-[50vh] md:h-full vip-glass flex flex-col p-6 rounded-t-3xl md:rounded-none transition-transform">
+            <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                <span class="w-2 h-6 bg-[#E63946] rounded-full"></span> Playlist
+            </h2>
+            
+            <ul id="gd-playlist-container" class="flex-1 overflow-y-auto dark-scroll space-y-3 pr-2">
+                <!-- Danh sách bài hát sinh bằng JS -->
+            </ul>
+
+            <!-- Bộ điều khiển Player -->
+            <div class="mt-6 p-5 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-md">
+                <div class="mb-4">
+                    <p class="text-xs text-[#E63946] font-bold uppercase tracking-widest mb-1">Đang phát</p>
+                    <p id="gd-now-playing-title" class="text-white font-medium truncate">Chưa chọn bài hát</p>
+                </div>
+                
+                <div class="flex items-center justify-center gap-6">
+                    <button onclick="prevGDSong()" class="text-white/70 hover:text-white transition-colors">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z"></path></svg>
+                    </button>
+                    
+                    <button onclick="toggleGDSong()" id="btn-gd-play" class="w-14 h-14 rounded-full bg-[#E63946] hover:bg-red-600 text-white flex items-center justify-center transition-all shadow-[0_0_20px_rgba(230,57,70,0.5)] transform hover:scale-105">
+                        <svg id="gd-icon-play" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                        <svg id="gd-icon-pause" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                    </button>
+                    
+                    <button onclick="nextGDSong()" class="text-white/70 hover:text-white transition-colors">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0013 14V8.798l5.445 3.63A1 1 0 0020 14V6a1 1 0 00-1.555-.832L13 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4zM4 6a1 1 0 11-2 0v8a1 1 0 112 0V6z"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================= 4. MODULE ĐỊA ĐIỂM (BẢN ĐỒ) ================= -->
+    <div id="places-module" class="hidden opacity-0 scale-95 pb-20 transition-all duration-500">
+        <button onclick="switchView('hub')" class="fixed top-6 left-6 z-[80] glass-card px-4 py-2 rounded-full text-primary font-medium hover:bg-white transition-colors flex items-center gap-2 shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Trở về
         </button>
 
         <header class="max-w-4xl mx-auto pt-24 px-6 text-center">
@@ -174,54 +298,28 @@
     </div>
 
 
-    <!-- ================= 4. MODULE HỌC TIẾNG ANH ================= -->
+    <!-- ================= 5. MODULE HỌC TIẾNG ANH ================= -->
     <div id="study-module" class="hidden opacity-0 scale-95 pb-20 transition-all duration-500">
         <button onclick="switchView('hub')" class="fixed top-6 left-6 z-[80] glass-card px-4 py-2 rounded-full text-primary font-medium hover:bg-white transition-colors flex items-center gap-2 shadow-sm">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-            Sảnh chính
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Trở về
         </button>
 
         <header class="max-w-4xl mx-auto pt-24 px-6 text-center mb-10">
-            <h1 class="font-serif text-4xl font-semibold mb-4 text-textDark">
-                Góc <span class="text-primary italic">Tiếng Anh</span>
-            </h1>
+            <h1 class="font-serif text-4xl font-semibold mb-4 text-textDark">Góc <span class="text-primary italic">Tiếng Anh</span></h1>
             <p class="text-textGray">Cùng nhau ôn tập và nhớ từ vựng nhé! 📖</p>
         </header>
 
         <main class="max-w-3xl mx-auto px-6">
             <div id="study-menu" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <button onclick="openStudyMode('list')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group">
-                    <div class="text-3xl mb-3">📝</div>
-                    <h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Danh sách từ vựng</h3>
-                    <p class="text-sm text-textGray">Xem 10 từ vựng hiện tại</p>
-                </button>
-                <button onclick="openStudyMode('en-vi')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-blue-200">
-                    <div class="text-3xl mb-3">🇬🇧 ➡️ 🇻🇳</div>
-                    <h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Dịch sang Tiếng Việt</h3>
-                    <p class="text-sm text-textGray">Đưa tiếng Anh, dịch tiếng Việt</p>
-                </button>
-                <button onclick="openStudyMode('vi-en')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-green-200">
-                    <div class="text-3xl mb-3">🇻🇳 ➡️ 🇬🇧</div>
-                    <h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Dịch sang Tiếng Anh</h3>
-                    <p class="text-sm text-textGray">Đưa tiếng Việt, dịch tiếng Anh</p>
-                </button>
-                <button onclick="openStudyMode('type')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-purple-200">
-                    <div class="text-3xl mb-3">🔍</div>
-                    <h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Phân tích loại từ</h3>
-                    <p class="text-sm text-textGray">Nhập loại từ (Noun, Verb...)</p>
-                </button>
-                <button onclick="openStudyMode('memory')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group sm:col-span-2 border-rose-200 bg-white/50">
-                    <div class="text-3xl mb-3 text-center">🧠</div>
-                    <h3 class="text-xl font-bold text-rose-600 mb-1 text-center">Kiểm tra trí nhớ (Hardcore)</h3>
-                    <p class="text-sm text-textGray text-center">Nhập đúng thứ tự 10 từ vựng đã học</p>
-                </button>
+                <button onclick="openStudyMode('list')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group"><div class="text-3xl mb-3">📝</div><h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Danh sách từ vựng</h3><p class="text-sm text-textGray">Xem 10 từ vựng hiện tại</p></button>
+                <button onclick="openStudyMode('en-vi')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-blue-200"><div class="text-3xl mb-3">🇬🇧 ➡️ 🇻🇳</div><h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Dịch sang Tiếng Việt</h3><p class="text-sm text-textGray">Đưa tiếng Anh, dịch tiếng Việt</p></button>
+                <button onclick="openStudyMode('vi-en')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-green-200"><div class="text-3xl mb-3">🇻🇳 ➡️ 🇬🇧</div><h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Dịch sang Tiếng Anh</h3><p class="text-sm text-textGray">Đưa tiếng Việt, dịch tiếng Anh</p></button>
+                <button onclick="openStudyMode('type')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-purple-200"><div class="text-3xl mb-3">🔍</div><h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Phân tích loại từ</h3><p class="text-sm text-textGray">Nhập loại từ (Noun, Verb...)</p></button>
+                <button onclick="openStudyMode('memory')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group sm:col-span-2 border-rose-200 bg-white/50"><div class="text-3xl mb-3 text-center">🧠</div><h3 class="text-xl font-bold text-rose-600 mb-1 text-center">Kiểm tra trí nhớ (Hardcore)</h3><p class="text-sm text-textGray text-center">Nhập đúng thứ tự 10 từ vựng đã học</p></button>
             </div>
 
             <div id="study-content" class="hidden glass-card rounded-3xl p-6 md:p-10 relative">
-                <button onclick="backToStudyMenu()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-                
+                <button onclick="backToStudyMenu()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"><svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                 <h2 id="study-content-title" class="text-2xl font-bold text-primary mb-6 border-b border-primary/20 pb-4">Tiêu đề</h2>
                 
                 <div id="vocab-list-container" class="hidden grid grid-cols-1 md:grid-cols-2 gap-3"></div>
@@ -234,7 +332,6 @@
                     </div>
                     <input type="text" id="quiz-input" autocomplete="off" placeholder="Nhập đáp án của bạn..." class="w-full max-w-md px-5 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-primary text-center text-lg mb-4 transition-colors">
                     <button id="quiz-submit-btn" onclick="checkQuizAnswer()" class="bg-primary hover:bg-[#4FC3F7] text-white px-8 py-3 rounded-xl font-bold transition-all shadow-md w-full max-w-md">Kiểm tra</button>
-                    
                     <div id="quiz-feedback" class="mt-4 p-4 rounded-xl w-full max-w-md hidden text-center font-medium"></div>
                 </div>
 
@@ -248,52 +345,17 @@
         </main>
     </div>
 
-    <!-- CÁC MODAL ĐỊA ĐIỂM -->
-    <!-- Modal Xem -->
+    <!-- CÁC MODAL ĐỊA ĐIỂM (View / Sửa / Thêm) giữ nguyên -->
     <div id="view-modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 transition-opacity">
         <div id="view-modal-content" class="bg-white rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto scroll-smooth shadow-2xl relative">
-            <button onclick="closeViewModal()" class="absolute top-4 right-4 z-10 p-2 bg-black/30 text-white backdrop-blur-md rounded-full hover:bg-black/50 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            <div class="h-56 bg-gray-200 w-full relative shrink-0">
-                <img id="view-image" src="" class="w-full h-full object-cover">
-                <div id="view-status-badge" class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1 shadow-sm"></div>
-            </div>
+            <button onclick="closeViewModal()" class="absolute top-4 right-4 z-10 p-2 bg-black/30 text-white backdrop-blur-md rounded-full hover:bg-black/50 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            <div class="h-56 bg-gray-200 w-full relative shrink-0"><img id="view-image" src="" class="w-full h-full object-cover"><div id="view-status-badge" class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1 shadow-sm"></div></div>
             <div class="p-6">
                 <h2 id="view-name" class="text-2xl font-serif font-bold text-textDark mb-1">Tên địa điểm</h2>
                 <p id="view-address" class="text-sm text-textGray flex items-center gap-1 mb-4"></p>
-                <div class="bg-accent/30 rounded-2xl p-4 mb-4">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <p class="text-xs text-textGray mb-1">Loại hình</p>
-                            <p id="view-type" class="font-medium text-sm text-textDark">Nhà hàng</p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-textGray mb-1" id="view-extra-label">Hình / Giá</p>
-                            <p id="view-extra-value" class="font-medium text-sm text-textDark">Ăn tại chỗ</p>
-                        </div>
-                        <div class="col-span-2">
-                            <p class="text-xs text-textGray mb-1">Đánh giá</p>
-                            <div class="flex items-center gap-1" id="view-stars"></div>
-                        </div>
-                    </div>
-                </div>
-                <div id="view-pros-cons" class="mb-4 space-y-3 hidden">
-                    <div id="view-pros-container" class="bg-emerald-50 border border-emerald-100 rounded-2xl p-3.5 hidden">
-                        <p class="text-xs text-emerald-600 font-semibold mb-1 flex items-center gap-1">💖 Điểm cộng</p>
-                        <p id="view-pros" class="text-sm text-emerald-800 leading-relaxed"></p>
-                    </div>
-                    <div id="view-cons-container" class="bg-rose-50 border border-rose-100 rounded-2xl p-3.5 hidden">
-                        <p class="text-xs text-rose-500 font-semibold mb-1 flex items-center gap-1">🥺 Điểm trừ</p>
-                        <p id="view-cons" class="text-sm text-rose-800 leading-relaxed"></p>
-                    </div>
-                </div>
-                <div id="view-menu-container" class="mb-6 hidden transition-all">
-                    <p class="text-sm font-semibold text-textDark mb-2 flex items-center gap-1">📖 Menu</p>
-                    <div class="rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
-                        <img id="view-menu-image" src="" class="w-full h-auto object-cover hover:scale-105 transition-transform duration-500">
-                    </div>
-                </div>
+                <div class="bg-accent/30 rounded-2xl p-4 mb-4"><div class="grid grid-cols-2 gap-4"><div><p class="text-xs text-textGray mb-1">Loại hình</p><p id="view-type" class="font-medium text-sm text-textDark">Nhà hàng</p></div><div><p class="text-xs text-textGray mb-1" id="view-extra-label">Hình / Giá</p><p id="view-extra-value" class="font-medium text-sm text-textDark">Ăn tại chỗ</p></div><div class="col-span-2"><p class="text-xs text-textGray mb-1">Đánh giá</p><div class="flex items-center gap-1" id="view-stars"></div></div></div></div>
+                <div id="view-pros-cons" class="mb-4 space-y-3 hidden"><div id="view-pros-container" class="bg-emerald-50 border border-emerald-100 rounded-2xl p-3.5 hidden"><p class="text-xs text-emerald-600 font-semibold mb-1 flex items-center gap-1">💖 Điểm cộng</p><p id="view-pros" class="text-sm text-emerald-800 leading-relaxed"></p></div><div id="view-cons-container" class="bg-rose-50 border border-rose-100 rounded-2xl p-3.5 hidden"><p class="text-xs text-rose-500 font-semibold mb-1 flex items-center gap-1">🥺 Điểm trừ</p><p id="view-cons" class="text-sm text-rose-800 leading-relaxed"></p></div></div>
+                <div id="view-menu-container" class="mb-6 hidden transition-all"><p class="text-sm font-semibold text-textDark mb-2 flex items-center gap-1">📖 Menu</p><div class="rounded-2xl overflow-hidden border border-gray-100 shadow-sm"><img id="view-menu-image" src="" class="w-full h-auto object-cover hover:scale-105 transition-transform duration-500"></div></div>
                 <div class="flex gap-3">
                     <button onclick="editCurrentPlace()" class="flex-1 py-3 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 font-medium flex items-center justify-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg> Sửa</button>
                     <button onclick="deleteCurrentPlace()" class="py-3 px-4 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 font-medium"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
@@ -302,57 +364,21 @@
         </div>
     </div>
 
-    <!-- Modal Form -->
+    <!-- Form Thêm sửa -->
     <div id="form-modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 transition-opacity">
         <div id="form-modal-content" class="bg-white rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl relative max-h-[90vh] overflow-y-auto scroll-smooth">
-            <button onclick="closeFormModal()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200">
-                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
+            <button onclick="closeFormModal()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200"><svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg></button>
             <div class="p-6">
                 <h2 id="form-title" class="text-2xl font-serif font-bold text-textDark mb-4">Lưu lại một kỷ niệm ☁️</h2>
-                <div class="flex p-1 bg-gray-100 rounded-xl mb-6">
-                    <button id="tab-food" type="button" onclick="switchFormTab('food')" class="flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm">Ăn uống</button>
-                    <button id="tab-homestay" type="button" onclick="switchFormTab('homestay')" class="flex-1 py-2 rounded-lg text-textGray font-medium text-sm">Homestay / Net</button>
-                </div>
+                <div class="flex p-1 bg-gray-100 rounded-xl mb-6"><button id="tab-food" type="button" onclick="switchFormTab('food')" class="flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm">Ăn uống</button><button id="tab-homestay" type="button" onclick="switchFormTab('homestay')" class="flex-1 py-2 rounded-lg text-textGray font-medium text-sm">Homestay / Net</button></div>
                 <form id="add-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
                     <div><label class="block text-sm font-medium mb-1">Tên địa điểm *</label><input type="text" id="input-name" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary focus:outline-none"></div>
                     <div><label class="block text-sm font-medium mb-1">Địa chỉ</label><input type="text" id="input-address" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary focus:outline-none"></div>
-                    <div id="form-food-fields" class="space-y-4">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><label class="block text-sm font-medium mb-1">Loại</label><select id="input-food-type" class="w-full px-4 py-2.5 rounded-xl border border-gray-200"><option>Lề đường</option><option>Nhà hàng</option><option>Quán Cà Phê</option></select></div>
-                            <div><label class="block text-sm font-medium mb-1">Hình thức</label><select id="input-format" class="w-full px-4 py-2.5 rounded-xl border border-gray-200"><option>Ăn tại chỗ</option><option>Mang đi</option><option>Cả hai</option></select></div>
-                        </div>
-                    </div>
-                    <div id="form-homestay-fields" class="space-y-4 hidden">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><label class="block text-sm font-medium mb-1">Loại</label><select id="input-home-type" class="w-full px-4 py-2.5 rounded-xl border border-gray-200"><option>Homestay</option><option>Phòng Net</option></select></div>
-                            <div><label class="block text-sm font-medium mb-1">Giá / Đêm / Giờ</label><input type="text" id="input-price" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary"></div>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 pt-2 border-t border-gray-100">
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Trạng thái</label>
-                            <select id="input-visited" onchange="toggleRating()" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-primary font-medium bg-blue-50/50"><option value="true">Đã đi rùi 🌸</option><option value="false">Sẽ đi 📌</option></select>
-                        </div>
-                        <div id="rating-container">
-                            <label class="block text-sm font-medium mb-1">Chấm điểm</label>
-                            <div class="flex gap-1 mt-2.5" id="star-group">
-                                <svg onclick="setRating(1)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                <svg onclick="setRating(2)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                <svg onclick="setRating(3)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                <svg onclick="setRating(4)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                <svg onclick="setRating(5)" class="w-6 h-6 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="review-details" class="space-y-4">
-                        <div><label class="block text-sm font-medium mb-1">Điểm cộng 💖</label><input type="text" id="input-pros" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-green-400 focus:outline-none"></div>
-                        <div><label class="block text-sm font-medium mb-1">Điểm trừ 🥺</label><input type="text" id="input-cons" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-rose-400 focus:outline-none"></div>
-                    </div>
-                    <div class="pt-2 border-t border-gray-100 space-y-4">
-                        <div><label class="block text-sm font-medium mb-1">Link ảnh bìa (Trực tiếp)</label><input type="url" id="input-image" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary focus:outline-none"></div>
-                        <div><label class="block text-sm font-medium mb-1">Link ảnh Menu 📖 (Tùy chọn)</label><input type="url" id="input-menu" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary focus:outline-none"></div>
-                    </div>
+                    <div id="form-food-fields" class="space-y-4"><div class="grid grid-cols-2 gap-4"><div><label class="block text-sm font-medium mb-1">Loại</label><select id="input-food-type" class="w-full px-4 py-2.5 rounded-xl border border-gray-200"><option>Lề đường</option><option>Nhà hàng</option><option>Quán Cà Phê</option></select></div><div><label class="block text-sm font-medium mb-1">Hình thức</label><select id="input-format" class="w-full px-4 py-2.5 rounded-xl border border-gray-200"><option>Ăn tại chỗ</option><option>Mang đi</option><option>Cả hai</option></select></div></div></div>
+                    <div id="form-homestay-fields" class="space-y-4 hidden"><div class="grid grid-cols-2 gap-4"><div><label class="block text-sm font-medium mb-1">Loại</label><select id="input-home-type" class="w-full px-4 py-2.5 rounded-xl border border-gray-200"><option>Homestay</option><option>Phòng Net</option></select></div><div><label class="block text-sm font-medium mb-1">Giá / Đêm / Giờ</label><input type="text" id="input-price" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary"></div></div></div>
+                    <div class="grid grid-cols-2 gap-4 pt-2 border-t border-gray-100"><div><label class="block text-sm font-medium mb-1">Trạng thái</label><select id="input-visited" onchange="toggleRating()" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-primary font-medium bg-blue-50/50"><option value="true">Đã đi rùi 🌸</option><option value="false">Sẽ đi 📌</option></select></div><div id="rating-container"><label class="block text-sm font-medium mb-1">Chấm điểm</label><div class="flex gap-1 mt-2.5" id="star-group"><svg onclick="setRating(1)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg onclick="setRating(2)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg onclick="setRating(3)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg onclick="setRating(4)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg onclick="setRating(5)" class="w-6 h-6 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg></div></div></div>
+                    <div id="review-details" class="space-y-4"><div><label class="block text-sm font-medium mb-1">Điểm cộng 💖</label><input type="text" id="input-pros" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-green-400 focus:outline-none"></div><div><label class="block text-sm font-medium mb-1">Điểm trừ 🥺</label><input type="text" id="input-cons" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-rose-400 focus:outline-none"></div></div>
+                    <div class="pt-2 border-t border-gray-100 space-y-4"><div><label class="block text-sm font-medium mb-1">Link ảnh bìa (Trực tiếp)</label><input type="url" id="input-image" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary focus:outline-none"></div><div><label class="block text-sm font-medium mb-1">Link ảnh Menu 📖 (Tùy chọn)</label><input type="url" id="input-menu" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary focus:outline-none"></div></div>
                     <button type="submit" id="btn-submit" class="w-full mt-6 bg-primary text-white py-3.5 rounded-xl font-semibold shadow-lg">Lưu vào Bản Đồ</button>
                 </form>
             </div>
@@ -365,7 +391,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
     <script>
-        // ---------------- FIREBASE CONFIG ----------------
+        // FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyAm5PXedBf4HH4OhzHOKJ4_-ESrJNSABYk",
             authDomain: "bautroi-738c9.firebaseapp.com",
@@ -378,13 +404,14 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // ---------------- VARIABLES ----------------
+        // VARIABLES
         let places = [];
         let formCurrentTab = 'food';
         let currentRating = 4;
         let editingId = null; 
         let viewingId = null;
 
+        // VOCAB DATA
         const vocabData = [
             { en: 'about', type: 'Adverb/Preposition', vi: 'Về cái gì đó?' },
             { en: 'above', type: 'Adverb/Preposition', vi: 'Hơn cái gì đó?' },
@@ -398,14 +425,18 @@
             { en: 'adult', type: 'Noun', vi: 'Người lớn' }
         ];
 
-        let studyState = {
-            mode: '', 
-            currentIndex: 0,
-            shuffledData: []
-        };
+        // G-DRAGON VIP MUSIC DATA
+        const gdSongs = [
+            { title: "G-Dragon - Track 1", url: "https://files.catbox.moe/ov2hwx.mp4" },
+            { title: "G-Dragon - Track 2", url: "https://files.catbox.moe/3v0jic.mp4" },
+            { title: "G-Dragon - Track 3", url: "https://files.catbox.moe/jvnizl.mp4" }
+        ];
+        let currentGDSongIndex = 0;
+        const gdAudio = new Audio();
+        
+        let studyState = { mode: '', currentIndex: 0, shuffledData: [] };
 
-
-        // ---------------- INTRO & VIEW SWITCHING (ĐÃ FIX LỖI TÀNG HÌNH) ----------------
+        // INITIALIZE
         document.addEventListener('DOMContentLoaded', () => {
             const video = document.getElementById('bg-video');
             const startBtn = document.getElementById('start-btn');
@@ -435,15 +466,22 @@
                     setTimeout(() => {
                         document.getElementById('intro-screen').style.display = 'none';
                         document.getElementById('body').classList.remove('no-scroll');
-                        
-                        // Show Hub
                         switchView('hub');
                     }, 1000);
                 }, 300);
             });
 
+            // Toggle Background Music
             document.getElementById('music-toggle').addEventListener('click', () => {
                 const bgMusic = document.getElementById('bg-music');
+                // Nếu GD Music đang phát thì tắt nó đi để mở nhạc nền chính lại
+                if(!gdAudio.paused) {
+                    gdAudio.pause();
+                    document.getElementById('gd-icon-play').classList.remove('hidden');
+                    document.getElementById('gd-icon-pause').classList.add('hidden');
+                    document.getElementById('record-disk').style.transform = 'rotate(0deg)'; // Stop spin
+                }
+
                 if (bgMusic.paused) {
                     bgMusic.play();
                     document.getElementById('icon-music-play').classList.remove('hidden');
@@ -455,6 +493,26 @@
                 }
             });
 
+            // Load GD Playlist
+            const playlistContainer = document.getElementById('gd-playlist-container');
+            gdSongs.forEach((song, index) => {
+                playlistContainer.innerHTML += `
+                    <li onclick="playGDSong(${index})" class="group flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 cursor-pointer transition-colors border border-transparent hover:border-white/10">
+                        <div class="w-10 h-10 rounded-lg bg-vipDark flex items-center justify-center border border-[#E63946]/50 shadow-inner group-hover:bg-[#E63946] transition-colors">
+                            <svg class="w-4 h-4 text-[#E63946] group-hover:text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.536l8-1.6V12.114A4.369 4.369 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium text-sm">${song.title}</p>
+                            <p class="text-white/40 text-xs">V.I.P Exclusive</p>
+                        </div>
+                    </li>
+                `;
+            });
+            
+            // GD Audio end event -> play next
+            gdAudio.addEventListener('ended', nextGDSong);
+
+            // Fetch Places
             db.collection("places").orderBy("createdAt", "desc").onSnapshot((querySnapshot) => {
                 places = [];
                 querySnapshot.forEach((doc) => { places.push({ id: doc.id, ...doc.data() }); });
@@ -462,41 +520,133 @@
             });
         });
 
-        // HÀM CHUYỂN CẢNH MỚI (Khắc phục lỗi đụng độ làm tàng hình block)
+        // VIEW SWITCHER
         function switchView(viewName) {
             const hub = document.getElementById('hub-screen');
             const placesMod = document.getElementById('places-module');
             const studyMod = document.getElementById('study-module');
+            const musicMod = document.getElementById('music-module');
 
-            // 1. Làm mờ và thu nhỏ tất cả
             hub.classList.add('opacity-0', 'scale-95');
             placesMod.classList.add('opacity-0', 'scale-95');
             studyMod.classList.add('opacity-0', 'scale-95');
+            musicMod.classList.add('opacity-0');
 
-            // 2. Chờ 500ms cho quá trình làm mờ xong, sau đó gắn thẻ ẩn hoàn toàn (display: none)
             setTimeout(() => {
                 hub.classList.add('hidden');
                 placesMod.classList.add('hidden');
                 studyMod.classList.add('hidden');
+                musicMod.classList.add('hidden');
 
-                // Lấy đối tượng cần bật
                 let target;
                 if(viewName === 'hub') target = hub;
                 else if(viewName === 'places') target = placesMod;
                 else if(viewName === 'study') target = studyMod;
+                else if(viewName === 'music') target = musicMod;
 
                 if (target) {
-                    // Tháo thẻ ẩn (display: block trở lại)
                     target.classList.remove('hidden');
-                    
-                    // Buộc trình duyệt nhận diện thay đổi CSS để kích hoạt hiệu ứng Transition
                     void target.offsetWidth;
-                    
-                    // Phóng to và hiện rõ
                     target.classList.remove('opacity-0', 'scale-95');
                 }
-            }, 500); // 500ms này khớp với duration-500 ở các thẻ HTML
+            }, 500);
         }
+
+        // =====================================================================
+        // ===================== LOGIC GÓC NGHE NHẠC (VIP) =====================
+        // =====================================================================
+        
+        function openMusicConfirm() {
+            const overlay = document.getElementById('music-confirm-modal');
+            const content = document.getElementById('music-confirm-content');
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+            content.classList.remove('modal-leave', 'modal-leave-active');
+            content.classList.add('modal-enter', 'modal-enter-active');
+            setTimeout(() => content.classList.remove('modal-enter', 'modal-enter-active'), 300);
+        }
+
+        function closeMusicConfirm() {
+            const content = document.getElementById('music-confirm-content');
+            content.classList.add('modal-leave-active');
+            setTimeout(() => {
+                document.getElementById('music-confirm-modal').classList.add('hidden');
+                document.getElementById('music-confirm-modal').classList.remove('flex');
+                content.classList.remove('modal-leave-active');
+            }, 200);
+        }
+
+        function enterMusicHub() {
+            closeMusicConfirm();
+            switchView('music');
+        }
+
+        let spinDegree = 0;
+        let spinInterval;
+
+        function playGDSong(index) {
+            currentGDSongIndex = index;
+            gdAudio.src = gdSongs[index].url;
+            gdAudio.play();
+            
+            // Dừng nhạc nền mặc định
+            const bgMusic = document.getElementById('bg-music');
+            bgMusic.pause();
+            document.getElementById('icon-music-play').classList.add('hidden');
+            document.getElementById('icon-music-pause').classList.remove('hidden');
+
+            // Cập nhật UI Music Hub
+            document.getElementById('gd-now-playing-title').innerText = gdSongs[index].title;
+            document.getElementById('gd-icon-play').classList.add('hidden');
+            document.getElementById('gd-icon-pause').classList.remove('hidden');
+            
+            // Xoay đĩa
+            clearInterval(spinInterval);
+            spinInterval = setInterval(() => {
+                spinDegree += 1;
+                document.getElementById('record-disk').style.transform = `rotate(${spinDegree}deg)`;
+            }, 20);
+        }
+
+        function toggleGDSong() {
+            if(!gdAudio.src) {
+                playGDSong(0);
+                return;
+            }
+
+            if (gdAudio.paused) {
+                gdAudio.play();
+                document.getElementById('bg-music').pause(); // Pause bg music
+                document.getElementById('icon-music-play').classList.add('hidden');
+                document.getElementById('icon-music-pause').classList.remove('hidden');
+
+                document.getElementById('gd-icon-play').classList.add('hidden');
+                document.getElementById('gd-icon-pause').classList.remove('hidden');
+                
+                spinInterval = setInterval(() => {
+                    spinDegree += 1;
+                    document.getElementById('record-disk').style.transform = `rotate(${spinDegree}deg)`;
+                }, 20);
+            } else {
+                gdAudio.pause();
+                document.getElementById('gd-icon-play').classList.remove('hidden');
+                document.getElementById('gd-icon-pause').classList.add('hidden');
+                clearInterval(spinInterval);
+            }
+        }
+
+        function nextGDSong() {
+            let nextIndex = currentGDSongIndex + 1;
+            if (nextIndex >= gdSongs.length) nextIndex = 0;
+            playGDSong(nextIndex);
+        }
+
+        function prevGDSong() {
+            let prevIndex = currentGDSongIndex - 1;
+            if (prevIndex < 0) prevIndex = gdSongs.length - 1;
+            playGDSong(prevIndex);
+        }
+
 
         // =====================================================================
         // ===================== LOGIC GÓC HỌC TIẾNG ANH =======================
@@ -664,12 +814,8 @@
             }
         }
 
-        function fireConfetti() {
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-        }
-
         // =====================================================================
-        // ===================== LOGIC ĐỊA ĐIỂM ================================
+        // ===================== LOGIC ĐỊA ĐIỂM (Firebase) =====================
         // =====================================================================
 
         function renderPlaces() {
@@ -698,9 +844,7 @@
                     extraInfoHtml = `<span class="bg-purple-50 text-purple-600 px-2 py-0.5 rounded-md text-xs font-medium">${place.type}</span>`;
                 }
                 
-                const defaultImage = place.category === 'food' 
-                    ? 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-                    : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                const defaultImage = place.category === 'food' ? 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
 
                 const cardHtml = `
                     <article onclick="openViewModal('${place.id}')" class="glass-card rounded-3xl p-4 bubble-card group relative overflow-hidden flex flex-col">
@@ -712,10 +856,7 @@
                         </div>
                         <div class="px-2 flex-1 flex flex-col">
                             <h3 class="font-serif text-xl font-semibold text-textDark leading-tight mb-1">${place.name}</h3>
-                            <p class="text-sm text-textGray flex items-center gap-1 mb-2 truncate">
-                                <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
-                                ${place.address || 'Chưa cập nhật'}
-                            </p>
+                            <p class="text-sm text-textGray flex items-center gap-1 mb-2 truncate"><svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>${place.address || 'Chưa cập nhật'}</p>
                             <div class="flex items-center gap-2 mb-3 mt-auto">${extraInfoHtml}</div>
                             <div class="flex justify-between items-center bg-white/50 p-2.5 rounded-xl border border-white">
                                 <div class="flex gap-1 items-center">${starsHtml}</div>
@@ -728,7 +869,6 @@
             });
         }
 
-        // VIEW CHI TIẾT
         function openViewModal(id) {
             const place = places.find(p => p.id === id);
             if(!place) return;
@@ -792,7 +932,7 @@
             if(confirm("Bạn có chắc muốn xóa kỷ niệm này không?")) {
                 db.collection("places").doc(viewingId).delete()
                   .then(() => closeViewModal())
-                  .catch(error => console.error("Lỗi khi xóa: ", error));
+                  .catch(error => console.error("Lỗi: ", error));
             }
         }
 
