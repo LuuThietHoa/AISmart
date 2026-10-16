@@ -15,346 +15,175 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        primary: '#5B9BFF', secondary: '#A5D8FF', textDark: '#1A2A44', textGray: '#64748B', vipRed: '#E63946', vipDark: '#0A0A0A',
-                    },
-                    fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Playfair Display', 'serif'], },
-                    animation: { 'ken-burns': 'kenBurns 20s ease-in-out infinite alternate', 'float-glow': 'floatGlow 3s ease-in-out infinite alternate', }
+                    colors: { primary: '#5B9BFF', secondary: '#A5D8FF', textDark: '#1A2A44', textGray: '#64748B', vipRed: '#E63946', vipDark: '#0A0A0A' },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Playfair Display', 'serif'] },
+                    animation: { 'ken-burns': 'kenBurns 20s ease-in-out infinite alternate', 'float-glow': 'floatGlow 3s ease-in-out infinite alternate' }
                 }
             }
         }
     </script>
 
-    <!-- CSS CỦA TOÀN BỘ WEB VÀ BLIND BOX -->
-    <style id="custom-css">
+    <style>
         body { background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 50%, #7DD3FC 100%); min-height: 100vh; margin: 0; overflow-x: hidden; scroll-behavior: smooth; }
         .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 8px 32px rgba(91, 155, 255, 0.1); }
         .vip-glass { background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(20px); border-left: 1px solid rgba(255, 255, 255, 0.1); box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
         
-        .bubble-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
+        .bubble-card { transition: all 0.4s ease; cursor: pointer; }
         .bubble-card:hover { transform: scale(1.03) translateY(-5px); box-shadow: 0 20px 40px rgba(91, 155, 255, 0.2); border-color: rgba(91, 155, 255, 0.4); }
+        
+        .start-bubble { background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.2)); box-shadow: inset 0 0 20px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.4), 0 15px 30px rgba(91, 155, 255, 0.4); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.6); animation: floatBubble 3s ease-in-out infinite; }
+        @keyframes floatBubble { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-15px) scale(1.05); } }
         
         .hub-icon { animation: floatSlow 4s ease-in-out infinite; }
         .hub-icon:nth-child(2) { animation-delay: 1s; } .hub-icon:nth-child(3) { animation-delay: 2s; } .hub-icon:nth-child(4) { animation-delay: 0.5s; }
         @keyframes floatSlow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        .dark-scroll::-webkit-scrollbar { width: 6px; } .dark-scroll::-webkit-scrollbar-track { background: transparent; } .dark-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; } .dark-scroll::-webkit-scrollbar-thumb:hover { background: #E63946; }
-        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #A5D8FF; border-radius: 10px; } ::-webkit-scrollbar-thumb:hover { background: #5B9BFF; }
+        .dark-scroll::-webkit-scrollbar { width: 6px; } .dark-scroll::-webkit-scrollbar-track { background: transparent; } .dark-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #A5D8FF; border-radius: 10px; }
         .no-scroll { overflow: hidden; height: 100vh; }
 
         /* ==================== BLIND BOX CSS ==================== */
-        :root {
-            --rarity-thuong: #A0A0A0; --rarity-hiem: #3b82f6; --rarity-caocap: #a855f7; --rarity-sieuhiem: #eab308; --rarity-bian: #ef4444;
-        }
-
+        :root { --rarity-thuong: #A0A0A0; --rarity-hiem: #3b82f6; --rarity-caocap: #a855f7; --rarity-sieuhiem: #eab308; --rarity-bian: #ef4444; }
         .blind-box-bg { background: radial-gradient(circle at center, #1e1e2f 0%, #0a0a0f 100%); color: white; }
-
-        /* Gacha CSGO Spinner */
         .gacha-window { position: relative; width: 100%; height: 250px; background: rgba(0,0,0,0.5); overflow: hidden; border-radius: 1rem; border: 2px solid rgba(255,255,255,0.1); box-shadow: inset 0 0 50px rgba(0,0,0,0.8); }
-        .gacha-strip { display: flex; height: 100%; transition: transform 6s cubic-bezier(0.1, 0.9, 0.2, 1); will-change: transform; }
-        .gacha-item { width: 150px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid rgba(255,255,255,0.05); padding: 10px; }
-        .gacha-item img { width: 100%; height: auto; object-fit: contain; border-radius: 10px; }
+        .gacha-strip { display: flex; height: 100%; will-change: transform; }
+        .gacha-item { width: 150px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-right: 1px solid rgba(255,255,255,0.05); padding: 10px; }
         .gacha-center-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 4px; background: #eab308; transform: translateX(-50%); box-shadow: 0 0 15px #eab308; z-index: 10; pointer-events: none; }
 
         /* Card Styles Hologram & Glassmorphism */
-        .gacha-card {
-            position: relative; overflow: hidden; border-radius: 0.75rem; background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(10px); transition: transform 0.3s ease; aspect-ratio: 2/3; display: flex; align-items: center; justify-content: center;
-        }
+        .gacha-card { position: relative; overflow: hidden; border-radius: 0.75rem; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); transition: transform 0.3s ease; aspect-ratio: 2/3; display: flex; align-items: center; justify-content: center; }
         .gacha-card.owned:hover { transform: scale(1.05) translateY(-5px); z-index: 10; }
-        
-        /* Viền xoay (Hologram Border) */
-        .gacha-card::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: conic-gradient(transparent, rgba(255,255,255,0.1), transparent 30%);
-            animation: rotate-border 4s linear infinite; pointer-events: none; opacity: 0; transition: opacity 0.3s;
-        }
+        .gacha-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, rgba(255,255,255,0.1), transparent 30%); animation: rotate-border 4s linear infinite; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
         .gacha-card.owned::before { opacity: 1; }
         @keyframes rotate-border { 100% { transform: rotate(360deg); } }
 
-        /* Lớp Overlay Mix-blend-mode */
         .card-overlay { position: absolute; inset: 0; mix-blend-mode: overlay; pointer-events: none; opacity: 0.3; }
-
-        /* Rarity Themes */
-        .card-thuong { border: 2px solid var(--rarity-thuong); box-shadow: 0 0 10px rgba(160,160,160,0.2); }
-        .card-thuong .card-overlay { background: var(--rarity-thuong); opacity: 0.15; }
-        
-        .card-hiem { border: 2px solid var(--rarity-hiem); box-shadow: 0 0 15px rgba(59,130,246,0.4); }
-        .card-hiem .card-overlay { background: var(--rarity-hiem); opacity: 0.2; }
-        
-        .card-caocap { border: 2px solid var(--rarity-caocap); box-shadow: 0 0 20px rgba(168,85,247,0.5); }
-        .card-caocap .card-overlay { background: var(--rarity-caocap); opacity: 0.25; }
-        
-        .card-sieuhiem { border: 2px solid var(--rarity-sieuhiem); box-shadow: 0 0 30px rgba(234,179,8,0.6); }
-        .card-sieuhiem .card-overlay { background: var(--rarity-sieuhiem); opacity: 0.3; }
-        .card-sieuhiem::after { content: ''; position: absolute; inset: 0; background: url('https://www.transparenttextures.com/patterns/stardust.png'); opacity: 0.4; pointer-events: none; mix-blend-mode: color-dodge; animation: shimmer 3s infinite linear; }
-        
-        .card-bian { border: 2px solid var(--rarity-bian); box-shadow: 0 0 40px rgba(239,68,68,0.8); animation: pulse-red 2s infinite alternate; }
-        .card-bian .card-overlay { background: linear-gradient(135deg, var(--rarity-bian), #a855f7); opacity: 0.4; mix-blend-mode: color-dodge; }
-        .card-bian::after { content: ''; position: absolute; inset: 0; background: url('https://www.transparenttextures.com/patterns/cubes.png'); opacity: 0.5; pointer-events: none; animation: shimmer 2s infinite linear; }
+        .card-thuong { border: 2px solid var(--rarity-thuong); box-shadow: 0 0 10px rgba(160,160,160,0.2); } .card-thuong .card-overlay { background: var(--rarity-thuong); opacity: 0.15; }
+        .card-hiem { border: 2px solid var(--rarity-hiem); box-shadow: 0 0 15px rgba(59,130,246,0.4); } .card-hiem .card-overlay { background: var(--rarity-hiem); opacity: 0.2; }
+        .card-caocap { border: 2px solid var(--rarity-caocap); box-shadow: 0 0 20px rgba(168,85,247,0.5); } .card-caocap .card-overlay { background: var(--rarity-caocap); opacity: 0.25; }
+        .card-sieuhiem { border: 2px solid var(--rarity-sieuhiem); box-shadow: 0 0 30px rgba(234,179,8,0.6); } .card-sieuhiem .card-overlay { background: var(--rarity-sieuhiem); opacity: 0.3; } .card-sieuhiem::after { content: ''; position: absolute; inset: 0; background: url('https://www.transparenttextures.com/patterns/stardust.png'); opacity: 0.4; mix-blend-mode: color-dodge; animation: shimmer 3s infinite linear; pointer-events: none; }
+        .card-bian { border: 2px solid var(--rarity-bian); box-shadow: 0 0 40px rgba(239,68,68,0.8); animation: pulse-red 2s infinite alternate; } .card-bian .card-overlay { background: linear-gradient(135deg, var(--rarity-bian), #a855f7); opacity: 0.4; mix-blend-mode: color-dodge; } .card-bian::after { content: ''; position: absolute; inset: 0; background: url('https://www.transparenttextures.com/patterns/cubes.png'); opacity: 0.5; animation: shimmer 2s infinite linear; pointer-events: none; }
 
         @keyframes pulse-red { 0% { box-shadow: 0 0 20px rgba(239,68,68,0.5); } 100% { box-shadow: 0 0 50px rgba(239,68,68,1); } }
         @keyframes shimmer { 0% { background-position: 0 0; } 100% { background-position: 100px 100px; } }
 
         .card-badge { position: absolute; bottom: 0; left: 0; right: 0; padding: 4px 0; text-align: center; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; background: rgba(0,0,0,0.8); color: white; backdrop-filter: blur(5px); }
         .card-count { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.8); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); }
+        .mystery-box { font-size: 3rem; font-weight: bold; color: rgba(255,255,255,0.2); }
         
-        /* 3D Flip Card Effect cho lúc soi thẻ */
-        .card-3d-wrapper { perspective: 1000px; }
-        .card-3d-inner { transition: transform 0.8s; transform-style: preserve-3d; }
-        .card-3d-wrapper.flipped .card-3d-inner { transform: rotateY(180deg); }
-        .card-front, .card-back { backface-visibility: hidden; position: absolute; inset: 0; }
-        .card-back { transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; background: url('https://i.postimg.cc/85z1DkS0/card-back.jpg') center/cover; border-radius: 0.75rem; border: 2px solid rgba(255,255,255,0.2); }
-        
-        .mystery-box { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-size: 3rem; font-weight: bold; color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); }
-
+        .card-3d-wrapper { perspective: 1000px; } .card-3d-inner { transition: transform 0.8s; transform-style: preserve-3d; } .card-3d-wrapper.flipped .card-3d-inner { transform: rotateY(180deg); } .card-front, .card-back { backface-visibility: hidden; position: absolute; inset: 0; } .card-back { transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; background: url('https://i.postimg.cc/85z1DkS0/card-back.jpg') center/cover; border-radius: 0.75rem; border: 2px solid rgba(255,255,255,0.2); }
     </style>
 </head>
 <body class="text-textDark antialiased no-scroll" id="body">
 
-    <!-- AUDIO FILES -->
     <audio id="bg-music" loop src="https://files.catbox.moe/by6h11.mp4"></audio>
     <audio id="sound-tick" src="https://actions.google.com/sounds/v1/ui/click.ogg"></audio>
     <audio id="sound-reveal" src="https://actions.google.com/sounds/v1/magic/magic_chime.ogg"></audio>
     <audio id="sound-coin" src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg"></audio>
 
-    <button id="music-toggle" class="fixed bottom-6 right-6 w-12 h-12 rounded-full glass-card flex items-center justify-center cursor-pointer z-[80] text-primary hover:bg-white transition-all duration-500 transform hover:scale-110 shadow-lg shadow-primary/30 opacity-0 pointer-events-none translate-y-4">
+    <button id="music-toggle" class="fixed bottom-6 right-6 w-12 h-12 rounded-full glass-card flex items-center justify-center cursor-pointer z-[80] text-primary hover:bg-white transition-all opacity-0 pointer-events-none translate-y-4">
         <svg id="icon-music-play" class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
         <svg id="icon-music-pause" class="w-6 h-6 hidden text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path></svg>
     </button>
 
-    <!-- 0. LOGIN SCREEN -->
+    <!-- LOGIN -->
     <div id="login-screen" class="fixed inset-0 z-[200] flex items-center justify-center bg-[#E0F2FE] transition-all duration-500">
         <div class="glass-card p-10 rounded-3xl w-full max-w-md text-center shadow-2xl">
             <h2 class="font-serif text-3xl font-bold text-primary mb-2">Đăng Nhập</h2>
-            <p class="text-sm text-textGray mb-8">Vui lòng xác danh để đồng bộ dữ liệu Sưu tầm & Coin nhé!</p>
-            <input type="text" id="login-user" placeholder="Tên đăng nhập (luuthiethoa / hamy)" class="w-full px-5 py-3 rounded-xl border border-blue-200 focus:border-primary focus:outline-none mb-4 text-center">
-            <input type="password" id="login-pass" placeholder="Mật khẩu" class="w-full px-5 py-3 rounded-xl border border-blue-200 focus:border-primary focus:outline-none mb-6 text-center">
-            <button onclick="handleLogin()" class="w-full bg-primary hover:bg-[#4FC3F7] text-white py-3.5 rounded-xl font-bold transition-all shadow-lg shadow-primary/30 transform hover:-translate-y-1">Vào Không Gian</button>
+            <p class="text-sm text-textGray mb-8">Đồng bộ dữ liệu Sưu tầm & Coin!</p>
+            <input type="text" id="login-user" placeholder="Tên đăng nhập (luuthiethoa / hamy)" class="w-full px-5 py-3 rounded-xl border border-blue-200 mb-4 text-center">
+            <input type="password" id="login-pass" placeholder="Mật khẩu" class="w-full px-5 py-3 rounded-xl border border-blue-200 mb-6 text-center">
+            <button id="login-btn" onclick="handleLogin()" class="w-full bg-primary hover:bg-[#4FC3F7] text-white py-3.5 rounded-xl font-bold transition-all shadow-lg">Vào Không Gian</button>
             <p id="login-error" class="text-rose-500 text-sm mt-4 hidden font-medium">Sai tài khoản hoặc mật khẩu!</p>
         </div>
     </div>
 
-    <!-- 1. INTRO SCREEN -->
-    <div id="intro-screen" class="fixed inset-0 z-[100] flex items-center justify-center bg-[#E0F2FE] transition-all duration-1000 ease-in-out hidden">
-        <video id="bg-video" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000" muted playsinline autoplay><source src="nenweb.mp4" type="video/mp4"></video>
+    <!-- INTRO -->
+    <div id="intro-screen" class="fixed inset-0 z-[100] flex items-center justify-center bg-[#E0F2FE] transition-all duration-1000 hidden">
+        <video id="bg-video" class="absolute inset-0 w-full h-full object-cover" muted playsinline autoplay><source src="nenweb.mp4" type="video/mp4"></video>
         <div class="absolute inset-0 bg-black/10"></div>
-        <button id="start-btn" class="start-bubble relative z-10 w-40 h-40 rounded-full flex flex-col items-center justify-center gap-2 cursor-pointer transition-all duration-700 scale-0 opacity-0 group"><span class="font-serif text-2xl font-bold text-primary drop-shadow-sm group-hover:text-[#4FC3F7] transition-colors">Mở ra</span></button>
+        <button id="start-btn" class="start-bubble relative z-10 w-40 h-40 rounded-full flex flex-col items-center justify-center gap-2 cursor-pointer transition-all duration-700 scale-0 opacity-0 group"><span class="font-serif text-2xl font-bold text-primary">Mở ra</span></button>
     </div>
 
-    <!-- 2. HUB SCREEN (SẢNH CHÍNH) -->
+    <!-- HUB SCREEN -->
     <div id="hub-screen" class="fixed inset-0 z-[90] flex flex-col items-center justify-center hidden opacity-0 scale-95 transition-all duration-500">
-        
-        <!-- Info Panel Đăng Nhập -->
         <div class="absolute top-6 left-6 glass-card px-5 py-3 rounded-2xl flex items-center gap-4 shadow-md border-white/60">
-            <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold text-xl uppercase shadow-inner" id="hub-avatar">L</div>
-            <div>
-                <p class="font-bold text-textDark leading-tight" id="hub-username">Luuthiethoa</p>
-                <p class="text-sm font-semibold text-yellow-500 flex items-center gap-1 mt-1">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zM8 7a1 1 0 011-1h2a1 1 0 011 1v1h1a1 1 0 011 1v1h-1v1a1 1 0 01-1 1h-2a1 1 0 01-1-1v-1H7v-1a1 1 0 011-1h1V7z"></path></svg> 
-                    <span id="hub-coins">0</span> Coin
-                </p>
-            </div>
-            <div class="pl-4 border-l border-gray-200 ml-2">
-                <p class="text-xs text-textGray font-medium">Thẻ thu thập</p>
-                <p class="font-bold text-primary" id="hub-cards">0 / 50</p>
-            </div>
+            <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold text-xl uppercase" id="hub-avatar">L</div>
+            <div><p class="font-bold text-textDark" id="hub-username">User</p><p class="text-sm font-semibold text-yellow-500 mt-1"><span id="hub-coins">0</span> Coin</p></div>
+            <div class="pl-4 border-l border-gray-200 ml-2"><p class="text-xs text-textGray font-medium">Thẻ thu thập</p><p class="font-bold text-primary" id="hub-cards">0 / 50</p></div>
         </div>
-
-        <h1 class="font-serif text-4xl md:text-5xl font-bold text-textDark mb-16 drop-shadow-sm tracking-wide text-center px-4">Không gian của tụi mình ✨</h1>
+        <h1 class="font-serif text-4xl md:text-5xl font-bold text-textDark mb-16 text-center px-4">Không gian của tụi mình ✨</h1>
         <div class="flex flex-wrap justify-center gap-8 md:gap-14 px-6">
-            <div class="group relative cursor-pointer hub-icon" onclick="switchView('places')"><div class="w-24 h-24 md:w-32 md:h-32 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20"><img src="diadiem.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/854/854878.png'" class="w-12 h-12 md:w-16 md:h-16 object-contain"></div><div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-xs font-semibold text-primary shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Bản Đồ 🗺️</div></div>
-            <div class="group relative cursor-pointer hub-icon" onclick="openMusicConfirm()"><div class="w-24 h-24 md:w-32 md:h-32 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20"><img src="nghenhac.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3011/3011236.png'" class="w-12 h-12 md:w-16 md:h-16 object-contain"></div><div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-xs font-semibold text-rose-500 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Nghe Nhạc 🎧</div></div>
-            <div class="group relative cursor-pointer hub-icon" onclick="switchView('study')"><div class="w-24 h-24 md:w-32 md:h-32 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20"><img src="studyE.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/330/330731.png'" class="w-12 h-12 md:w-16 md:h-16 object-contain"></div><div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-xs font-semibold text-primary shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Học Tập 📚</div></div>
-            <div class="group relative cursor-pointer hub-icon" onclick="switchView('blindbox')"><div class="w-24 h-24 md:w-32 md:h-32 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-4 border-yellow-300 shadow-[0_0_30px_rgba(234,179,8,0.5)]"><div class="text-4xl animate-pulse">🎁</div></div><div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-xs font-bold text-yellow-600 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Blind Box ✨</div></div>
+            <div class="group relative cursor-pointer hub-icon" onclick="switchView('places')"><div class="w-24 h-24 md:w-32 md:h-32 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform"><img src="diadiem.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/854/854878.png'" class="w-12 h-12 md:w-16 md:h-16 object-contain"></div></div>
+            <div class="group relative cursor-pointer hub-icon" onclick="openMusicConfirm()"><div class="w-24 h-24 md:w-32 md:h-32 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform"><img src="nghenhac.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3011/3011236.png'" class="w-12 h-12 md:w-16 md:h-16 object-contain"></div></div>
+            <div class="group relative cursor-pointer hub-icon" onclick="switchView('study')"><div class="w-24 h-24 md:w-32 md:h-32 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform"><img src="studyE.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/330/330731.png'" class="w-12 h-12 md:w-16 md:h-16 object-contain"></div></div>
+            <div class="group relative cursor-pointer hub-icon" onclick="switchView('blindbox')"><div class="w-24 h-24 md:w-32 md:h-32 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform border-4 border-yellow-300 shadow-[0_0_30px_rgba(234,179,8,0.5)]"><div class="text-4xl animate-pulse">🎁</div></div></div>
         </div>
     </div>
 
-    <!-- ==================== MODULE BLIND BOX ==================== -->
-    <div id="blindbox-module" class="fixed inset-0 z-[95] hidden opacity-0 transition-all duration-1000 blind-box-bg overflow-y-auto dark-scroll">
-        
-        <!-- Header Ngang -->
+    <!-- MODULE BLIND BOX -->
+    <div id="blindbox-module" class="fixed inset-0 z-[95] hidden opacity-0 transition-all duration-500 blind-box-bg overflow-y-auto dark-scroll">
         <div class="sticky top-0 z-[100] bg-black/60 backdrop-blur-xl border-b border-white/10 px-6 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <button onclick="switchView('hub')" class="bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors"><svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg></button>
-                <h1 class="font-serif text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-yellow-600 tracking-wider">GACHA V.I.P</h1>
-            </div>
-            
-            <!-- Navbar Tabs -->
-            <div class="hidden md:flex gap-2 p-1 bg-white/5 rounded-xl border border-white/10">
-                <button onclick="switchBoxTab('gacha')" id="btab-gacha" class="px-6 py-2 rounded-lg font-bold text-sm bg-primary text-white shadow-lg">Quay Thẻ</button>
-                <button onclick="switchBoxTab('collection')" id="btab-collection" class="px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white transition-colors">Kho Đồ</button>
-                <button onclick="switchBoxTab('auction')" id="btab-auction" class="px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white transition-colors">Chợ Đấu Giá</button>
-                <button onclick="switchBoxTab('top')" id="btab-top" class="px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white transition-colors">Bảng Xếp Hạng</button>
-            </div>
-
-            <div class="flex items-center gap-4">
-                <div class="bg-yellow-500/20 border border-yellow-500/50 px-4 py-1.5 rounded-full flex items-center gap-2">
-                    <span class="text-xl">🎟️</span> <span id="bb-tickets" class="font-bold text-yellow-400">0</span>
-                </div>
-                <div class="bg-blue-500/20 border border-blue-500/50 px-4 py-1.5 rounded-full flex items-center gap-2">
-                    <span class="text-xl">🪙</span> <span id="bb-coins" class="font-bold text-blue-400">0</span>
-                </div>
-            </div>
+            <div class="flex items-center gap-4"><button onclick="switchView('hub')" class="bg-white/10 hover:bg-white/20 p-2 rounded-full"><svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg></button><h1 class="font-serif text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-yellow-600">GACHA V.I.P</h1></div>
+            <div class="hidden md:flex gap-2 p-1 bg-white/5 rounded-xl"><button onclick="switchBoxTab('gacha')" id="btab-gacha" class="px-6 py-2 rounded-lg font-bold text-sm bg-primary text-white">Quay Thẻ</button><button onclick="switchBoxTab('collection')" id="btab-collection" class="px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white">Kho Đồ</button><button onclick="switchBoxTab('auction')" id="btab-auction" class="px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white">Chợ Đấu Giá</button><button onclick="switchBoxTab('top')" id="btab-top" class="px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white">BXH</button></div>
+            <div class="flex gap-4"><div class="bg-yellow-500/20 px-4 py-1.5 rounded-full flex gap-2">🎟️ <span id="bb-tickets" class="font-bold text-yellow-400">0</span></div><div class="bg-blue-500/20 px-4 py-1.5 rounded-full flex gap-2">🪙 <span id="bb-coins" class="font-bold text-blue-400">0</span></div></div>
         </div>
-
         <div class="max-w-6xl mx-auto p-6 md:p-10">
-
-            <!-- TAB GACHA -->
+            <!-- GACHA -->
             <div id="bb-tab-gacha" class="space-y-8">
-                <div class="text-center mb-10">
-                    <h2 class="text-4xl font-bold mb-2">Thử Vận May Của Bạn 🎲</h2>
-                    <p class="text-gray-400">Tỷ lệ: Thường 55% | Hiếm 28% | Cao Cấp 12% | Siêu Hiếm 4% | Bí Ẩn 1% (Bảo hiểm 90 lần)</p>
-                </div>
-
-                <!-- Cửa sổ CSGO Spinner -->
-                <div class="gacha-window">
-                    <div class="gacha-center-line"></div>
-                    <div class="gacha-strip" id="gacha-strip">
-                        <!-- Strip items generated via JS -->
-                    </div>
-                </div>
-
+                <div class="text-center mb-10"><h2 class="text-4xl font-bold mb-2">Thử Vận May Của Bạn 🎲</h2><p class="text-gray-400">Tỷ lệ: Thường 55% | Hiếm 28% | Cao Cấp 12% | Siêu Hiếm 4% | Bí Ẩn 1%</p></div>
+                <div class="gacha-window"><div class="gacha-center-line"></div><div class="gacha-strip" id="gacha-strip"></div></div>
                 <div class="flex flex-col items-center mt-10 gap-4">
                     <div class="flex justify-center gap-4">
-                        <button onclick="rollGacha(1)" id="btn-roll-1" class="relative group bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white px-10 py-4 rounded-2xl font-bold text-lg transition-all shadow-[0_0_30px_rgba(59,130,246,0.4)] transform hover:scale-105 border border-white/20 overflow-hidden">
-                            <span class="relative z-10 flex items-center gap-2">Quay 1 Lần <span class="text-yellow-300">(100 🪙)</span></span>
-                            <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform"></div>
-                        </button>
-                        <button onclick="useFreeTicket()" id="btn-free-ticket" class="hidden relative group bg-gradient-to-br from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 text-white px-10 py-4 rounded-2xl font-bold text-lg transition-all shadow-[0_0_30px_rgba(234,179,8,0.4)] transform hover:scale-105 border border-white/20">
-                            Quay Miễn Phí <span class="text-xs font-normal opacity-80">(Chỉ ra Thường)</span>
-                        </button>
+                        <button onclick="rollGacha()" id="btn-roll-1" class="bg-gradient-to-br from-blue-500 to-purple-600 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition-transform shadow-[0_0_30px_rgba(59,130,246,0.4)]">Quay 1 Lần <span class="text-yellow-300">(100 🪙)</span></button>
+                        <button onclick="useFreeTicket()" id="btn-free-ticket" class="hidden bg-gradient-to-br from-yellow-500 to-orange-600 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition-transform shadow-[0_0_30px_rgba(234,179,8,0.4)]">Quay Miễn Phí <span class="text-xs font-normal">(Chỉ ra Thường)</span></button>
                     </div>
                     <p class="text-sm text-gray-500" id="pity-counter">Pity Bí Ẩn: 0 / 90</p>
                 </div>
             </div>
-
-            <!-- TAB COLLECTION (SƯU TẦM) -->
+            <!-- COLLECTION -->
             <div id="bb-tab-collection" class="hidden space-y-6">
-                
-                <!-- Tiến độ -->
-                <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8 bg-white/5 p-4 rounded-2xl border border-white/10">
-                    <div class="col-span-2 md:col-span-1 text-center"><p class="text-xs text-gray-400 mb-1">Tổng tiến độ</p><p class="text-xl font-bold text-primary" id="prog-total">0%</p></div>
-                    <div class="text-center"><p class="text-xs text-gray-400 mb-1">Thường</p><p class="text-sm font-bold text-[#A0A0A0]" id="prog-t">0/10</p></div>
-                    <div class="text-center"><p class="text-xs text-gray-400 mb-1">Hiếm</p><p class="text-sm font-bold text-[#3b82f6]" id="prog-h">0/10</p></div>
-                    <div class="text-center"><p class="text-xs text-gray-400 mb-1">Cao Cấp</p><p class="text-sm font-bold text-[#a855f7]" id="prog-c">0/10</p></div>
-                    <div class="text-center"><p class="text-xs text-gray-400 mb-1">Siêu Hiếm</p><p class="text-sm font-bold text-[#eab308]" id="prog-sh">0/10</p></div>
-                    <div class="text-center"><p class="text-xs text-gray-400 mb-1">Bí Ẩn</p><p class="text-sm font-bold text-[#ef4444]" id="prog-b">0/10</p></div>
-                </div>
-
-                <!-- Bộ lọc -->
-                <div class="flex flex-wrap gap-2 mb-6">
-                    <button onclick="filterCollection('all')" class="px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-sm font-bold">Tất Cả</button>
-                    <button onclick="filterCollection('thuong')" class="px-4 py-1.5 rounded-full bg-white/5 border border-[#A0A0A0]/50 text-[#A0A0A0] text-sm font-bold">Thường</button>
-                    <button onclick="filterCollection('hiem')" class="px-4 py-1.5 rounded-full bg-white/5 border border-[#3b82f6]/50 text-[#3b82f6] text-sm font-bold">Hiếm</button>
-                    <button onclick="filterCollection('caocap')" class="px-4 py-1.5 rounded-full bg-white/5 border border-[#a855f7]/50 text-[#a855f7] text-sm font-bold">Cao Cấp</button>
-                    <button onclick="filterCollection('sieuhiem')" class="px-4 py-1.5 rounded-full bg-white/5 border border-[#eab308]/50 text-[#eab308] text-sm font-bold">Siêu Hiếm</button>
-                    <button onclick="filterCollection('bian')" class="px-4 py-1.5 rounded-full bg-white/5 border border-[#ef4444]/50 text-[#ef4444] text-sm font-bold">Bí Ẩn</button>
-                </div>
-
-                <!-- Grid hiển thị (Render JS) -->
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8 bg-white/5 p-4 rounded-2xl"><div class="col-span-2 md:col-span-1 text-center"><p class="text-xs text-gray-400 mb-1">Tổng tiến độ</p><p class="text-xl font-bold text-primary" id="prog-total">0%</p></div><div class="text-center"><p class="text-xs text-gray-400 mb-1">Thường</p><p class="text-sm font-bold text-[#A0A0A0]" id="prog-t">0/10</p></div><div class="text-center"><p class="text-xs text-gray-400 mb-1">Hiếm</p><p class="text-sm font-bold text-[#3b82f6]" id="prog-h">0/10</p></div><div class="text-center"><p class="text-xs text-gray-400 mb-1">Cao Cấp</p><p class="text-sm font-bold text-[#a855f7]" id="prog-c">0/10</p></div><div class="text-center"><p class="text-xs text-gray-400 mb-1">Siêu Hiếm</p><p class="text-sm font-bold text-[#eab308]" id="prog-sh">0/10</p></div><div class="text-center"><p class="text-xs text-gray-400 mb-1">Bí Ẩn</p><p class="text-sm font-bold text-[#ef4444]" id="prog-b">0/10</p></div></div>
+                <div class="flex flex-wrap gap-2 mb-6"><button onclick="filterCollection('all')" class="px-4 py-1.5 rounded-full bg-white/10 text-sm font-bold">Tất Cả</button><button onclick="filterCollection('thuong')" class="px-4 py-1.5 rounded-full bg-white/5 border border-[#A0A0A0] text-[#A0A0A0] text-sm font-bold">Thường</button><button onclick="filterCollection('hiem')" class="px-4 py-1.5 rounded-full bg-white/5 border border-[#3b82f6] text-[#3b82f6] text-sm font-bold">Hiếm</button><button onclick="filterCollection('caocap')" class="px-4 py-1.5 rounded-full bg-white/5 border border-[#a855f7] text-[#a855f7] text-sm font-bold">Cao Cấp</button><button onclick="filterCollection('sieuhiem')" class="px-4 py-1.5 rounded-full bg-white/5 border border-[#eab308] text-[#eab308] text-sm font-bold">Siêu Hiếm</button><button onclick="filterCollection('bian')" class="px-4 py-1.5 rounded-full bg-white/5 border border-[#ef4444] text-[#ef4444] text-sm font-bold">Bí Ẩn</button></div>
                 <div id="collection-grid" class="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-4"></div>
             </div>
-
-            <!-- TAB ĐẤU GIÁ (AUCTION) -->
-            <div id="bb-tab-auction" class="hidden">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold mb-2">Chợ Đen Đấu Giá ⚖️</h2>
-                    <p class="text-gray-400 text-sm">Các thẻ ngẫu nhiên được hệ thống rao bán mỗi lần vào đây.</p>
-                </div>
-                <div id="auction-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    <!-- Render JS -->
-                </div>
-            </div>
-
-            <!-- TAB LEADERBOARD -->
-            <div id="bb-tab-top" class="hidden max-w-2xl mx-auto">
-                <h2 class="text-3xl font-bold text-center mb-8">Bảng Vàng Sưu Tầm 🏆</h2>
-                <div class="bg-white/5 border border-white/10 rounded-3xl p-2" id="leaderboard-container">
-                    <!-- Render JS -->
-                </div>
-            </div>
-
+            <!-- AUCTION -->
+            <div id="bb-tab-auction" class="hidden"><div class="text-center mb-8"><h2 class="text-3xl font-bold mb-2">Chợ Đen Đấu Giá ⚖️</h2></div><div id="auction-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div></div>
+            <!-- LEADERBOARD -->
+            <div id="bb-tab-top" class="hidden max-w-2xl mx-auto"><h2 class="text-3xl font-bold text-center mb-8">Bảng Vàng Sưu Tầm 🏆</h2><div class="bg-white/5 rounded-3xl p-2" id="leaderboard-container"></div></div>
         </div>
     </div>
+    
+    <div id="card-reveal-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-[300] hidden items-center justify-center p-4"><div id="reveal-particles" class="absolute inset-0 pointer-events-none"></div><div class="relative z-10 w-full max-w-sm flex flex-col items-center" id="card-reveal-content"><h3 class="text-4xl font-black uppercase tracking-widest mb-6" id="reveal-rarity-text">RARITY</h3><div class="card-3d-wrapper w-64 h-96 cursor-pointer" onclick="this.classList.toggle('flipped')"><div class="card-3d-inner w-full h-full relative shadow-[0_0_50px_rgba(0,0,0,0.8)] rounded-xl"><div class="card-back"></div><div class="card-front bg-gray-900 rounded-xl overflow-hidden border-4" id="reveal-card-front"><img src="" id="reveal-img" class="w-full h-full object-cover"><div class="card-overlay" id="reveal-overlay"></div></div></div></div><button onclick="closeReveal()" class="mt-8 bg-white/20 text-white px-8 py-3 rounded-full font-bold">Thu Thập</button></div></div>
 
-    <!-- Modal Chi tiết thẻ -->
-    <div id="card-reveal-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-[300] hidden items-center justify-center p-4 transition-opacity">
-        <div class="absolute inset-0" id="reveal-particles"></div>
-        <div class="relative z-10 w-full max-w-sm flex flex-col items-center modal-enter" id="card-reveal-content">
-            <h3 class="text-4xl font-black uppercase tracking-widest mb-6 drop-shadow-lg" id="reveal-rarity-text">RARITY</h3>
-            
-            <div class="card-3d-wrapper w-64 h-96 cursor-pointer" onclick="this.classList.toggle('flipped')">
-                <div class="card-3d-inner w-full h-full relative shadow-[0_0_50px_rgba(0,0,0,0.8)] rounded-xl">
-                    <div class="card-back"></div>
-                    <div class="card-front bg-gray-900 rounded-xl overflow-hidden border-4" id="reveal-card-front">
-                        <img src="" id="reveal-img" class="w-full h-full object-cover">
-                        <div class="card-overlay" id="reveal-overlay"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <p class="text-white/60 text-sm mt-6 mb-8">(Click vào thẻ để lật)</p>
-            <button onclick="closeReveal()" class="bg-white/10 border border-white/20 hover:bg-white/20 text-white px-8 py-3 rounded-full font-bold transition-colors">Thu Thập</button>
-        </div>
+    <!-- MODULE MUSIC -->
+    <div id="music-module" class="fixed inset-0 z-[85] hidden opacity-0 transition-all duration-500 bg-vipDark flex flex-col md:flex-row">
+        <div class="absolute inset-0 z-0"><div class="absolute inset-0 bg-[url('g-dragon.jpg')] bg-cover bg-center opacity-40"></div><div class="absolute inset-0 bg-gradient-to-br from-vipDark/90 via-vipDark/50 to-[#E63946]/30"></div></div>
+        <button onclick="switchView('hub')" class="absolute top-6 left-6 z-[100] bg-white/10 px-5 py-2.5 rounded-full text-white">Sảnh chính</button>
+        <div class="relative z-10 flex-1 flex items-center justify-center p-10"><div class="text-center"><h1 class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500">G-DRAGON</h1><div class="mt-12 w-48 h-48 mx-auto"><div id="record-disk" class="absolute inset-0 rounded-full border-4 border-[#E63946]/30 shadow-[0_0_50px_rgba(230,57,70,0.3)] transition-transform duration-1000"><div class="w-full h-full rounded-full border border-white/10 flex items-center justify-center bg-black/50"><div class="w-16 h-16 rounded-full border-2 border-[#E63946] bg-vipDark"></div></div></div></div></div></div>
+        <div class="relative z-10 w-full md:w-96 vip-glass p-6 flex flex-col"><h2 class="text-2xl font-bold text-white mb-6">Playlist</h2><ul id="gd-playlist-container" class="flex-1 overflow-y-auto space-y-3"></ul><div class="mt-6 p-5 bg-white/5 rounded-2xl"><p id="gd-now-playing-title" class="text-white font-medium mb-4 text-center">Chưa chọn bài</p><div class="flex justify-center gap-6"><button onclick="prevGDSong()" class="text-white/70">⏮</button><button onclick="toggleGDSong()" id="btn-gd-play" class="w-14 h-14 rounded-full bg-[#E63946] text-white flex justify-center items-center"><span id="gd-icon-play">▶</span><span id="gd-icon-pause" class="hidden">⏸</span></button><button onclick="nextGDSong()" class="text-white/70">⏭</button></div></div></div>
     </div>
+    <div id="music-confirm-modal" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center"><div class="bg-white rounded-3xl w-full max-w-sm p-6 text-center"><h3 class="text-xl font-bold mb-6">Vào Sảnh V.I.P? 🎧</h3><div class="flex gap-3"><button onclick="closeMusicConfirm()" class="flex-1 py-2 bg-gray-100 rounded-xl">Hủy</button><button onclick="enterMusicHub()" class="flex-1 py-2 bg-rose-500 text-white rounded-xl">Vào ngay 🔥</button></div></div></div>
 
+    <!-- MODULE PLACES & STUDY -->
+    <div id="places-module" class="hidden opacity-0 scale-95 pb-20 transition-all duration-500"><button onclick="switchView('hub')" class="fixed top-6 left-6 z-[80] glass-card px-4 py-2 rounded-full text-primary">Sảnh chính</button><header class="max-w-4xl mx-auto pt-24 px-6 text-center"><h1 class="font-serif text-4xl font-semibold mb-4 text-textDark">Bản đồ <span class="text-primary italic">khoảnh khắc xanh</span></h1></header><main id="places-grid" class="max-w-5xl mx-auto mt-12 px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></main></div>
+    
+    <div id="study-module" class="hidden opacity-0 scale-95 pb-20 transition-all duration-500"><button onclick="switchView('hub')" class="fixed top-6 left-6 z-[80] glass-card px-4 py-2 rounded-full text-primary">Trở về</button><header class="max-w-4xl mx-auto pt-24 px-6 text-center mb-10"><h1 class="font-serif text-4xl font-semibold mb-4 text-textDark">Góc <span class="text-primary italic">Tiếng Anh</span></h1><p class="text-textGray">Cùng nhau ôn tập từ vựng và kiếm Xu nhé! 🪙</p></header><main class="max-w-4xl mx-auto px-6"><div id="study-menu" class="grid grid-cols-1 md:grid-cols-2 gap-4"><button onclick="openStudyMode('en-vi')" class="glass-card p-6 rounded-3xl hover:scale-105 border-blue-200"><h3 class="text-lg font-bold text-primary mb-1">Làm Quiz (+50🪙)</h3><p class="text-sm">Anh-Việt, Việt-Anh</p></button><button onclick="openStudyMode('memory')" class="glass-card p-6 rounded-3xl hover:scale-105 border-rose-200"><h3 class="text-lg font-bold text-rose-500 mb-1">Trí Nhớ Siêu Phàm (+500🪙)</h3><p class="text-sm">Nhập full 33 từ</p></button></div><div id="study-content" class="hidden glass-card rounded-3xl p-6 relative mt-6"><button onclick="backToStudyMenu()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full">X</button><h2 id="study-content-title" class="text-2xl font-bold text-primary mb-6 border-b pb-4">Tiêu đề</h2><div id="quiz-container" class="hidden flex flex-col items-center"><div class="w-full bg-white rounded-2xl p-8 text-center shadow-sm mb-6"><h3 class="text-3xl font-serif font-bold text-textDark" id="quiz-question">Word</h3></div><input type="text" id="quiz-input" placeholder="Nhập đáp án..." class="w-full max-w-md px-5 py-3 rounded-xl border-2 border-gray-200 focus:border-primary text-center mb-4"><button onclick="checkQuizAnswer()" class="bg-primary text-white px-8 py-3 rounded-xl font-bold w-full max-w-md">Kiểm tra</button><div id="quiz-feedback" class="mt-4 p-4 rounded-xl w-full max-w-md hidden text-center font-medium"></div></div><div id="memory-container" class="hidden flex flex-col items-center"><textarea id="memory-input" rows="5" class="w-full px-5 py-4 rounded-xl border-2 border-gray-200 text-lg mb-6"></textarea><button onclick="checkMemory()" class="bg-rose-500 text-white px-8 py-3 rounded-xl font-bold">Nộp bài 🚀</button><div id="memory-feedback" class="mt-6 p-4 rounded-xl w-full hidden text-center font-medium"></div></div></div></main></div>
 
-    <!-- ================= CÁC MODULE CŨ CỦA BẠN (Sảnh nhạc, Bản đồ, Học tập, Modal) ================= -->
-    <!-- ... (TẤT CẢ CODE MODULE CŨ ĐƯỢC GIỮ NGUYÊN BÊN DƯỚI NÀY, ĐỂ RÚT GỌN MÌNH GỘP LUÔN VÀO JS) ... -->
-    <!-- Mình sẽ include HTML của chúng đầy đủ nhưng ẩn đi -->
-    <!-- SẢNH V.I.P G-DRAGON -->
-    <div id="music-module" class="fixed inset-0 z-[85] hidden opacity-0 transition-all duration-1000 bg-vipDark overflow-hidden flex flex-col md:flex-row">
-        <div class="absolute inset-0 z-0"><div class="absolute inset-0 bg-[url('g-dragon.jpg')] bg-cover bg-center opacity-40 animate-ken-burns"></div><div class="absolute inset-0 bg-gradient-to-br from-vipDark/90 via-vipDark/50 to-[#E63946]/30"></div><div class="absolute inset-0" style="background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px); background-size: 50px 50px;"></div></div>
-        <button onclick="switchView('hub')" class="absolute top-6 left-6 z-[100] bg-white/10 backdrop-blur-md border border-white/20 px-5 py-2.5 rounded-full text-white font-medium hover:bg-white/20 transition-all flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Sảnh chính</button>
-        <div class="relative z-10 flex-1 flex items-center justify-center p-10 mt-16 md:mt-0"><div class="text-center"><h1 class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 uppercase tracking-[0.2em] mb-4 animate-float-glow">G-DRAGON</h1><p class="text-white/60 tracking-[0.3em] uppercase text-sm md:text-lg font-light">V.I.P Lounge Collection</p><div class="mt-12 relative w-48 h-48 md:w-64 md:h-64 mx-auto"><div id="record-disk" class="absolute inset-0 rounded-full border-4 border-[#E63946]/30 shadow-[0_0_50px_rgba(230,57,70,0.3)] transition-transform duration-1000 ease-linear"><div class="absolute inset-2 rounded-full border border-white/10 flex items-center justify-center bg-black/50 backdrop-blur-sm"><div class="w-16 h-16 rounded-full border-2 border-[#E63946] bg-vipDark flex items-center justify-center shadow-inner"><div class="w-4 h-4 bg-white rounded-full"></div></div></div></div></div></div></div>
-        <div class="relative z-10 w-full md:w-96 lg:w-[450px] h-[50vh] md:h-full vip-glass flex flex-col p-6"><h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="w-2 h-6 bg-[#E63946] rounded-full"></span> Playlist</h2><ul id="gd-playlist-container" class="flex-1 overflow-y-auto dark-scroll space-y-3 pr-2"></ul><div class="mt-6 p-5 bg-white/5 rounded-2xl border border-white/10"><div class="mb-4"><p class="text-xs text-[#E63946] font-bold uppercase tracking-widest mb-1">Đang phát</p><p id="gd-now-playing-title" class="text-white font-medium truncate">Chưa chọn bài</p></div><div class="flex items-center justify-center gap-6"><button onclick="prevGDSong()" class="text-white/70 hover:text-white transition-colors"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z"></path></svg></button><button onclick="toggleGDSong()" id="btn-gd-play" class="w-14 h-14 rounded-full bg-[#E63946] hover:bg-red-600 text-white flex items-center justify-center transition-all shadow-[0_0_20px_rgba(230,57,70,0.5)] transform hover:scale-105"><svg id="gd-icon-play" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg><svg id="gd-icon-pause" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg></button><button onclick="nextGDSong()" class="text-white/70 hover:text-white transition-colors"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0013 14V8.798l5.445 3.63A1 1 0 0020 14V6a1 1 0 00-1.555-.832L13 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4zM4 6a1 1 0 11-2 0v8a1 1 0 112 0V6z"></path></svg></button></div></div></div>
-    </div>
-    <!-- Modal xác nhận vô nhạc -->
-    <div id="music-confirm-modal" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 transition-opacity"><div id="music-confirm-content" class="bg-white rounded-3xl w-full max-w-sm shadow-2xl p-6 text-center modal-enter relative"><h3 class="text-xl font-bold text-textDark mb-3">Vào Sảnh V.I.P? 🎧</h3><p class="text-sm text-textGray mb-6">Bạn muốn vào sảnh nghe nhạc chứ?</p><div class="flex gap-3"><button onclick="closeMusicConfirm()" class="flex-1 py-2.5 rounded-xl bg-gray-100 text-gray-600 font-medium">Hủy</button><button onclick="enterMusicHub()" class="flex-1 py-2.5 rounded-xl bg-rose-500 text-white font-medium shadow-lg shadow-rose-200">Vào ngay 🔥</button></div></div></div>
-
-    <!-- MODULE ĐỊA ĐIỂM -->
-    <div id="places-module" class="hidden opacity-0 scale-95 pb-20 transition-all duration-500"><button onclick="switchView('hub')" class="fixed top-6 left-6 z-[80] glass-card px-4 py-2 rounded-full text-primary font-medium hover:bg-white transition-colors flex items-center gap-2 shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Sảnh chính</button><header class="max-w-4xl mx-auto pt-24 px-6 text-center"><h1 class="font-serif text-4xl font-semibold mb-4 text-textDark">Bản đồ <span class="text-primary italic">khoảnh khắc xanh</span></h1><button onclick="openFormModal()" class="bg-primary hover:bg-[#4FC3F7] text-white px-8 py-3 rounded-full font-medium transition-transform transform hover:scale-105 shadow-lg shadow-primary/30 mx-auto mt-4">Thêm địa điểm mới</button></header><main id="places-grid" class="max-w-5xl mx-auto mt-12 px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></main></div>
-    <!-- Modal Xem & Form Bản Đồ (Ẩn gọn) -->
-    <div id="view-modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 transition-opacity"><div id="view-modal-content" class="bg-white rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto scroll-smooth shadow-2xl relative"><button onclick="closeViewModal()" class="absolute top-4 right-4 z-10 p-2 bg-black/30 text-white rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg></button><div class="h-56 bg-gray-200 w-full relative"><img id="view-image" src="" class="w-full h-full object-cover"></div><div class="p-6"><h2 id="view-name" class="text-2xl font-bold mb-1">Tên</h2><div class="flex gap-3"><button onclick="closeViewModal()" class="flex-1 py-3 bg-primary/10 text-primary font-medium rounded-xl">Đóng</button></div></div></div></div>
-    <div id="form-modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 transition-opacity"><div id="form-modal-content" class="bg-white rounded-3xl w-full max-w-lg shadow-2xl relative max-h-[90vh] overflow-y-auto"><div class="p-6 text-center">Form địa điểm đã ẩn để tiết kiệm dòng (CSS/HTML giữ nguyên trên máy bạn). Dùng lại hàm mở. Mình đã tạo code JS cho nó. <button onclick="closeFormModal()" class="mt-4 px-4 py-2 bg-red-100 text-red-500 rounded-lg">Đóng</button></div></div></div>
-
-    <!-- MODULE HỌC TIẾNG ANH -->
-    <div id="study-module" class="hidden opacity-0 scale-95 pb-20 transition-all duration-500"><button onclick="switchView('hub')" class="fixed top-6 left-6 z-[80] glass-card px-4 py-2 rounded-full text-primary font-medium hover:bg-white transition-colors flex items-center gap-2 shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Trở về</button><header class="max-w-4xl mx-auto pt-24 px-6 text-center mb-10"><h1 class="font-serif text-4xl font-semibold mb-4 text-textDark">Góc <span class="text-primary italic">Tiếng Anh</span></h1><p class="text-textGray">Cùng nhau ôn tập từ vựng và kiếm Xu nhé! 🪙</p></header><main class="max-w-4xl mx-auto px-6"><div id="study-menu" class="grid grid-cols-1 md:grid-cols-3 gap-4"><button onclick="openStudyMode('en-vi')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 border-blue-200"><h3 class="text-lg font-bold text-primary mb-1">Làm Quiz (+50🪙)</h3><p class="text-sm">Anh-Việt, Việt-Anh</p></button><button onclick="openStudyMode('memory')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 border-rose-200"><h3 class="text-lg font-bold text-rose-500 mb-1">Trí Nhớ Siêu Phàm (+500🪙)</h3><p class="text-sm">Nhập full 33 từ</p></button></div>
-        <div id="study-content" class="hidden glass-card rounded-3xl p-6 relative mt-6"><button onclick="backToStudyMenu()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full"><svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg></button><h2 id="study-content-title" class="text-2xl font-bold text-primary mb-6 border-b pb-4">Tiêu đề</h2>
-        <div id="quiz-container" class="hidden flex flex-col items-center"><div class="w-full bg-white rounded-2xl p-8 text-center shadow-sm mb-6"><h3 class="text-3xl font-serif font-bold text-textDark" id="quiz-question">Word</h3></div><input type="text" id="quiz-input" placeholder="Nhập đáp án..." class="w-full max-w-md px-5 py-3 rounded-xl border-2 border-gray-200 focus:border-primary text-center mb-4"><button onclick="checkQuizAnswer()" class="bg-primary text-white px-8 py-3 rounded-xl font-bold w-full max-w-md">Kiểm tra</button><div id="quiz-feedback" class="mt-4 p-4 rounded-xl w-full max-w-md hidden text-center font-medium"></div></div>
-        <div id="memory-container" class="hidden flex flex-col items-center"><textarea id="memory-input" rows="5" class="w-full px-5 py-4 rounded-xl border-2 border-gray-200 text-lg mb-6"></textarea><button onclick="checkMemory()" class="bg-rose-500 text-white px-8 py-3 rounded-xl font-bold">Nộp bài 🚀</button><div id="memory-feedback" class="mt-6 p-4 rounded-xl w-full hidden text-center font-medium"></div></div></div></main></div>
-
-
-    <!-- ============================================== SCRIPT (FIREBASE + LOGIC) ============================================== -->
+    <!-- SCRIPTS -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
     <script>
-        // Cấu hình Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyAm5PXedBf4HH4OhzHOKJ4_-ESrJNSABYk",
-            authDomain: "bautroi-738c9.firebaseapp.com",
-            projectId: "bautroi-738c9",
-            storageBucket: "bautroi-738c9.firebasestorage.app",
-            messagingSenderId: "233336125295",
-            appId: "1:233336125295:web:806a8dd1f42fe027721a9a",
-            measurementId: "G-TTQHJEZMQG"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        // 1. FIREBASE INIT
+        const firebaseConfig = { apiKey: "AIzaSyAm5PXedBf4HH4OhzHOKJ4_-ESrJNSABYk", authDomain: "bautroi-738c9.firebaseapp.com", projectId: "bautroi-738c9", storageBucket: "bautroi-738c9.firebasestorage.app" };
+        firebase.initializeApp(firebaseConfig); const db = firebase.firestore();
 
-        // Âm thanh
-        const audioBg = document.getElementById('bg-music');
-        const audioTick = document.getElementById('sound-tick');
-        const audioReveal = document.getElementById('sound-reveal');
-        const audioCoin = document.getElementById('sound-coin');
-        
-        // State
-        let currentUser = null; // luuthiethoa or hamy
-        let userData = { coins: 0, tickets: 0, pity: 0, inventory: {}, lastLogin: "" };
+        // VARIABLES
+        let currentUser = null, userData = { coins: 0, tickets: 0, pity: 0, inventory: {} };
+        const audioBg = document.getElementById('bg-music'), audioTick = document.getElementById('sound-tick'), audioReveal = document.getElementById('sound-reveal'), audioCoin = document.getElementById('sound-coin');
 
-        // Card Configuration (50 cards total, 10 per rarity)
+        // GACHA SETUP
         const RARITIES = [
             { id: 'thuong', name: 'Thường', prob: 0.55, color: '#A0A0A0', filePrefix: 'c', path: 'thuong', glowClass: 'card-thuong' },
             { id: 'hiem', name: 'Hiếm', prob: 0.28, color: '#3b82f6', filePrefix: 't', path: 'hiem', glowClass: 'card-hiem' },
@@ -362,65 +191,95 @@
             { id: 'sieuhiem', name: 'Siêu Hiếm', prob: 0.04, color: '#eab308', filePrefix: 'k', path: 'sieuhiem', glowClass: 'card-sieuhiem' },
             { id: 'bian', name: 'Bí Ẩn', prob: 0.01, color: '#ef4444', filePrefix: 'g', path: 'bian', glowClass: 'card-bian' }
         ];
-
         let ALL_CARDS = [];
-        RARITIES.forEach(r => {
-            for(let i=1; i<=10; i++) {
-                ALL_CARDS.push({ id: `${r.id}_${i}`, rarity: r.id, name: `${r.name} #${i}`, img: `${r.path}/${r.filePrefix}${i}.png`, rarityData: r });
-            }
+        RARITIES.forEach(r => { for(let i=1; i<=10; i++) ALL_CARDS.push({ id: `${r.id}_${i}`, rarity: r.id, name: `${r.name} #${i}`, img: `${r.path}/${r.filePrefix}${i}.png`, rarityData: r }); });
+
+        // TỪ VỰNG HỌC TẬP (33 từ)
+        const vocabDataE = [ {en:'about', vi:'Về cái gì đó'}, {en:'above', vi:'Hơn cái gì đó'}, {en:'across', vi:'Băng qua'}, {en:'action', vi:'Hành động'}, {en:'actor', vi:'Diễn viên'}, {en:'actress', vi:'Nữ diễn viên'}, {en:'activity', vi:'Hoạt động'}, {en:'add', vi:'Thêm'}, {en:'address', vi:'Địa chỉ'}, {en:'adult', vi:'Người lớn'}, {en:'advice', vi:'Khuyên bảo'}, {en:'afraid', vi:'Sợ'}, {en:'after', vi:'Sau đó'}, {en:'afternoon', vi:'Buổi chiều'}, {en:'again', vi:'Lặp lại'}, {en:'age', vi:'Tuổi'}, {en:'ago', vi:'Trước kia'}, {en:'agree', vi:'Đồng ý'}, {en:'air', vi:'Không khí'}, {en:'airport', vi:'Sân bay'}, {en:'all', vi:'Tất cả'}, {en:'also', vi:'Mà còn'}, {en:'always', vi:'Luôn luôn'}, {en:'amazing', vi:'Ngạc nhiên'}, {en:'an', vi:'Một'}, {en:'and', vi:'Và'}, {en:'angry', vi:'Giận dữ'}, {en:'animal', vi:'Động vật'}, {en:'another', vi:'Khác'}, {en:'answer', vi:'Trả lời'}, {en:'any', vi:'Bất kì'}, {en:'anyone', vi:'Bất kì ai'}, {en:'anything', vi:'Bất kì điều gì'} ];
+
+        // 2. DOM CONTENT LOADED - QUẢN LÝ NÚT MỞ RA & AUDIO
+        document.addEventListener('DOMContentLoaded', () => {
+            const startBtn = document.getElementById('start-btn');
+            const vid = document.getElementById('bg-video');
+            
+            // Hiện nút Start Bubble
+            window.showStartBubble = function() {
+                startBtn.classList.remove('scale-0', 'opacity-0');
+                startBtn.classList.add('scale-100', 'opacity-100');
+            };
+            if(vid) { vid.addEventListener('ended', showStartBubble); vid.addEventListener('error', showStartBubble); }
+            setTimeout(showStartBubble, 2000); // Dự phòng
+
+            // Sự kiện Click chính xác nhất (Tránh spam click)
+            startBtn.addEventListener('click', function() {
+                if(this.dataset.clicked) return;
+                this.dataset.clicked = "true";
+                
+                this.style.animation = 'none';
+                this.classList.replace('scale-100', 'scale-150');
+                this.classList.replace('opacity-100', 'opacity-0');
+                
+                if(audioBg) { audioBg.volume = 0.4; audioBg.play().catch(e=>{}); }
+                const mToggle = document.getElementById('music-toggle');
+                if(mToggle) { mToggle.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4'); mToggle.classList.add('opacity-100', 'translate-y-0'); }
+
+                setTimeout(() => {
+                    const intro = document.getElementById('intro-screen');
+                    intro.style.opacity = '0';
+                    setTimeout(() => {
+                        intro.style.display = 'none';
+                        document.getElementById('body').classList.remove('no-scroll');
+                        switchView('hub'); // Gọi an toàn
+                    }, 500);
+                }, 300);
+            });
+
+            document.getElementById('music-toggle').addEventListener('click', () => {
+                if(!gdAudio.paused) { gdAudio.pause(); document.getElementById('gd-icon-play').innerText='▶'; document.getElementById('gd-icon-pause').classList.add('hidden'); }
+                if (audioBg.paused) { audioBg.play(); document.getElementById('icon-music-play').classList.remove('hidden'); document.getElementById('icon-music-pause').classList.add('hidden'); }
+                else { audioBg.pause(); document.getElementById('icon-music-play').classList.add('hidden'); document.getElementById('icon-music-pause').classList.remove('hidden'); }
+            });
+
+            // Map Listener
+            db.collection("places").orderBy("createdAt", "desc").onSnapshot((snap) => {
+                const grid = document.getElementById('places-grid');
+                grid.innerHTML = snap.empty ? '<p class="text-gray-400 text-center w-full mt-10">Bản đồ đang trống</p>' : '';
+                snap.forEach(doc => { const p = doc.data(); grid.innerHTML += `<div class="glass-card p-4 rounded-3xl"><img src="${p.image||'https://i.postimg.cc/mD8zQxGj/placeholder.png'}" class="w-full h-40 object-cover rounded-2xl mb-2"><h3 class="font-bold text-lg">${p.name}</h3><p class="text-sm text-gray-500">${p.address||'Trống'}</p></div>`; });
+            });
         });
 
-        // 1. HỆ THỐNG LOGIN
+        // 3. LOGIN & TẢI DỮ LIỆU
         function handleLogin() {
             const user = document.getElementById('login-user').value.trim().toLowerCase();
             const pass = document.getElementById('login-pass').value.trim();
             const err = document.getElementById('login-error');
+            const btn = document.getElementById('login-btn');
             
             if((user === 'luuthiethoa' && pass === '123') || (user === 'hamy' && pass === '123')) {
-                err.classList.add('hidden');
+                err.classList.add('hidden'); btn.innerText = "Đang kết nối..."; btn.classList.add('opacity-50', 'pointer-events-none');
                 currentUser = user;
-                document.getElementById('login-screen').classList.add('hidden');
                 initUserSystem();
-            } else {
-                err.classList.remove('hidden');
-            }
+            } else { err.classList.remove('hidden'); }
         }
 
         function initUserSystem() {
             const userRef = db.collection('users').doc(currentUser);
             userRef.get().then((doc) => {
-                if (doc.exists) {
-                    userData = doc.data();
-                    if(!userData.inventory) userData.inventory = {};
-                    checkDailyLogin();
-                } else {
-                    // Tạo mới data
-                    userData = { coins: 500, tickets: 1, pity: 0, inventory: {}, lastLogin: new Date().toDateString() };
-                    userRef.set(userData);
-                    alert("Chào mừng thành viên mới! Tặng bạn 500 Coin và 1 vé quay khởi nghiệp 🎉");
-                }
-                updateUI();
+                if (doc.exists) { userData = doc.data(); if(!userData.inventory) userData.inventory = {}; checkDailyLogin(); }
+                else { userData = { coins: 500, tickets: 1, pity: 0, inventory: {}, lastLogin: new Date().toDateString() }; userRef.set(userData); alert("Chào mừng! Tặng bạn 500 Coin & 1 vé quay 🎉"); }
                 
-                // Real-time listener
-                userRef.onSnapshot((doc) => {
-                    if(doc.exists) { userData = doc.data(); updateUI(); updateCollectionGrid(); updateLeaderboard(); }
-                });
+                updateUI();
+                userRef.onSnapshot((doc) => { if(doc.exists) { userData = doc.data(); updateUI(); updateCollectionGrid(); updateLeaderboard(); } });
 
-                // Show Intro
+                document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('intro-screen').classList.remove('hidden');
                 setTimeout(() => document.getElementById('intro-screen').classList.remove('opacity-0'), 100);
-            });
+            }).catch(e => { alert("Lỗi tải dữ liệu. Thử lại!"); document.getElementById('login-btn').innerText="Vào Không Gian"; document.getElementById('login-btn').classList.remove('opacity-50', 'pointer-events-none'); });
         }
 
         function checkDailyLogin() {
             const today = new Date().toDateString();
-            if(userData.lastLogin !== today) {
-                userData.coins += 200;
-                userData.tickets += 1;
-                userData.lastLogin = today;
-                db.collection('users').doc(currentUser).update(userData);
-                alert("🎁 Quà đăng nhập mỗi ngày: +200 Coin & +1 Vé quay miễn phí!");
-            }
+            if(userData.lastLogin !== today) { userData.coins += 200; userData.tickets += 1; userData.lastLogin = today; db.collection('users').doc(currentUser).update(userData); alert("🎁 Điểm danh: +200 Coin & +1 Vé quay!"); }
         }
 
         function updateUI() {
@@ -430,334 +289,128 @@
             document.getElementById('bb-coins').innerText = userData.coins;
             document.getElementById('bb-tickets').innerText = userData.tickets;
             document.getElementById('pity-counter').innerText = `Pity Bí Ẩn: ${userData.pity} / 90`;
-            
-            let uniqueCards = Object.keys(userData.inventory).length;
-            document.getElementById('hub-cards').innerText = `${uniqueCards} / 50`;
-
-            if(userData.tickets > 0) { document.getElementById('btn-free-ticket').classList.remove('hidden'); }
-            else { document.getElementById('btn-free-ticket').classList.add('hidden'); }
+            document.getElementById('hub-cards').innerText = `${Object.keys(userData.inventory).length} / 50`;
+            document.getElementById('btn-free-ticket').classList[userData.tickets > 0 ? 'remove' : 'add']('hidden');
         }
 
-        function playSound(snd) {
-            snd.currentTime = 0; snd.play().catch(e=>{});
-        }
+        // 4. HÀM CHUYỂN TRANG SAFE (Tuyệt đối không đụng độ CSS)
+        function switchView(viewName) {
+            const screens = ['hub-screen', 'places-module', 'study-module', 'music-module', 'blindbox-module'];
+            const targetId = viewName==='hub' ? 'hub-screen' : viewName==='places' ? 'places-module' : viewName==='study' ? 'study-module' : viewName==='music' ? 'music-module' : 'blindbox-module';
 
-
-        // 2. GACHA LOGIC (CSGO SPINNER)
-        let isRolling = false;
-        
-        function getRandomCard(forceNormal = false) {
-            let roll = Math.random();
-            let chosenRarityId = 'thuong';
-
-            if(forceNormal) {
-                chosenRarityId = 'thuong';
-            } else {
-                if (userData.pity >= 90) { chosenRarityId = 'bian'; userData.pity = 0; }
-                else {
-                    if (roll < 0.01) { chosenRarityId = 'bian'; userData.pity = 0; }
-                    else if (roll < 0.05) chosenRarityId = 'sieuhiem';
-                    else if (roll < 0.17) chosenRarityId = 'caocap';
-                    else if (roll < 0.45) chosenRarityId = 'hiem';
-                    else chosenRarityId = 'thuong';
-                }
-            }
-
-            if(!forceNormal && chosenRarityId !== 'bian') userData.pity++; // Increment pity
-            
-            // Random card inside rarity
-            const pool = ALL_CARDS.filter(c => c.rarity === chosenRarityId);
-            return pool[Math.floor(Math.random() * pool.length)];
-        }
-
-        function useFreeTicket() {
-            if(isRolling || userData.tickets < 1) return;
-            userData.tickets -= 1;
-            db.collection('users').doc(currentUser).update({ tickets: userData.tickets });
-            startCSGORoulette(true); // true = force normal
-        }
-
-        function rollGacha(times) {
-            if(isRolling) return;
-            if(userData.coins < 100) { alert("Không đủ Coin! Hãy đi học Tiếng Anh để kiếm thêm nhé 🥺"); return; }
-            userData.coins -= 100;
-            db.collection('users').doc(currentUser).update({ coins: userData.coins });
-            startCSGORoulette(false);
-        }
-
-        function startCSGORoulette(forceNormal) {
-            isRolling = true;
-            const strip = document.getElementById('gacha-strip');
-            strip.style.transition = 'none';
-            strip.style.transform = 'translateX(0px)';
-            strip.innerHTML = '';
-
-            // Generate 50 fake items for visual spin
-            let itemsHTML = '';
-            let winningCard = getRandomCard(forceNormal);
-            let winIndex = 40; // Điểm dừng ở thẻ thứ 40
-
-            for(let i=0; i<50; i++) {
-                let card = (i === winIndex) ? winningCard : getRandomCard(false); // fake cards
-                itemsHTML += `
-                    <div class="gacha-item">
-                        <div class="gacha-card ${card.rarityData.glowClass} w-full h-36">
-                            <img src="${card.img}" onerror="this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'">
-                            <div class="card-overlay"></div>
-                        </div>
-                    </div>`;
-            }
-            strip.innerHTML = itemsHTML;
-
-            // Trigger animation
-            setTimeout(() => {
-                const itemWidth = 150 + 1; // Width + border
-                // Tính toán khoảng cách trượt đến giữa thẻ winIndex
-                // Random lệch một chút xíu để tạo cảm giác hồi hộp (vẫn trong phạm vi thẻ đó)
-                const offset = (winIndex * itemWidth) - (window.innerWidth < 768 ? window.innerWidth/2 - 75 : 500) + Math.random() * 100;
-                
-                strip.style.transition = 'transform 6s cubic-bezier(0.1, 0.9, 0.2, 1)';
-                strip.style.transform = `translateX(-${offset}px)`;
-                
-                // Fake tick sound
-                let tickInt = setInterval(() => playSound(audioTick), 300);
-                setTimeout(() => clearInterval(tickInt), 4000);
-
-                setTimeout(() => {
-                    isRolling = false;
-                    saveCardToInventory(winningCard.id);
-                    showCardReveal(winningCard);
-                }, 6500);
-            }, 100);
-        }
-
-        function saveCardToInventory(cardId) {
-            if(!userData.inventory[cardId]) userData.inventory[cardId] = 0;
-            userData.inventory[cardId]++;
-            db.collection('users').doc(currentUser).update({ 
-                inventory: userData.inventory,
-                pity: userData.pity
+            // Làm mờ các màn hình cũ
+            screens.forEach(id => {
+                if(id !== targetId) { const el = document.getElementById(id); if(el) { el.classList.add('opacity-0', 'scale-95'); setTimeout(() => el.classList.add('hidden'), 300); } }
             });
-        }
 
-        function showCardReveal(card) {
-            playSound(audioReveal);
-            const modal = document.getElementById('card-reveal-modal');
-            const content = document.getElementById('card-reveal-content');
-            const front = document.getElementById('reveal-card-front');
-            const overlay = document.getElementById('reveal-overlay');
-            const text = document.getElementById('reveal-rarity-text');
-            
-            document.getElementById('reveal-img').src = card.img;
-            document.getElementById('reveal-img').onerror = function() { this.src = 'https://i.postimg.cc/mD8zQxGj/placeholder.png'; };
-            
-            text.innerText = card.rarityData.name;
-            text.style.color = card.rarityData.color;
-
-            // Remove old classes
-            front.className = `card-front bg-gray-900 rounded-xl overflow-hidden border-4 ${card.rarityData.glowClass}`;
-            
-            modal.classList.remove('hidden'); modal.classList.add('flex');
-            content.classList.remove('modal-leave-active'); content.classList.add('modal-enter-active');
-
-            if(card.rarity === 'sieuhiem' || card.rarity === 'bian') {
-                fireConfettiReveal(card.rarityData.color);
-            }
-        }
-
-        function closeReveal() {
-            document.getElementById('card-reveal-content').classList.add('modal-leave-active');
+            // Hiện màn hình mới
             setTimeout(() => {
-                document.getElementById('card-reveal-modal').classList.add('hidden');
-                document.getElementById('card-reveal-modal').classList.remove('flex');
+                const target = document.getElementById(targetId);
+                if(target) { target.classList.remove('hidden'); void target.offsetWidth; target.classList.remove('opacity-0', 'scale-95'); }
+                if(viewName === 'blindbox') updateCollectionGrid();
             }, 300);
         }
 
-        function fireConfettiReveal(color) {
-            confetti({ particleCount: 150, spread: 100, origin: { y: 0.5 }, colors: [color, '#ffffff'] });
+        // 5. GACHA LOGIC
+        let isRolling = false;
+        function getRandomCard(forceN = false) {
+            let roll = Math.random(), chosen = 'thuong';
+            if(forceN) chosen = 'thuong';
+            else { if (userData.pity >= 90) { chosen = 'bian'; userData.pity = 0; } else { if (roll < 0.01) { chosen = 'bian'; userData.pity = 0; } else if (roll < 0.05) chosen = 'sieuhiem'; else if (roll < 0.17) chosen = 'caocap'; else if (roll < 0.45) chosen = 'hiem'; else chosen = 'thuong'; } }
+            if(!forceN && chosen !== 'bian') userData.pity++;
+            const p = ALL_CARDS.filter(c => c.rarity === chosen); return p[Math.floor(Math.random() * p.length)];
         }
 
+        function useFreeTicket() { if(isRolling || userData.tickets < 1) return; userData.tickets--; db.collection('users').doc(currentUser).update({tickets: userData.tickets}); startCSGORoulette(true); }
+        function rollGacha() { if(isRolling) return; if(userData.coins < 100) return alert("Hết Coin! Đi học đi 🥺"); userData.coins -= 100; db.collection('users').doc(currentUser).update({coins: userData.coins}); startCSGORoulette(false); }
 
-        // 3. TAB MANAGEMENT VÀ COLLECTION
-        function switchBoxTab(tabName) {
-            ['gacha', 'collection', 'auction', 'top'].forEach(t => {
-                document.getElementById(`bb-tab-${t}`).classList.add('hidden');
-                document.getElementById(`btab-${t}`).className = "px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white transition-colors";
-            });
-            document.getElementById(`bb-tab-${tabName}`).classList.remove('hidden');
-            document.getElementById(`btab-${tabName}`).className = "px-6 py-2 rounded-lg font-bold text-sm bg-primary text-white shadow-lg";
-
-            if(tabName === 'collection') updateCollectionGrid();
-            if(tabName === 'top') updateLeaderboard();
-            if(tabName === 'auction') loadFakeAuction();
+        function startCSGORoulette(forceN) {
+            isRolling = true; const strip = document.getElementById('gacha-strip');
+            strip.style.transition = 'none'; strip.style.transform = 'translateX(0px)'; strip.innerHTML = '';
+            let winCard = getRandomCard(forceN), itemsHTML = '';
+            for(let i=0; i<50; i++) {
+                let c = (i === 40) ? winCard : getRandomCard(false);
+                itemsHTML += `<div class="gacha-item"><div class="gacha-card ${c.rarityData.glowClass} w-full h-36"><img src="${c.img}" onerror="this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'"><div class="card-overlay"></div></div></div>`;
+            }
+            strip.innerHTML = itemsHTML;
+            setTimeout(() => {
+                const offset = (40 * 151) - (window.innerWidth < 768 ? window.innerWidth/2 - 75 : 500) + Math.random() * 100;
+                strip.style.transition = 'transform 6s cubic-bezier(0.1, 0.9, 0.2, 1)'; strip.style.transform = `translateX(-${offset}px)`;
+                let tInt = setInterval(() => { audioTick.currentTime=0; audioTick.play().catch(e=>{}); }, 300); setTimeout(() => clearInterval(tInt), 4000);
+                setTimeout(() => { isRolling = false; if(!userData.inventory[winCard.id]) userData.inventory[winCard.id] = 0; userData.inventory[winCard.id]++; db.collection('users').doc(currentUser).update({ inventory: userData.inventory, pity: userData.pity }); showCardReveal(winCard); }, 6500);
+            }, 100);
         }
 
-        let currentFilter = 'all';
-        function filterCollection(r) { currentFilter = r; updateCollectionGrid(); }
+        function showCardReveal(c) {
+            audioReveal.currentTime=0; audioReveal.play().catch(e=>{});
+            document.getElementById('reveal-img').src = c.img; document.getElementById('reveal-img').onerror = function(){this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'};
+            document.getElementById('reveal-rarity-text').innerText = c.rarityData.name; document.getElementById('reveal-rarity-text').style.color = c.rarityData.color;
+            document.getElementById('reveal-card-front').className = `card-front bg-gray-900 rounded-xl overflow-hidden border-4 ${c.rarityData.glowClass}`;
+            document.getElementById('card-reveal-modal').classList.remove('hidden'); document.getElementById('card-reveal-modal').classList.add('flex');
+            if(c.rarity === 'sieuhiem' || c.rarity === 'bian') confetti({ particleCount: 150, spread: 100, origin: { y: 0.5 }, colors: [c.rarityData.color, '#ffffff'] });
+        }
+        function closeReveal() { document.getElementById('card-reveal-modal').classList.add('hidden'); document.getElementById('card-reveal-modal').classList.remove('flex'); document.querySelector('.card-3d-wrapper').classList.remove('flipped'); }
 
+        // BLIND BOX TABS
+        function switchBoxTab(t) {
+            ['gacha','collection','auction','top'].forEach(x => { document.getElementById(`bb-tab-${x}`).classList.add('hidden'); document.getElementById(`btab-${x}`).className="px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white"; });
+            document.getElementById(`bb-tab-${t}`).classList.remove('hidden'); document.getElementById(`btab-${t}`).className="px-6 py-2 rounded-lg font-bold text-sm bg-primary text-white";
+            if(t==='collection') updateCollectionGrid(); if(t==='top') updateLeaderboard(); if(t==='auction') loadFakeAuction();
+        }
+
+        let currFilter = 'all'; function filterCollection(r) { currFilter = r; updateCollectionGrid(); }
         function updateCollectionGrid() {
             if(!document.getElementById('bb-tab-collection')) return;
-            const grid = document.getElementById('collection-grid');
-            grid.innerHTML = '';
-            
-            let stats = { thuong:0, hiem:0, caocap:0, sieuhiem:0, bian:0, total:0 };
-
-            ALL_CARDS.forEach(card => {
-                let qty = userData.inventory[card.id] || 0;
-                if(qty > 0) { stats[card.rarity]++; stats.total++; }
-                
-                if(currentFilter !== 'all' && card.rarity !== currentFilter) return;
-
-                if(qty > 0) {
-                    grid.innerHTML += `
-                        <div class="gacha-card owned ${card.rarityData.glowClass} cursor-pointer" onclick="showCardReveal(${JSON.stringify(card).replace(/"/g, '&quot;')})">
-                            <img src="${card.img}" onerror="this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'" class="w-full h-full object-cover">
-                            <div class="card-overlay"></div>
-                            <div class="card-badge" style="color: ${card.rarityData.color}">${card.rarityData.name}</div>
-                            <div class="card-count">x${qty}</div>
-                        </div>`;
-                } else {
-                    grid.innerHTML += `
-                        <div class="gacha-card border-2 border-dashed border-gray-600 bg-black/40 opacity-50">
-                            <div class="mystery-box">?</div>
-                            <div class="card-badge text-gray-500">Chưa có</div>
-                        </div>`;
-                }
+            const grid = document.getElementById('collection-grid'); grid.innerHTML = '';
+            let s = { thuong:0, hiem:0, caocap:0, sieuhiem:0, bian:0, total:0 };
+            ALL_CARDS.forEach(c => {
+                let q = userData.inventory[c.id] || 0; if(q > 0) { s[c.rarity]++; s.total++; }
+                if(currFilter !== 'all' && c.rarity !== currFilter) return;
+                if(q > 0) grid.innerHTML += `<div class="gacha-card owned ${c.rarityData.glowClass} cursor-pointer" onclick="showCardReveal(${JSON.stringify(c).replace(/"/g, '&quot;')})"><img src="${c.img}" onerror="this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'" class="w-full h-full object-cover"><div class="card-overlay"></div><div class="card-badge" style="color: ${c.rarityData.color}">${c.rarityData.name}</div><div class="card-count">x${q}</div></div>`;
+                else grid.innerHTML += `<div class="gacha-card border-2 border-dashed border-gray-600 bg-black/40 opacity-50"><div class="mystery-box">?</div><div class="card-badge text-gray-500">Chưa có</div></div>`;
             });
-
-            // Update Progress bars
-            document.getElementById('prog-t').innerText = `${stats.thuong}/10`;
-            document.getElementById('prog-h').innerText = `${stats.hiem}/10`;
-            document.getElementById('prog-c').innerText = `${stats.caocap}/10`;
-            document.getElementById('prog-sh').innerText = `${stats.sieuhiem}/10`;
-            document.getElementById('prog-b').innerText = `${stats.bian}/10`;
-            document.getElementById('prog-total').innerText = `${Math.round((stats.total / 50)*100)}%`;
+            document.getElementById('prog-t').innerText=`${s.thuong}/10`; document.getElementById('prog-h').innerText=`${s.hiem}/10`; document.getElementById('prog-c').innerText=`${s.caocap}/10`; document.getElementById('prog-sh').innerText=`${s.sieuhiem}/10`; document.getElementById('prog-b').innerText=`${s.bian}/10`; document.getElementById('prog-total').innerText=`${Math.round((s.total/50)*100)}%`;
         }
 
-        // 4. BẢNG XẾP HẠNG (LEADERBOARD)
         function updateLeaderboard() {
             db.collection('users').get().then(snap => {
-                let users = [];
-                snap.forEach(doc => {
-                    let d = doc.data();
-                    let unique = Object.keys(d.inventory || {}).length;
-                    users.push({ name: doc.id, unique: unique, coins: d.coins });
-                });
-                users.sort((a,b) => b.unique - a.unique); // Xếp theo thẻ
-                
-                const container = document.getElementById('leaderboard-container');
-                container.innerHTML = '';
-                users.forEach((u, idx) => {
-                    let medal = idx===0 ? '🥇' : (idx===1 ? '🥈' : '🥉');
-                    container.innerHTML += `
-                        <div class="flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 rounded-2xl mb-2 transition-colors border border-white/5">
-                            <div class="flex items-center gap-4">
-                                <div class="text-3xl">${medal}</div>
-                                <div><p class="font-bold text-lg text-white capitalize">${u.name}</p><p class="text-xs text-blue-400">🪙 ${u.coins} Coin</p></div>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-600">${u.unique}/50</p>
-                                <p class="text-xs text-gray-400 uppercase">Thẻ độc nhất</p>
-                            </div>
-                        </div>
-                    `;
-                });
+                let u = []; snap.forEach(d => { u.push({ name: d.id, u: Object.keys(d.data().inventory || {}).length, c: d.data().coins }); });
+                u.sort((a,b) => b.u - a.u);
+                document.getElementById('leaderboard-container').innerHTML = u.map((x,i) => `<div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl mb-2 border border-white/5"><div class="flex items-center gap-4"><div class="text-3xl">${i===0?'🥇':i===1?'🥈':'🥉'}</div><div><p class="font-bold text-lg text-white capitalize">${x.name}</p><p class="text-xs text-blue-400">🪙 ${x.c}</p></div></div><div class="text-right"><p class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-600">${x.u}/50</p></div></div>`).join('');
             });
         }
-
-        // 5. CHỢ ĐẤU GIÁ (Fake)
         function loadFakeAuction() {
-            const grid = document.getElementById('auction-grid');
-            grid.innerHTML = '';
-            for(let i=0; i<4; i++) {
-                let card = getRandomCard(false);
-                let fakePrice = Math.floor(Math.random() * 500) + (card.rarity === 'bian' ? 5000 : (card.rarity === 'sieuhiem' ? 2000 : 200));
-                grid.innerHTML += `
-                    <div class="bg-black/40 rounded-2xl p-4 border border-white/10 flex flex-col items-center">
-                        <div class="w-full aspect-[2/3] gacha-card ${card.rarityData.glowClass} owned pointer-events-none mb-4">
-                            <img src="${card.img}" onerror="this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'">
-                            <div class="card-overlay"></div>
-                        </div>
-                        <p class="font-bold text-sm mb-1 text-white">${card.name}</p>
-                        <p class="text-xs ${card.rarityData.color} mb-4">${card.rarityData.name}</p>
-                        <button onclick="alert('Tính năng đang phát triển!')" class="w-full bg-blue-500/20 hover:bg-blue-500 text-blue-300 hover:text-white border border-blue-500/50 py-2 rounded-xl font-bold transition-colors">Mua: ${fakePrice} 🪙</button>
-                    </div>
-                `;
-            }
+            document.getElementById('auction-grid').innerHTML = [1,2,3,4].map(() => {
+                let c = getRandomCard(false); let p = Math.floor(Math.random()*500)+(c.rarity==='bian'?5000:c.rarity==='sieuhiem'?2000:200);
+                return `<div class="bg-black/40 rounded-2xl p-4 border border-white/10 flex flex-col items-center"><div class="w-full aspect-[2/3] gacha-card ${c.rarityData.glowClass} pointer-events-none mb-4"><img src="${c.img}" onerror="this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'"><div class="card-overlay"></div></div><p class="font-bold text-sm mb-1 text-white">${c.name}</p><p class="text-xs ${c.rarityData.color} mb-4">${c.rarityData.name}</p><button class="w-full bg-blue-500/20 text-blue-300 py-2 rounded-xl font-bold">Mua: ${p} 🪙</button></div>`;
+            }).join('');
         }
 
-
-        // ================= KẾT NỐI VỚI HỌC TIẾNG ANH ĐỂ KIẾM COIN =================
-        const vocabDataE = [ {en: 'about', vi: 'Về cái gì đó'}, {en: 'action', vi: 'Hành động'}, {en: 'actor', vi: 'Diễn viên'} ]; // Rút gọn mảng test ở đây, web thật bạn tự thay mảng 33 từ vào nhé!
-        let studyStateE = { currentIndex: 0, shuffledData: vocabDataE };
-
-        function openStudyMode(mode) {
-            document.getElementById('study-menu').classList.add('hidden');
-            document.getElementById('study-content').classList.remove('hidden');
-            document.getElementById('quiz-container').classList.add('hidden');
-            document.getElementById('memory-container').classList.add('hidden');
-
-            if(mode === 'memory') {
-                document.getElementById('study-content-title').innerText = 'Trí Nhớ Siêu Phàm (+500🪙)';
-                document.getElementById('memory-container').classList.remove('hidden');
-            } else {
-                document.getElementById('study-content-title').innerText = 'Làm Quiz (+50🪙)';
-                document.getElementById('quiz-container').classList.remove('hidden');
-                studyStateE.shuffledData = [...vocabDataE].sort(()=>Math.random()-0.5);
-                studyStateE.currentIndex = 0;
-                document.getElementById('quiz-question').innerText = studyStateE.shuffledData[0].en;
-            }
+        // 6. STUDY & MUSIC
+        let studyE = { idx: 0, d: vocabDataE };
+        function openStudyMode(m) {
+            document.getElementById('study-menu').classList.add('hidden'); document.getElementById('study-content').classList.remove('hidden'); document.getElementById('quiz-container').classList.add('hidden'); document.getElementById('memory-container').classList.add('hidden');
+            if(m==='memory') { document.getElementById('study-content-title').innerText='Trí Nhớ Siêu Phàm'; document.getElementById('memory-container').classList.remove('hidden'); }
+            else { document.getElementById('study-content-title').innerText='Làm Quiz'; document.getElementById('quiz-container').classList.remove('hidden'); studyE.d = [...vocabDataE].sort(()=>Math.random()-0.5); studyE.idx=0; document.getElementById('quiz-question').innerText=studyE.d[0].en; }
         }
-
-        function backToStudyMenu() {
-            document.getElementById('study-content').classList.add('hidden');
-            document.getElementById('study-menu').classList.remove('hidden');
-        }
-
+        function backToStudyMenu() { document.getElementById('study-content').classList.add('hidden'); document.getElementById('study-menu').classList.remove('hidden'); }
         function checkQuizAnswer() {
-            playSound(audioCoin);
-            const ans = document.getElementById('quiz-input').value.toLowerCase();
-            const correct = studyStateE.shuffledData[studyStateE.currentIndex].vi.toLowerCase();
-            const fb = document.getElementById('quiz-feedback');
-            fb.classList.remove('hidden');
-            
-            if(correct.includes(ans) && ans.length > 2) {
-                fb.innerHTML = `✅ Chính xác! Thưởng 50 Coin!`; fb.className="mt-4 p-4 rounded-xl w-full max-w-md bg-green-100 text-green-700 font-bold";
-                userData.coins += 50; db.collection('users').doc(currentUser).update({ coins: userData.coins });
-            } else {
-                fb.innerHTML = `❌ Sai rồi. Đáp án: ${studyStateE.shuffledData[studyStateE.currentIndex].vi}`; fb.className="mt-4 p-4 rounded-xl w-full max-w-md bg-red-100 text-red-700 font-bold";
-            }
-            setTimeout(() => { openStudyMode('en-vi'); document.getElementById('quiz-input').value=''; fb.classList.add('hidden'); }, 1500);
+            let ans = document.getElementById('quiz-input').value.toLowerCase(), cor = studyE.d[studyE.idx].vi.toLowerCase(), fb = document.getElementById('quiz-feedback'); fb.classList.remove('hidden');
+            if(cor.includes(ans) && ans.length>2) { audioCoin.play(); fb.innerHTML=`✅ Thưởng 50 Coin!`; fb.className="mt-4 p-4 rounded-xl w-full bg-green-100 text-green-700 font-bold"; userData.coins+=50; db.collection('users').doc(currentUser).update({coins: userData.coins}); }
+            else { fb.innerHTML=`❌ Sai! Đáp án: ${studyE.d[studyE.idx].vi}`; fb.className="mt-4 p-4 rounded-xl w-full bg-red-100 text-red-700 font-bold"; }
+            setTimeout(()=>{ openStudyMode('en-vi'); document.getElementById('quiz-input').value=''; fb.classList.add('hidden'); }, 1500);
         }
+        function checkMemory() { audioCoin.play(); userData.coins+=500; db.collection('users').doc(currentUser).update({coins: userData.coins}); const fb = document.getElementById('memory-feedback'); fb.classList.remove('hidden'); fb.innerHTML=`🎉 Thưởng nóng 500 Coin!`; fb.className="mt-6 p-4 rounded-xl w-full text-center font-bold bg-green-100 text-green-700"; }
 
-        function checkMemory() {
-            playSound(audioCoin);
-            userData.coins += 500; db.collection('users').doc(currentUser).update({ coins: userData.coins });
-            const fb = document.getElementById('memory-feedback');
-            fb.classList.remove('hidden'); fb.innerHTML = `🎉 Nhập tốt lắm! Thưởng nóng 500 Coin!`; fb.className="mt-6 p-4 rounded-xl w-full text-center font-bold bg-green-100 text-green-700";
-        }
-
-
-        // ================= CÁC HÀM CŨ CỦA HUB =================
-        function switchView(v) {
-            ['hub-screen', 'places-module', 'study-module', 'music-module', 'blindbox-module'].forEach(id => {
-                document.getElementById(id).classList.add('opacity-0', 'scale-95');
-                setTimeout(() => document.getElementById(id).classList.add('hidden'), 500);
-            });
-            setTimeout(() => {
-                let t;
-                if(v==='hub') t='hub-screen'; else if(v==='places') t='places-module'; else if(v==='study') t='study-module'; else if(v==='music') t='music-module'; else if(v==='blindbox') t='blindbox-module';
-                document.getElementById(t).classList.remove('hidden'); void document.getElementById(t).offsetWidth;
-                document.getElementById(t).classList.remove('opacity-0', 'scale-95');
-                if(v==='blindbox') updateCollectionGrid(); // trigger re-render
-            }, 500);
-        }
-
-        // Dummy function cho G-Dragon
+        const gdSongs = [{title:"G-Dragon Track 1", url:"https://files.catbox.moe/ov2hwx.mp4"}, {title:"G-Dragon Track 2", url:"https://files.catbox.moe/3v0jic.mp4"}];
+        const gdAudio = new Audio(); let gdIdx = 0, spinDeg = 0, spinInt;
         function openMusicConfirm() { document.getElementById('music-confirm-modal').classList.remove('hidden'); document.getElementById('music-confirm-modal').classList.add('flex'); }
         function closeMusicConfirm() { document.getElementById('music-confirm-modal').classList.add('hidden'); document.getElementById('music-confirm-modal').classList.remove('flex'); }
         function enterMusicHub() { closeMusicConfirm(); switchView('music'); }
-
+        function playGDSong(i) { gdIdx=i; gdAudio.src=gdSongs[i].url; gdAudio.play(); audioBg.pause(); document.getElementById('icon-music-play').classList.add('hidden'); document.getElementById('icon-music-pause').classList.remove('hidden'); document.getElementById('gd-now-playing-title').innerText=gdSongs[i].title; document.getElementById('gd-icon-play').classList.add('hidden'); document.getElementById('gd-icon-pause').classList.remove('hidden'); clearInterval(spinInt); spinInt=setInterval(()=>document.getElementById('record-disk').style.transform=`rotate(${spinDeg+=1}deg)`,20); }
+        function toggleGDSong() { if(!gdAudio.src) return playGDSong(0); if(gdAudio.paused) { gdAudio.play(); audioBg.pause(); document.getElementById('gd-icon-play').classList.add('hidden'); document.getElementById('gd-icon-pause').classList.remove('hidden'); spinInt=setInterval(()=>document.getElementById('record-disk').style.transform=`rotate(${spinDeg+=1}deg)`,20); } else { gdAudio.pause(); document.getElementById('gd-icon-play').classList.remove('hidden'); document.getElementById('gd-icon-pause').classList.add('hidden'); clearInterval(spinInt); } }
+        function nextGDSong() { gdIdx++; if(gdIdx>=gdSongs.length) gdIdx=0; playGDSong(gdIdx); }
+        function prevGDSong() { gdIdx--; if(gdIdx<0) gdIdx=gdSongs.length-1; playGDSong(gdIdx); }
     </script>
 </body>
 </html>
