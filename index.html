@@ -78,14 +78,14 @@
 </head>
 <body class="text-textDark antialiased no-scroll" id="body">
 
-    <!-- AUDIO SOUND EFFECTS (ĐÃ UPDATE LINK XỊN 100% HOẠT ĐỘNG) -->
+    <!-- AUDIO SOUND EFFECTS -->
     <audio id="bg-music" loop src="https://files.catbox.moe/by6h11.mp4"></audio>
     <audio id="sound-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
     <audio id="sound-tick" src="https://assets.mixkit.co/active_storage/sfx/2073/2073-preview.mp3"></audio>
     <audio id="sound-reveal" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
     <audio id="sound-coin" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
 
-    <!-- NÚT BẬT/TẮT NHẠC (Z-INDEX 9999 ĐỂ KHÔNG BỊ ĐÈ) -->
+    <!-- NÚT BẬT/TẮT NHẠC (Z-INDEX 9999) -->
     <button id="music-toggle" onclick="toggleMainMusic()" class="fixed bottom-6 right-6 w-12 h-12 rounded-full glass-card flex items-center justify-center cursor-pointer z-[9999] text-primary hover:bg-white transition-all duration-500 transform hover:scale-110 shadow-lg shadow-primary/30 opacity-0 pointer-events-none translate-y-4">
         <svg id="icon-music-play" class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
         <svg id="icon-music-pause" class="w-6 h-6 hidden text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path></svg>
@@ -129,16 +129,15 @@
 
     <!-- Modal Xác nhận vào sảnh nhạc -->
     <div id="music-confirm-modal" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 transition-opacity">
-        <div id="music-confirm-content" class="bg-white rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl p-6 text-center modal-enter relative">
+        <div id="music-confirm-content" class="bg-white rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl p-6 text-center modal-enter relative transition-all duration-300">
             <h3 class="text-xl font-bold text-textDark mb-3">Vào Sảnh V.I.P? 🎧</h3>
             <p class="text-sm text-textGray mb-6 leading-relaxed">Bạn muốn vào sảnh nghe nhạc chứ?<br/>(Nhạc GD vẫn tự động phát khi bạn ra sảnh chính)</p>
             <div class="flex gap-3"><button onclick="playClickSound(); closeMusicConfirm()" class="flex-1 py-2.5 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 font-medium transition-colors">Hủy</button><button onclick="playClickSound(); enterMusicHub()" class="flex-1 py-2.5 rounded-xl bg-rose-500 text-white hover:bg-rose-600 font-medium transition-colors shadow-lg shadow-rose-200">Vào ngay 🔥</button></div>
         </div>
     </div>
 
-    <!-- 3. SẢNH V.I.P G-DRAGON (SỬA LỖI CLICK) -->
+    <!-- 3. SẢNH V.I.P G-DRAGON -->
     <div id="music-module" class="fixed inset-0 z-[95] hidden opacity-0 transition-all duration-1000 bg-vipDark overflow-hidden flex flex-col md:flex-row">
-        <!-- Đã thêm pointer-events-none để tránh lớp nền đè lên làm mất click -->
         <div class="absolute inset-0 z-0 pointer-events-none">
             <div class="absolute inset-0 bg-[url('g-dragon.jpg')] bg-cover bg-center opacity-40 animate-ken-burns"></div>
             <div class="absolute inset-0 bg-gradient-to-br from-vipDark/90 via-vipDark/50 to-[#E63946]/30"></div>
@@ -152,7 +151,6 @@
                 <div class="mt-12 relative w-48 h-48 md:w-64 md:h-64 mx-auto"><div id="record-disk" class="absolute inset-0 rounded-full border-4 border-[#E63946]/30 shadow-[0_0_50px_rgba(230,57,70,0.3)] transition-transform duration-1000 ease-linear"><div class="absolute inset-2 rounded-full border border-white/10 flex items-center justify-center bg-black/50 backdrop-blur-sm"><div class="w-16 h-16 rounded-full border-2 border-[#E63946] bg-vipDark flex items-center justify-center shadow-inner"><div class="w-4 h-4 bg-white rounded-full"></div></div></div></div></div>
             </div>
         </div>
-        <!-- Thêm z-20 và pointer-events-auto để list nhạc click chuẩn xác -->
         <div class="relative z-20 w-full md:w-96 lg:w-[450px] h-[50vh] md:h-full vip-glass flex flex-col p-6 rounded-t-3xl md:rounded-none transition-transform pointer-events-auto">
             <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="w-2 h-6 bg-[#E63946] rounded-full"></span> Playlist</h2>
             <ul id="gd-playlist-container" class="flex-1 overflow-y-auto dark-scroll space-y-3 pr-2"></ul>
@@ -370,7 +368,6 @@
             db.collection("places").orderBy("createdAt", "desc").onSnapshot((snap) => { places = []; snap.forEach((doc) => { places.push({ id: doc.id, ...doc.data() }); }); renderPlaces(); });
         });
 
-        // Hàm tắt mở nhạc đồng nhất
         function toggleMainMusic() {
             playClickSound();
             if(!gdAudio.paused) {
@@ -399,7 +396,6 @@
             setTimeout(() => { const target = document.getElementById(targetId); if(target) { target.classList.remove('hidden'); void target.offsetWidth; target.classList.remove('opacity-0', 'scale-95'); } if(viewName === 'blindbox') updateCollectionGrid(); }, 300);
         }
 
-        // BẢN ĐỒ KỶ NIỆM MODALS
         function renderPlaces() { const grid = document.getElementById('places-grid'); if (!grid) return; grid.innerHTML = ''; if (places.length === 0) { grid.innerHTML = `<div class="col-span-full text-center py-12"><p class="text-textGray">Chưa có địa điểm nào ☁️</p></div>`; return; } places.forEach(p => { const starsHTML = Array.from({length: 5}, (_, i) => `<svg class="w-4 h-4 ${i < p.rating ? 'text-yellow-400' : 'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`).join(''); grid.innerHTML += `<div onclick="playClickSound(); openViewModal('${p.id}')" class="bubble-card glass-card rounded-3xl overflow-hidden flex flex-col h-full border border-white/60"><div class="h-48 bg-gray-200 relative overflow-hidden"><img src="${p.image || 'https://i.postimg.cc/mD8zQxGj/placeholder.png'}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"><div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold ${p.visited ? 'text-emerald-600' : 'text-primary'} shadow-sm">${p.visited ? '🌸 Đã đi' : '📌 Sẽ đi'}</div></div><div class="p-5 flex-1 flex flex-col justify-between"><div><h3 class="font-serif font-bold text-xl text-textDark mb-1">${p.name}</h3><p class="text-xs text-textGray flex items-center gap-1 mb-3">📍 ${p.address || 'Chưa cập nhật'}</p></div><div class="flex items-center justify-between border-t border-gray-100 pt-3"><span class="text-xs font-medium bg-accent/50 text-textDark px-2.5 py-1 rounded-lg">${p.type || 'Địa điểm'}</span><div class="flex items-center gap-0.5">${starsHTML}</div></div></div></div>`; }); }
         function openFormModal(id=null) { editingId=id; const over=document.getElementById('form-modal-overlay'), cont=document.getElementById('form-modal-content'); over.classList.remove('hidden'); over.classList.add('flex'); cont.classList.remove('modal-leave','modal-leave-active'); cont.classList.add('modal-enter','modal-enter-active'); if(id) { const p=places.find(x=>x.id===id); document.getElementById('form-title').innerText="Sửa kỷ niệm 📝"; document.getElementById('input-name').value=p.name||''; document.getElementById('input-address').value=p.address||''; document.getElementById('input-visited').value=p.visited?"true":"false"; setRating(p.rating||4); document.getElementById('input-pros').value=p.pros||''; document.getElementById('input-cons').value=p.cons||''; document.getElementById('input-image').value=p.image||''; document.getElementById('input-menu').value=p.menu||''; switchFormTab(p.category||'food'); } else { document.getElementById('form-title').innerText="Lưu kỷ niệm mới ☁️"; document.getElementById('add-form').reset(); setRating(4); switchFormTab('food'); } toggleRating(); }
         function closeFormModal() { const c=document.getElementById('form-modal-content'); c.classList.add('modal-leave-active'); setTimeout(()=>{ document.getElementById('form-modal-overlay').classList.add('hidden'); document.getElementById('form-modal-overlay').classList.remove('flex'); c.classList.remove('modal-leave-active'); }, 200); }
@@ -410,11 +406,21 @@
         function openViewModal(id) { viewingId=id; const p=places.find(x=>x.id===id); if(!p) return; const o=document.getElementById('view-modal-overlay'); o.classList.remove('hidden'); o.classList.add('flex'); document.getElementById('view-image').src=p.image||'https://i.postimg.cc/mD8zQxGj/placeholder.png'; document.getElementById('view-name').innerText=p.name; document.getElementById('view-address').innerText=`📍 ${p.address||'Chưa cập nhật'}`; document.getElementById('view-status-badge').innerHTML=p.visited?'<span class="text-emerald-600">🌸 Đã đi rùi</span>':'<span class="text-primary">📌 Sẽ đi</span>'; document.getElementById('view-type').innerText=p.type||'Khác'; document.getElementById('view-extra-label').innerText=p.category==='food'?'Hình thức':'Giá cả'; document.getElementById('view-extra-value').innerText=p.extra||'Không rõ'; document.getElementById('view-stars').innerHTML=Array.from({length:5},(_,i)=>`<svg class="w-4 h-4 ${i<(p.rating||0)?'text-yellow-400':'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`).join(''); if(p.visited&&(p.pros||p.cons)) { document.getElementById('view-pros-cons').classList.remove('hidden'); document.getElementById('view-pros-container').classList[p.pros?'remove':'add']('hidden'); document.getElementById('view-pros').innerText=p.pros||''; document.getElementById('view-cons-container').classList[p.cons?'remove':'add']('hidden'); document.getElementById('view-cons').innerText=p.cons||''; } else document.getElementById('view-pros-cons').classList.add('hidden'); if(p.menu) { document.getElementById('view-menu-container').classList.remove('hidden'); document.getElementById('view-menu-image').src=p.menu; } else document.getElementById('view-menu-container').classList.add('hidden'); }
         function closeViewModal() { document.getElementById('view-modal-overlay').classList.add('hidden'); document.getElementById('view-modal-overlay').classList.remove('flex'); viewingId=null; } function editCurrentPlace() { if(viewingId){ closeViewModal(); openFormModal(viewingId); } } function deleteCurrentPlace() { if(viewingId&&confirm("Xóa địa điểm này?")) db.collection("places").doc(viewingId).delete().then(()=>closeViewModal()); }
 
-        // G-DRAGON VIP MUSIC CONTROLS
-        let spinDegree=0, spinInterval;
-        function openMusicConfirm() { document.getElementById('music-confirm-modal').classList.remove('hidden'); document.getElementById('music-confirm-modal').classList.add('flex'); }
-        function closeMusicConfirm() { document.getElementById('music-confirm-modal').classList.add('hidden'); document.getElementById('music-confirm-modal').classList.remove('flex'); }
+        // MỞ/ĐÓNG MODAL XÁC NHẬN NHẠC VIP MƯỢT MÀ (FIX LỖI MỜ MÀN HÌNH)
+        function openMusicConfirm() { 
+            document.getElementById('music-confirm-modal').classList.remove('hidden'); 
+            document.getElementById('music-confirm-modal').classList.add('flex'); 
+            setTimeout(() => { document.getElementById('music-confirm-content').classList.add('modal-enter-active'); }, 10);
+        }
+        function closeMusicConfirm() { 
+            document.getElementById('music-confirm-content').classList.remove('modal-enter-active'); 
+            setTimeout(() => { 
+                document.getElementById('music-confirm-modal').classList.add('hidden'); 
+                document.getElementById('music-confirm-modal').classList.remove('flex'); 
+            }, 200);
+        }
         function enterMusicHub() { closeMusicConfirm(); switchView('music'); }
+        
         function playGDSong(index) { currentGDSongIndex=index; gdAudio.src=gdSongs[index].url; gdAudio.play().catch(()=>{}); audioBg.pause(); document.getElementById('icon-music-play').classList.add('hidden'); document.getElementById('icon-music-pause').classList.remove('hidden'); document.getElementById('gd-now-playing-title').innerText=gdSongs[index].title; document.getElementById('gd-icon-play').classList.add('hidden'); document.getElementById('gd-icon-pause').classList.remove('hidden'); clearInterval(spinInterval); spinInterval=setInterval(()=>{spinDegree+=1; document.getElementById('record-disk').style.transform=`rotate(${spinDegree}deg)`;},20); }
         function toggleGDSong() { if(!gdAudio.src) { playGDSong(0); return; } if(gdAudio.paused) { gdAudio.play().catch(()=>{}); audioBg.pause(); document.getElementById('gd-icon-play').classList.add('hidden'); document.getElementById('gd-icon-pause').classList.remove('hidden'); spinInterval=setInterval(()=>{spinDegree+=1; document.getElementById('record-disk').style.transform=`rotate(${spinDegree}deg)`;},20); } else { gdAudio.pause(); document.getElementById('gd-icon-play').classList.remove('hidden'); document.getElementById('gd-icon-pause').classList.add('hidden'); clearInterval(spinInterval); } }
         function nextGDSong() { let n=currentGDSongIndex+1; if(n>=gdSongs.length) n=0; playGDSong(n); } function prevGDSong() { let p=currentGDSongIndex-1; if(p<0) p=gdSongs.length-1; playGDSong(p); }
