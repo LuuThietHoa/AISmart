@@ -17,30 +17,13 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#5B9BFF',
-                        secondary: '#A5D8FF',
-                        accent: '#E0F7FA',
-                        textDark: '#1A2A44',
-                        textGray: '#64748B',
-                        pinkLight: '#FFD6E0',
-                        yellowLight: '#FFF3C4',
-                        vipRed: '#E63946',
-                        vipDark: '#0A0A0A',
+                        primary: '#5B9BFF', secondary: '#A5D8FF', accent: '#E0F7FA', textDark: '#1A2A44', textGray: '#64748B', vipRed: '#E63946', vipDark: '#0A0A0A',
                     },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
-                    },
-                    animation: {
-                        'ken-burns': 'kenBurns 20s ease-in-out infinite alternate',
-                        'float-glow': 'floatGlow 3s ease-in-out infinite alternate',
-                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Playfair Display', 'serif'] },
+                    animation: { 'ken-burns': 'kenBurns 20s ease-in-out infinite alternate', 'float-glow': 'floatGlow 3s ease-in-out infinite alternate' },
                     keyframes: {
                         kenBurns: { '0%': { transform: 'scale(1)' }, '100%': { transform: 'scale(1.15)' } },
-                        floatGlow: {
-                            '0%': { transform: 'translateY(0)', textShadow: '0 0 10px rgba(230, 57, 70, 0.5)' },
-                            '100%': { transform: 'translateY(-10px)', textShadow: '0 0 30px rgba(230, 57, 70, 1)' },
-                        }
+                        floatGlow: { '0%': { transform: 'translateY(0)', textShadow: '0 0 10px rgba(230, 57, 70, 0.5)' }, '100%': { transform: 'translateY(-10px)', textShadow: '0 0 30px rgba(230, 57, 70, 1)' } }
                     }
                 }
             }
@@ -51,8 +34,8 @@
 
     <style>
         body { background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 50%, #7DD3FC 100%); min-height: 100vh; margin: 0; overflow-x: hidden; scroll-behavior: smooth; }
-        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 8px 32px rgba(91, 155, 255, 0.1); }
-        .vip-glass { background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-left: 1px solid rgba(255, 255, 255, 0.1); box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
+        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 8px 32px rgba(91, 155, 255, 0.1); }
+        .vip-glass { background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(20px); border-left: 1px solid rgba(255, 255, 255, 0.1); box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
         
         .bubble-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
         .bubble-card:hover { transform: scale(1.03) translateY(-5px); box-shadow: 0 20px 40px rgba(91, 155, 255, 0.2); border-color: rgba(91, 155, 255, 0.4); }
@@ -60,41 +43,24 @@
         .start-bubble { background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.2)); box-shadow: inset 0 0 20px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.4), 0 15px 30px rgba(91, 155, 255, 0.4); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.6); animation: floatBubble 3s ease-in-out infinite; }
         @keyframes floatBubble { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-15px) scale(1.05); } }
         
-        .hub-icon { animation: floatSlow 4s ease-in-out infinite; }
-        .hub-icon:nth-child(2) { animation-delay: 1s; }
-        .hub-icon:nth-child(3) { animation-delay: 2s; }
-        .hub-icon:nth-child(4) { animation-delay: 0.5s; }
+        .hub-icon { animation: floatSlow 4s ease-in-out infinite; } .hub-icon:nth-child(2) { animation-delay: 1s; } .hub-icon:nth-child(3) { animation-delay: 2s; } .hub-icon:nth-child(4) { animation-delay: 0.5s; }
         @keyframes floatSlow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        .modal-enter { opacity: 0; transform: scale(0.95) translateY(10px); }
-        .modal-enter-active { opacity: 1; transform: scale(1) translateY(0); transition: all 0.3s ease-out; }
-        .modal-leave { opacity: 1; transform: scale(1) translateY(0); }
-        .modal-leave-active { opacity: 0; transform: scale(0.95) translateY(10px); transition: all 0.2s ease-in; }
+        .modal-enter { opacity: 0; transform: scale(0.95) translateY(10px); } .modal-enter-active { opacity: 1; transform: scale(1) translateY(0); transition: all 0.3s ease-out; }
+        .modal-leave { opacity: 1; transform: scale(1) translateY(0); } .modal-leave-active { opacity: 0; transform: scale(0.95) translateY(10px); transition: all 0.2s ease-in; }
+        .slide-down-enter { opacity: 0; transform: translateY(-20px); transition: all 0.4s ease; } .slide-down-enter-active { opacity: 1; transform: translateY(0); }
 
-        .slide-down-enter { opacity: 0; transform: translateY(-20px); transition: all 0.4s ease; }
-        .slide-down-enter-active { opacity: 1; transform: translateY(0); }
-
-        .dark-scroll::-webkit-scrollbar { width: 6px; }
-        .dark-scroll::-webkit-scrollbar-track { background: transparent; }
-        .dark-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
-        .dark-scroll::-webkit-scrollbar-thumb:hover { background: #E63946; }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #A5D8FF; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #5B9BFF; }
+        .dark-scroll::-webkit-scrollbar { width: 6px; } .dark-scroll::-webkit-scrollbar-track { background: transparent; } .dark-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #A5D8FF; border-radius: 10px; }
         .no-scroll { overflow: hidden; height: 100vh; }
-        .star { cursor: pointer; color: #cbd5e1; transition: color 0.2s; }
-        .star.active { color: #fbbf24; }
+        .star { cursor: pointer; color: #cbd5e1; transition: color 0.2s; } .star.active { color: #fbbf24; }
 
-        /* GACHA BLINDBOX STYLES */
+        /* GACHA STYLES */
         :root { --rarity-thuong: #A0A0A0; --rarity-hiem: #3b82f6; --rarity-caocap: #a855f7; --rarity-sieuhiem: #eab308; --rarity-bian: #ef4444; }
         .blind-box-bg { background: radial-gradient(circle at center, #1e1e2f 0%, #0a0a0f 100%); color: white; }
         .gacha-window { position: relative; width: 100%; height: 250px; background: rgba(0,0,0,0.5); overflow: hidden; border-radius: 1rem; border: 2px solid rgba(255,255,255,0.1); box-shadow: inset 0 0 50px rgba(0,0,0,0.8); }
-        .gacha-strip { display: flex; height: 100%; will-change: transform; }
-        .gacha-item { width: 150px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-right: 1px solid rgba(255,255,255,0.05); padding: 10px; }
+        .gacha-strip { display: flex; height: 100%; will-change: transform; } .gacha-item { width: 150px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-right: 1px solid rgba(255,255,255,0.05); padding: 10px; }
         .gacha-center-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 4px; background: #eab308; transform: translateX(-50%); box-shadow: 0 0 15px #eab308; z-index: 10; pointer-events: none; }
-
         .gacha-card { position: relative; overflow: hidden; border-radius: 0.75rem; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); transition: transform 0.3s ease; aspect-ratio: 2/3; display: flex; align-items: center; justify-content: center; }
         .gacha-card.owned:hover { transform: scale(1.05) translateY(-5px); z-index: 10; }
         .card-overlay { position: absolute; inset: 0; mix-blend-mode: overlay; pointer-events: none; opacity: 0.3; }
@@ -104,24 +70,23 @@
         .card-sieuhiem { border: 2px solid var(--rarity-sieuhiem); box-shadow: 0 0 30px rgba(234,179,8,0.6); } .card-sieuhiem .card-overlay { background: var(--rarity-sieuhiem); opacity: 0.3; }
         .card-bian { border: 2px solid var(--rarity-bian); box-shadow: 0 0 40px rgba(239,68,68,0.8); animation: pulse-red 2s infinite alternate; } .card-bian .card-overlay { background: linear-gradient(135deg, var(--rarity-bian), #a855f7); opacity: 0.4; mix-blend-mode: color-dodge; }
         @keyframes pulse-red { 0% { box-shadow: 0 0 20px rgba(239,68,68,0.5); } 100% { box-shadow: 0 0 50px rgba(239,68,68,1); } }
-
         .card-badge { position: absolute; bottom: 0; left: 0; right: 0; padding: 4px 0; text-align: center; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; background: rgba(0,0,0,0.8); color: white; backdrop-filter: blur(5px); }
         .card-count { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.8); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); }
         .mystery-box { font-size: 3rem; font-weight: bold; color: rgba(255,255,255,0.2); }
-        
         .card-3d-wrapper { perspective: 1000px; } .card-3d-inner { transition: transform 0.8s; transform-style: preserve-3d; } .card-3d-wrapper.flipped .card-3d-inner { transform: rotateY(180deg); } .card-front, .card-back { backface-visibility: hidden; position: absolute; inset: 0; } .card-back { transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; background: url('https://i.postimg.cc/85z1DkS0/card-back.jpg') center/cover; border-radius: 0.75rem; border: 2px solid rgba(255,255,255,0.2); }
     </style>
 </head>
 <body class="text-textDark antialiased no-scroll" id="body">
 
-    <!-- AUDIO SOUND EFFECTS -->
+    <!-- AUDIO SOUND EFFECTS (ĐÃ UPDATE LINK XỊN 100% HOẠT ĐỘNG) -->
     <audio id="bg-music" loop src="https://files.catbox.moe/by6h11.mp4"></audio>
-    <audio id="sound-click" src="https://actions.google.com/sounds/v1/ui/click.ogg"></audio>
-    <audio id="sound-tick" src="https://actions.google.com/sounds/v1/ui/click.ogg"></audio>
-    <audio id="sound-reveal" src="https://actions.google.com/sounds/v1/magic/magic_chime.ogg"></audio>
-    <audio id="sound-coin" src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg"></audio>
+    <audio id="sound-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
+    <audio id="sound-tick" src="https://assets.mixkit.co/active_storage/sfx/2073/2073-preview.mp3"></audio>
+    <audio id="sound-reveal" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
+    <audio id="sound-coin" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
 
-    <button id="music-toggle" onclick="playClickSound()" class="fixed bottom-6 right-6 w-12 h-12 rounded-full glass-card flex items-center justify-center cursor-pointer z-[80] text-primary hover:bg-white transition-all duration-500 transform hover:scale-110 shadow-lg shadow-primary/30 opacity-0 pointer-events-none translate-y-4">
+    <!-- NÚT BẬT/TẮT NHẠC (Z-INDEX 9999 ĐỂ KHÔNG BỊ ĐÈ) -->
+    <button id="music-toggle" onclick="toggleMainMusic()" class="fixed bottom-6 right-6 w-12 h-12 rounded-full glass-card flex items-center justify-center cursor-pointer z-[9999] text-primary hover:bg-white transition-all duration-500 transform hover:scale-110 shadow-lg shadow-primary/30 opacity-0 pointer-events-none translate-y-4">
         <svg id="icon-music-play" class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
         <svg id="icon-music-pause" class="w-6 h-6 hidden text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path></svg>
     </button>
@@ -145,38 +110,20 @@
         <button id="start-btn" onclick="playClickSound()" class="start-bubble relative z-10 w-40 h-40 rounded-full flex flex-col items-center justify-center gap-2 cursor-pointer transition-all duration-700 scale-0 opacity-0 group"><span class="font-serif text-2xl font-bold text-primary drop-shadow-sm group-hover:text-[#4FC3F7] transition-colors">Mở ra</span></button>
     </div>
 
-    <!-- 2. HUB SCREEN (SẢNH CHÍNH) -->
+    <!-- 2. HUB SCREEN -->
     <div id="hub-screen" class="fixed inset-0 z-[90] flex flex-col items-center justify-center hidden opacity-0 scale-95 transition-all duration-500">
         <div class="absolute top-6 left-6 glass-card px-5 py-3 rounded-2xl flex items-center gap-4 shadow-md border-white/60">
             <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold text-xl uppercase shadow-md" id="hub-avatar">L</div>
-            <div>
-                <p class="font-bold text-textDark" id="hub-username">User</p>
-                <p class="text-sm font-semibold text-yellow-500 mt-0.5">🪙 <span id="hub-coins">0</span> Coin</p>
-            </div>
-            <div class="pl-4 border-l border-gray-200 ml-2">
-                <p class="text-xs text-textGray font-medium">Bộ sưu tầm</p>
-                <p class="font-bold text-primary" id="hub-cards">0 / 50</p>
-            </div>
+            <div><p class="font-bold text-textDark" id="hub-username">User</p><p class="text-sm font-semibold text-yellow-500 mt-0.5">🪙 <span id="hub-coins">0</span> Coin</p></div>
+            <div class="pl-4 border-l border-gray-200 ml-2"><p class="text-xs text-textGray font-medium">Bộ sưu tầm</p><p class="font-bold text-primary" id="hub-cards">0 / 50</p></div>
         </div>
 
         <h1 class="font-serif text-4xl md:text-5xl font-bold text-textDark mb-16 drop-shadow-sm tracking-wide text-center px-4">Không gian của tụi mình ✨</h1>
         <div class="flex flex-wrap justify-center gap-8 md:gap-14 px-6">
-            <div class="group relative cursor-pointer hub-icon" onclick="playClickSound(); switchView('places')">
-                <div class="w-28 h-28 md:w-36 md:h-36 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20"><img src="diadiem.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/854/854878.png'" class="w-14 h-14 md:w-20 md:h-20 object-contain drop-shadow-md"></div>
-                <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-primary shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Địa điểm đã đi 🗺️</div>
-            </div>
-            <div class="group relative cursor-pointer hub-icon" onclick="playClickSound(); openMusicConfirm()">
-                <div class="w-28 h-28 md:w-36 md:h-36 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20"><img src="nghenhac.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3011/3011236.png'" class="w-14 h-14 md:w-20 md:h-20 object-contain drop-shadow-md"></div>
-                <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-rose-500 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Sảnh Nghe Nhạc 🎧</div>
-            </div>
-            <div class="group relative cursor-pointer hub-icon" onclick="playClickSound(); switchView('study')">
-                <div class="w-28 h-28 md:w-36 md:h-36 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20"><img src="studyE.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/330/330731.png'" class="w-14 h-14 md:w-20 md:h-20 object-contain drop-shadow-md"></div>
-                <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-primary shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Học Tiếng Anh 📚</div>
-            </div>
-            <div class="group relative cursor-pointer hub-icon" onclick="playClickSound(); switchView('blindbox')">
-                <div class="w-28 h-28 md:w-36 md:h-36 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-4 border-yellow-300 shadow-[0_0_30px_rgba(234,179,8,0.5)]"><div class="text-5xl animate-pulse">🎁</div></div>
-                <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-yellow-600 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Gacha VIP 🎲</div>
-            </div>
+            <div class="group relative cursor-pointer hub-icon" onclick="playClickSound(); switchView('places')"><div class="w-28 h-28 md:w-36 md:h-36 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20"><img src="diadiem.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/854/854878.png'" class="w-14 h-14 md:w-20 md:h-20 object-contain drop-shadow-md"></div><div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-primary shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Địa điểm đã đi 🗺️</div></div>
+            <div class="group relative cursor-pointer hub-icon" onclick="playClickSound(); openMusicConfirm()"><div class="w-28 h-28 md:w-36 md:h-36 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20"><img src="nghenhac.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3011/3011236.png'" class="w-14 h-14 md:w-20 md:h-20 object-contain drop-shadow-md"></div><div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-rose-500 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Sảnh Nghe Nhạc 🎧</div></div>
+            <div class="group relative cursor-pointer hub-icon" onclick="playClickSound(); switchView('study')"><div class="w-28 h-28 md:w-36 md:h-36 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20"><img src="studyE.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/330/330731.png'" class="w-14 h-14 md:w-20 md:h-20 object-contain drop-shadow-md"></div><div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-primary shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Học Tiếng Anh 📚</div></div>
+            <div class="group relative cursor-pointer hub-icon" onclick="playClickSound(); switchView('blindbox')"><div class="w-28 h-28 md:w-36 md:h-36 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-4 border-yellow-300 shadow-[0_0_30px_rgba(234,179,8,0.5)]"><div class="text-5xl animate-pulse">🎁</div></div><div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-yellow-600 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Gacha VIP 🎲</div></div>
         </div>
     </div>
 
@@ -189,22 +136,24 @@
         </div>
     </div>
 
-    <!-- 3. SẢNH V.I.P G-DRAGON -->
+    <!-- 3. SẢNH V.I.P G-DRAGON (SỬA LỖI CLICK) -->
     <div id="music-module" class="fixed inset-0 z-[95] hidden opacity-0 transition-all duration-1000 bg-vipDark overflow-hidden flex flex-col md:flex-row">
-        <div class="absolute inset-0 z-0">
+        <!-- Đã thêm pointer-events-none để tránh lớp nền đè lên làm mất click -->
+        <div class="absolute inset-0 z-0 pointer-events-none">
             <div class="absolute inset-0 bg-[url('g-dragon.jpg')] bg-cover bg-center opacity-40 animate-ken-burns"></div>
             <div class="absolute inset-0 bg-gradient-to-br from-vipDark/90 via-vipDark/50 to-[#E63946]/30"></div>
             <div class="absolute inset-0" style="background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px); background-size: 50px 50px;"></div>
         </div>
         <button onclick="playClickSound(); switchView('hub')" class="absolute top-6 left-6 z-[100] bg-white/10 backdrop-blur-md border border-white/20 px-5 py-2.5 rounded-full text-white font-medium hover:bg-white/20 transition-all flex items-center gap-2 shadow-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Sảnh chính</button>
-        <div class="relative z-10 flex-1 flex items-center justify-center p-10 mt-16 md:mt-0">
+        <div class="relative z-10 flex-1 flex items-center justify-center p-10 mt-16 md:mt-0 pointer-events-auto">
             <div class="text-center">
                 <h1 class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 uppercase tracking-[0.2em] mb-4 animate-float-glow">G-DRAGON</h1>
                 <p class="text-white/60 tracking-[0.3em] uppercase text-sm md:text-lg font-light">V.I.P Lounge Collection</p>
                 <div class="mt-12 relative w-48 h-48 md:w-64 md:h-64 mx-auto"><div id="record-disk" class="absolute inset-0 rounded-full border-4 border-[#E63946]/30 shadow-[0_0_50px_rgba(230,57,70,0.3)] transition-transform duration-1000 ease-linear"><div class="absolute inset-2 rounded-full border border-white/10 flex items-center justify-center bg-black/50 backdrop-blur-sm"><div class="w-16 h-16 rounded-full border-2 border-[#E63946] bg-vipDark flex items-center justify-center shadow-inner"><div class="w-4 h-4 bg-white rounded-full"></div></div></div></div></div>
             </div>
         </div>
-        <div class="relative z-10 w-full md:w-96 lg:w-[450px] h-[50vh] md:h-full vip-glass flex flex-col p-6 rounded-t-3xl md:rounded-none transition-transform">
+        <!-- Thêm z-20 và pointer-events-auto để list nhạc click chuẩn xác -->
+        <div class="relative z-20 w-full md:w-96 lg:w-[450px] h-[50vh] md:h-full vip-glass flex flex-col p-6 rounded-t-3xl md:rounded-none transition-transform pointer-events-auto">
             <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="w-2 h-6 bg-[#E63946] rounded-full"></span> Playlist</h2>
             <ul id="gd-playlist-container" class="flex-1 overflow-y-auto dark-scroll space-y-3 pr-2"></ul>
             <div class="mt-6 p-5 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-md">
@@ -218,7 +167,7 @@
         </div>
     </div>
 
-    <!-- 4. MODULE BẢN ĐỒ KỶ NIỆM -->
+    <!-- 4. MODULE BẢN ĐỒ -->
     <div id="places-module" class="hidden opacity-0 scale-95 pb-20 transition-all duration-500">
         <button onclick="playClickSound(); switchView('hub')" class="fixed top-6 left-6 z-[80] glass-card px-4 py-2 rounded-full text-primary font-medium hover:bg-white transition-colors flex items-center gap-2 shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Sảnh chính</button>
         <header class="max-w-4xl mx-auto pt-24 px-6 text-center">
@@ -229,7 +178,6 @@
         <main id="places-grid" class="max-w-5xl mx-auto mt-12 px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></main>
     </div>
 
-    <!-- Modal Xem Chi Tiết Địa Điểm -->
     <div id="view-modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 transition-opacity">
         <div id="view-modal-content" class="bg-white rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto scroll-smooth shadow-2xl relative">
             <button onclick="playClickSound(); closeViewModal()" class="absolute top-4 right-4 z-10 p-2 bg-black/30 text-white backdrop-blur-md rounded-full hover:bg-black/50 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg></button>
@@ -240,12 +188,11 @@
                 <div class="bg-accent/30 rounded-2xl p-4 mb-4"><div class="grid grid-cols-2 gap-4"><div><p class="text-xs text-textGray mb-1">Loại hình</p><p id="view-type" class="font-medium text-sm text-textDark">Nhà hàng</p></div><div><p class="text-xs text-textGray mb-1" id="view-extra-label">Hình / Giá</p><p id="view-extra-value" class="font-medium text-sm text-textDark">Ăn tại chỗ</p></div><div class="col-span-2"><p class="text-xs text-textGray mb-1">Đánh giá</p><div class="flex items-center gap-1" id="view-stars"></div></div></div></div>
                 <div id="view-pros-cons" class="mb-4 space-y-3 hidden"><div id="view-pros-container" class="bg-emerald-50 border border-emerald-100 rounded-2xl p-3.5 hidden"><p class="text-xs text-emerald-600 font-semibold mb-1 flex items-center gap-1">💖 Điểm cộng</p><p id="view-pros" class="text-sm text-emerald-800 leading-relaxed"></p></div><div id="view-cons-container" class="bg-rose-50 border border-rose-100 rounded-2xl p-3.5 hidden"><p class="text-xs text-rose-500 font-semibold mb-1 flex items-center gap-1">🥺 Điểm trừ</p><p id="view-cons" class="text-sm text-rose-800 leading-relaxed"></p></div></div>
                 <div id="view-menu-container" class="mb-6 hidden transition-all"><p class="text-sm font-semibold text-textDark mb-2 flex items-center gap-1">📖 Menu</p><div class="rounded-2xl overflow-hidden border border-gray-100 shadow-sm"><img id="view-menu-image" src="" class="w-full h-auto object-cover hover:scale-105 transition-transform duration-500"></div></div>
-                <div class="flex gap-3"><button onclick="playClickSound(); editCurrentPlace()" class="flex-1 py-3 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 font-medium flex items-center justify-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg> Sửa</button><button onclick="playClickSound(); deleteCurrentPlace()" class="py-3 px-4 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 font-medium"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button></div>
+                <div class="flex gap-3"><button onclick="playClickSound(); editCurrentPlace()" class="flex-1 py-3 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 font-medium flex items-center justify-center gap-2">Sửa</button><button onclick="playClickSound(); deleteCurrentPlace()" class="py-3 px-4 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 font-medium">Xóa</button></div>
             </div>
         </div>
     </div>
 
-    <!-- Modal Form Nhập Bản Đồ -->
     <div id="form-modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 transition-opacity">
         <div id="form-modal-content" class="bg-white rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl relative max-h-[90vh] overflow-y-auto scroll-smooth">
             <button onclick="playClickSound(); closeFormModal()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200"><svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg></button>
@@ -260,21 +207,16 @@
                     <div class="grid grid-cols-2 gap-4 pt-2 border-t border-gray-100"><div><label class="block text-sm font-medium mb-1">Trạng thái</label><select id="input-visited" onchange="toggleRating()" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-primary font-medium bg-blue-50/50"><option value="true">Đã đi rùi 🌸</option><option value="false">Sẽ đi 📌</option></select></div><div id="rating-container"><label class="block text-sm font-medium mb-1">Chấm điểm</label><div class="flex gap-1 mt-2.5" id="star-group"><svg onclick="setRating(1)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg onclick="setRating(2)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg onclick="setRating(3)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg onclick="setRating(4)" class="w-6 h-6 star active" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg onclick="setRating(5)" class="w-6 h-6 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg></div></div></div>
                     <div id="review-details" class="space-y-4"><div><label class="block text-sm font-medium mb-1">Điểm cộng 💖</label><input type="text" id="input-pros" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-green-400 focus:outline-none"></div><div><label class="block text-sm font-medium mb-1">Điểm trừ 🥺</label><input type="text" id="input-cons" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-rose-400 focus:outline-none"></div></div>
                     <div class="pt-2 border-t border-gray-100 space-y-4"><div><label class="block text-sm font-medium mb-1">Link ảnh bìa (Trực tiếp)</label><input type="url" id="input-image" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary focus:outline-none"></div><div><label class="block text-sm font-medium mb-1">Link ảnh Menu 📖 (Tùy chọn)</label><input type="url" id="input-menu" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary focus:outline-none"></div></div>
-                    <button type="submit" id="btn-submit" class="w-full mt-6 bg-primary text-white py-3.5 rounded-xl font-semibold shadow-lg shadow-primary/30">Lưu vào Bản Đồ</button>
+                    <button type="submit" id="btn-submit" onclick="playClickSound()" class="w-full mt-6 bg-primary text-white py-3.5 rounded-xl font-semibold shadow-lg shadow-primary/30">Lưu vào Bản Đồ</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- 5. MODULE HỌC TIẾNG ANH & NGỮ PHÁP -->
+    <!-- 5. MODULE HỌC TIẾNG ANH -->
     <div id="study-module" class="hidden opacity-0 scale-95 pb-20 transition-all duration-500">
         <button onclick="playClickSound(); switchView('hub')" class="fixed top-6 left-6 z-[80] glass-card px-4 py-2 rounded-full text-primary font-medium hover:bg-white transition-colors flex items-center gap-2 shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Trở về</button>
-        
-        <header class="max-w-4xl mx-auto pt-24 px-6 text-center mb-10">
-            <h1 class="font-serif text-4xl font-semibold mb-4 text-textDark">Góc <span class="text-primary italic">Tiếng Anh</span></h1>
-            <p class="text-textGray">Cùng nhau ôn tập từ vựng và ngữ pháp nhé! 📖</p>
-        </header>
-
+        <header class="max-w-4xl mx-auto pt-24 px-6 text-center mb-10"><h1 class="font-serif text-4xl font-semibold mb-4 text-textDark">Góc <span class="text-primary italic">Tiếng Anh</span></h1><p class="text-textGray">Cùng nhau ôn tập từ vựng và ngữ pháp nhé! 📖</p></header>
         <main class="max-w-4xl mx-auto px-6">
             <div id="study-menu" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <button onclick="playClickSound(); openStudyMode('list')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group"><div class="text-3xl mb-3">📝</div><h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Danh sách từ vựng</h3><p class="text-sm text-textGray">Xem đầy đủ 33 từ vựng</p></button>
@@ -284,53 +226,34 @@
                 <button onclick="playClickSound(); openStudyMode('grammar')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-orange-200"><div class="text-3xl mb-3">✨</div><h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-orange-500 transition-colors">Ngữ Pháp & Bài Tập</h3><p class="text-sm text-textGray">Học và làm trắc nghiệm giới từ</p></button>
                 <button onclick="playClickSound(); openStudyMode('memory')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-rose-200 bg-white/50"><div class="text-3xl mb-3">🧠</div><h3 class="text-lg font-bold text-rose-600 mb-1">Kiểm tra trí nhớ</h3><p class="text-sm text-textGray">Gõ đúng thứ tự toàn bộ từ vựng</p></button>
             </div>
-
             <div id="study-content" class="hidden glass-card rounded-3xl p-6 md:p-10 relative">
                 <button onclick="playClickSound(); backToStudyMenu()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"><svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                 <h2 id="study-content-title" class="text-2xl font-bold text-primary mb-6 border-b border-primary/20 pb-4">Tiêu đề</h2>
-                
                 <div id="vocab-list-container" class="hidden grid grid-cols-2 md:grid-cols-3 gap-3"></div>
-
                 <div id="quiz-container" class="hidden flex flex-col items-center">
                     <div class="text-sm text-textGray mb-2 font-medium" id="quiz-progress">Câu 1 / 10</div>
-                    <div class="w-full bg-white rounded-2xl p-8 text-center shadow-sm border border-gray-100 mb-6">
-                        <p class="text-xs text-primary font-bold uppercase tracking-widest mb-2" id="quiz-hint">Dịch sang tiếng Việt</p>
-                        <h3 class="text-3xl font-serif font-bold text-textDark" id="quiz-question">Word</h3>
-                    </div>
+                    <div class="w-full bg-white rounded-2xl p-8 text-center shadow-sm border border-gray-100 mb-6"><p class="text-xs text-primary font-bold uppercase tracking-widest mb-2" id="quiz-hint">Dịch sang tiếng Việt</p><h3 class="text-3xl font-serif font-bold text-textDark" id="quiz-question">Word</h3></div>
                     <input type="text" id="quiz-input" autocomplete="off" placeholder="Nhập đáp án của bạn..." class="w-full max-w-md px-5 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-primary text-center text-lg mb-4 transition-colors">
-                    <button id="quiz-submit-btn" onclick="checkQuizAnswer()" class="bg-primary hover:bg-[#4FC3F7] text-white px-8 py-3 rounded-xl font-bold transition-all shadow-md w-full max-w-md">Kiểm tra (+50🪙)</button>
+                    <button id="quiz-submit-btn" onclick="playClickSound(); checkQuizAnswer()" class="bg-primary hover:bg-[#4FC3F7] text-white px-8 py-3 rounded-xl font-bold transition-all shadow-md w-full max-w-md">Kiểm tra (+50🪙)</button>
                     <div id="quiz-feedback" class="mt-4 p-4 rounded-xl w-full max-w-md hidden text-center font-medium"></div>
                 </div>
-
                 <div id="memory-container" class="hidden flex flex-col items-center">
                     <p class="text-textGray text-center mb-6">Hãy nhập lại <b class="text-rose-500">toàn bộ từ tiếng Anh</b> theo đúng thứ tự đã học.<br/>(Cách nhau bằng dấu phẩy hoặc khoảng trắng)</p>
                     <textarea id="memory-input" rows="5" placeholder="Ví dụ: about, above, across..." class="w-full px-5 py-4 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-rose-400 text-lg mb-6 transition-colors resize-none leading-relaxed"></textarea>
-                    <button onclick="checkMemory()" class="bg-rose-500 hover:bg-rose-600 text-white px-8 py-3 rounded-xl font-bold transition-all shadow-md shadow-rose-200 w-full md:w-auto min-w-[200px]">Nộp bài (+500🪙) 🚀</button>
+                    <button onclick="playClickSound(); checkMemory()" class="bg-rose-500 hover:bg-rose-600 text-white px-8 py-3 rounded-xl font-bold transition-all shadow-md shadow-rose-200 w-full md:w-auto min-w-[200px]">Nộp bài (+500🪙) 🚀</button>
                     <div id="memory-feedback" class="mt-6 p-4 rounded-xl w-full hidden text-center font-medium"></div>
                 </div>
-
                 <div id="grammar-container" class="hidden flex flex-col w-full">
-                    <div class="flex p-1 bg-gray-100 rounded-xl mb-8 max-w-md mx-auto w-full">
-                        <button id="tab-theory" onclick="playClickSound(); switchGrammarTab('theory')" class="flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm transition-all">📖 Lý Thuyết</button>
-                        <button id="tab-practice" onclick="playClickSound(); switchGrammarTab('practice')" class="flex-1 py-2 rounded-lg text-textGray font-medium text-sm hover:text-primary transition-all">📝 Bài Tập</button>
-                    </div>
-
+                    <div class="flex p-1 bg-gray-100 rounded-xl mb-8 max-w-md mx-auto w-full"><button id="tab-theory" onclick="playClickSound(); switchGrammarTab('theory')" class="flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm transition-all">📖 Lý Thuyết</button><button id="tab-practice" onclick="playClickSound(); switchGrammarTab('practice')" class="flex-1 py-2 rounded-lg text-textGray font-medium text-sm hover:text-primary transition-all">📝 Bài Tập</button></div>
                     <div id="grammar-theory-content" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-
                     <div id="grammar-practice-content" class="hidden flex flex-col items-center w-full max-w-xl mx-auto">
                         <div class="text-sm text-textGray mb-3 font-medium" id="gram-quiz-progress">Câu 1/8</div>
-                        <div class="w-full bg-white rounded-3xl p-8 text-center shadow-sm border border-gray-100 mb-6">
-                            <h3 class="text-2xl font-serif font-bold text-textDark leading-relaxed" id="gram-quiz-question">Question here</h3>
-                        </div>
+                        <div class="w-full bg-white rounded-3xl p-8 text-center shadow-sm border border-gray-100 mb-6"><h3 class="text-2xl font-serif font-bold text-textDark leading-relaxed" id="gram-quiz-question">Question here</h3></div>
                         <div id="gram-quiz-options" class="grid grid-cols-3 gap-3 w-full mb-6"></div>
-
                         <div id="gram-feedback-container" class="w-full hidden mt-2">
                             <div id="gram-result-alert" class="px-5 py-3 rounded-2xl mb-4 text-center font-bold text-lg"></div>
                             <div id="gram-explanation-box" class="bg-blue-50 border border-blue-200 rounded-2xl p-5 slide-down-enter hidden">
-                                <p class="text-sm text-blue-800 font-medium mb-2 flex items-center gap-2">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
-                                    Lý thuyết nhắc nhở:
-                                </p>
+                                <p class="text-sm text-blue-800 font-medium mb-2 flex items-center gap-2"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> Lý thuyết nhắc nhở:</p>
                                 <div id="gram-explanation-content" class="text-sm text-blue-900 bg-white/60 p-4 rounded-xl leading-relaxed"></div>
                                 <button onclick="playClickSound(); nextGrammarQuestion()" class="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white py-2.5 rounded-xl font-medium transition-colors">Tiếp tục thui 🚀</button>
                             </div>
@@ -341,54 +264,35 @@
         </main>
     </div>
 
-    <!-- 6. MODULE GACHA BLINDBOX VIP -->
+    <!-- 6. MODULE GACHA VIP -->
     <div id="blindbox-module" class="fixed inset-0 z-[95] hidden opacity-0 transition-all duration-500 blind-box-bg overflow-y-auto dark-scroll">
         <div class="sticky top-0 z-[100] bg-black/60 backdrop-blur-xl border-b border-white/10 px-6 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <button onclick="playClickSound(); switchView('hub')" class="bg-white/10 hover:bg-white/20 p-2 rounded-full"><svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg></button>
-                <h1 class="font-serif text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-yellow-600">GACHA V.I.P 🎲</h1>
-            </div>
-            <div class="hidden md:flex gap-2 p-1 bg-white/5 rounded-xl">
-                <button onclick="playClickSound(); switchBoxTab('gacha')" id="btab-gacha" class="px-6 py-2 rounded-lg font-bold text-sm bg-primary text-white">Quay Thẻ</button>
-                <button onclick="playClickSound(); switchBoxTab('collection')" id="btab-collection" class="px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white">Kho Đồ</button>
-                <button onclick="playClickSound(); switchBoxTab('auction')" id="btab-auction" class="px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white">Chợ Đấu Giá</button>
-                <button onclick="playClickSound(); switchBoxTab('top')" id="btab-top" class="px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white">BXH</button>
-            </div>
-            <div class="flex gap-4">
-                <div class="bg-yellow-500/20 px-4 py-1.5 rounded-full flex gap-2">🎟️ <span id="bb-tickets" class="font-bold text-yellow-400">0</span></div>
-                <div class="bg-blue-500/20 px-4 py-1.5 rounded-full flex gap-2">🪙 <span id="bb-coins" class="font-bold text-blue-400">0</span></div>
-            </div>
+            <div class="flex items-center gap-4"><button onclick="playClickSound(); switchView('hub')" class="bg-white/10 hover:bg-white/20 p-2 rounded-full"><svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg></button><h1 class="font-serif text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-yellow-600">GACHA V.I.P 🎲</h1></div>
+            <div class="hidden md:flex gap-2 p-1 bg-white/5 rounded-xl"><button onclick="playClickSound(); switchBoxTab('gacha')" id="btab-gacha" class="px-6 py-2 rounded-lg font-bold text-sm bg-primary text-white">Quay Thẻ</button><button onclick="playClickSound(); switchBoxTab('collection')" id="btab-collection" class="px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white">Kho Đồ</button><button onclick="playClickSound(); switchBoxTab('auction')" id="btab-auction" class="px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white">Chợ Đấu Giá</button><button onclick="playClickSound(); switchBoxTab('top')" id="btab-top" class="px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white">BXH</button></div>
+            <div class="flex gap-4"><div class="bg-yellow-500/20 px-4 py-1.5 rounded-full flex gap-2">🎟️ <span id="bb-tickets" class="font-bold text-yellow-400">0</span></div><div class="bg-blue-500/20 px-4 py-1.5 rounded-full flex gap-2">🪙 <span id="bb-coins" class="font-bold text-blue-400">0</span></div></div>
         </div>
-
         <div class="max-w-6xl mx-auto p-6 md:p-10">
             <!-- TAB GACHA -->
             <div id="bb-tab-gacha" class="space-y-8">
-                <div class="text-center mb-10"><h2 class="text-4xl font-bold mb-2">Thử Vận May Của Bạn 🎲</h2><p class="text-gray-400">Tỷ lệ: Thường 55% | Hiếm 28% | Cao Cấp 12% | Siêu Hiếm 4% | Bí Ẩn 1%</p></div>
+                <!-- TỶ LỆ MỚI UPDATE -->
+                <div class="text-center mb-10"><h2 class="text-4xl font-bold mb-2">Thử Vận May Của Bạn 🎲</h2><p class="text-gray-400 font-medium">Tỷ lệ: Thường 60% | Hiếm 30% | Cao Cấp 9% | Siêu Hiếm 0.9% | Bí Ẩn 0.1%</p></div>
                 <div class="gacha-window"><div class="gacha-center-line"></div><div class="gacha-strip" id="gacha-strip"></div></div>
                 <div class="flex flex-col items-center mt-10 gap-4">
                     <div class="flex justify-center gap-4">
                         <button onclick="playClickSound(); rollGacha()" id="btn-roll-1" class="bg-gradient-to-br from-blue-500 to-purple-600 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition-transform shadow-[0_0_30px_rgba(59,130,246,0.4)]">Quay 1 Lần <span class="text-yellow-300">(100 🪙)</span></button>
                         <button onclick="playClickSound(); useFreeTicket()" id="btn-free-ticket" class="hidden bg-gradient-to-br from-yellow-500 to-orange-600 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition-transform shadow-[0_0_30px_rgba(234,179,8,0.4)]">Quay Miễn Phí <span class="text-xs font-normal">(Vé Free)</span></button>
                     </div>
-                    <p class="text-sm text-gray-500" id="pity-counter">Pity Bí Ẩn: 0 / 90</p>
+                    <p class="text-sm text-rose-500 font-bold" id="pity-counter">Pity Bí Ẩn: 0 / 150</p>
                 </div>
             </div>
             <!-- TAB COLLECTION -->
             <div id="bb-tab-collection" class="hidden space-y-6">
-                <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8 bg-white/5 p-4 rounded-2xl">
-                    <div class="col-span-2 md:col-span-1 text-center"><p class="text-xs text-gray-400 mb-1">Tổng tiến độ</p><p class="text-xl font-bold text-primary" id="prog-total">0%</p></div>
-                    <div class="text-center"><p class="text-xs text-gray-400 mb-1">Thường</p><p class="text-sm font-bold text-[#A0A0A0]" id="prog-t">0/10</p></div>
-                    <div class="text-center"><p class="text-xs text-gray-400 mb-1">Hiếm</p><p class="text-sm font-bold text-[#3b82f6]" id="prog-h">0/10</p></div>
-                    <div class="text-center"><p class="text-xs text-gray-400 mb-1">Cao Cấp</p><p class="text-sm font-bold text-[#a855f7]" id="prog-c">0/10</p></div>
-                    <div class="text-center"><p class="text-xs text-gray-400 mb-1">Siêu Hiếm</p><p class="text-sm font-bold text-[#eab308]" id="prog-sh">0/10</p></div>
-                    <div class="text-center"><p class="text-xs text-gray-400 mb-1">Bí Ẩn</p><p class="text-sm font-bold text-[#ef4444]" id="prog-b">0/10</p></div>
-                </div>
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8 bg-white/5 p-4 rounded-2xl"><div class="col-span-2 md:col-span-1 text-center"><p class="text-xs text-gray-400 mb-1">Tổng tiến độ</p><p class="text-xl font-bold text-primary" id="prog-total">0%</p></div><div class="text-center"><p class="text-xs text-gray-400 mb-1">Thường</p><p class="text-sm font-bold text-[#A0A0A0]" id="prog-t">0/10</p></div><div class="text-center"><p class="text-xs text-gray-400 mb-1">Hiếm</p><p class="text-sm font-bold text-[#3b82f6]" id="prog-h">0/10</p></div><div class="text-center"><p class="text-xs text-gray-400 mb-1">Cao Cấp</p><p class="text-sm font-bold text-[#a855f7]" id="prog-c">0/10</p></div><div class="text-center"><p class="text-xs text-gray-400 mb-1">Siêu Hiếm</p><p class="text-sm font-bold text-[#eab308]" id="prog-sh">0/10</p></div><div class="text-center"><p class="text-xs text-gray-400 mb-1">Bí Ẩn</p><p class="text-sm font-bold text-[#ef4444]" id="prog-b">0/10</p></div></div>
                 <div class="flex flex-wrap gap-2 mb-6"><button onclick="playClickSound(); filterCollection('all')" class="px-4 py-1.5 rounded-full bg-white/10 text-sm font-bold">Tất Cả</button><button onclick="playClickSound(); filterCollection('thuong')" class="px-4 py-1.5 rounded-full bg-white/5 border border-[#A0A0A0] text-[#A0A0A0] text-sm font-bold">Thường</button><button onclick="playClickSound(); filterCollection('hiem')" class="px-4 py-1.5 rounded-full bg-white/5 border border-[#3b82f6] text-[#3b82f6] text-sm font-bold">Hiếm</button><button onclick="playClickSound(); filterCollection('caocap')" class="px-4 py-1.5 rounded-full bg-white/5 border border-[#a855f7] text-[#a855f7] text-sm font-bold">Cao Cấp</button><button onclick="playClickSound(); filterCollection('sieuhiem')" class="px-4 py-1.5 rounded-full bg-white/5 border border-[#eab308] text-[#eab308] text-sm font-bold">Siêu Hiếm</button><button onclick="playClickSound(); filterCollection('bian')" class="px-4 py-1.5 rounded-full bg-white/5 border border-[#ef4444] text-[#ef4444] text-sm font-bold">Bí Ẩn</button></div>
                 <div id="collection-grid" class="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-4"></div>
             </div>
-            <!-- TAB AUCTION -->
+            <!-- TAB AUCTION & TOP -->
             <div id="bb-tab-auction" class="hidden"><div class="text-center mb-8"><h2 class="text-3xl font-bold mb-2">Chợ Đen Đấu Giá ⚖️</h2></div><div id="auction-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div></div>
-            <!-- TAB LEADERBOARD -->
             <div id="bb-tab-top" class="hidden max-w-2xl mx-auto"><h2 class="text-3xl font-bold text-center mb-8">Bảng Vàng Sưu Tầm 🏆</h2><div class="bg-white/5 rounded-3xl p-2" id="leaderboard-container"></div></div>
         </div>
     </div>
@@ -397,13 +301,12 @@
         <div id="reveal-particles" class="absolute inset-0 pointer-events-none"></div>
         <div class="relative z-10 w-full max-w-sm flex flex-col items-center" id="card-reveal-content">
             <h3 class="text-4xl font-black uppercase tracking-widest mb-6" id="reveal-rarity-text">RARITY</h3>
-            <div class="card-3d-wrapper w-64 h-96 cursor-pointer" onclick="this.classList.toggle('flipped')">
+            <div class="card-3d-wrapper w-64 h-96 cursor-pointer" onclick="playClickSound(); this.classList.toggle('flipped')">
                 <div class="card-3d-inner w-full h-full relative shadow-[0_0_50px_rgba(0,0,0,0.8)] rounded-xl"><div class="card-back"></div><div class="card-front bg-gray-900 rounded-xl overflow-hidden border-4" id="reveal-card-front"><img src="" id="reveal-img" class="w-full h-full object-cover"><div class="card-overlay" id="reveal-overlay"></div></div></div>
             </div>
             <button onclick="playClickSound(); closeReveal()" class="mt-8 bg-white/20 text-white px-8 py-3 rounded-full font-bold">Thu Thập</button>
         </div>
     </div>
-
 
     <!-- ================= SCRIPTS ================= -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
@@ -411,622 +314,136 @@
 
     <script>
         // 1. FIREBASE CONFIG
-        const firebaseConfig = {
-            apiKey: "AIzaSyAm5PXedBf4HH4OhzHOKJ4_-ESrJNSABYk",
-            authDomain: "bautroi-738c9.firebaseapp.com",
-            projectId: "bautroi-738c9",
-            storageBucket: "bautroi-738c9.firebasestorage.app",
-            messagingSenderId: "233336125295",
-            appId: "1:233336125295:web:806a8dd1f42fe027721a9a",
-            measurementId: "G-TTQHJEZMQG"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        const firebaseConfig = { apiKey: "AIzaSyAm5PXedBf4HH4OhzHOKJ4_-ESrJNSABYk", authDomain: "bautroi-738c9.firebaseapp.com", projectId: "bautroi-738c9", storageBucket: "bautroi-738c9.firebasestorage.app" };
+        firebase.initializeApp(firebaseConfig); const db = firebase.firestore();
 
-        // VARIABLES & AUDIO HELPERS
+        // 2. BIẾN AUDIO & HÀM PLAY SOUND (TRY CATCH AN TOÀN)
         let currentUser = null, userData = { coins: 0, tickets: 0, pity: 0, inventory: {} };
-        const audioBg = document.getElementById('bg-music'), audioClick = document.getElementById('sound-click'), audioTick = document.getElementById('sound-tick'), audioReveal = document.getElementById('sound-reveal'), audioCoin = document.getElementById('sound-coin');
+        const audioBg = document.getElementById('bg-music');
+        const audioClick = document.getElementById('sound-click');
+        const audioTick = document.getElementById('sound-tick');
+        const audioReveal = document.getElementById('sound-reveal');
+        const audioCoin = document.getElementById('sound-coin');
 
-        function playClickSound() { if(audioClick) { audioClick.currentTime = 0; audioClick.play().catch(()=>{}); } }
+        function playClickSound() { 
+            try { if(audioClick) { audioClick.currentTime = 0; let p = audioClick.play(); if (p !== undefined) p.catch(e=>{}); } } catch(e) {} 
+        }
 
-        // BẢN ĐỒ KỶ NIỆM VARIABLES
-        let places = [];
-        let formCurrentTab = 'food';
-        let currentRating = 4;
-        let editingId = null; 
-        let viewingId = null;
-
-        // 2. TỪ VỰNG TIẾNG ANH (Đủ 33 từ đầy đủ)
-        const vocabData = [
-            { en: 'about', type: 'Adverb/Preposition', vi: 'Về cái gì đó' },
-            { en: 'above', type: 'Adverb/Preposition', vi: 'Hơn cái gì đó' },
-            { en: 'across', type: 'Adverb/Preposition', vi: 'Băng qua, Ngang qua' },
-            { en: 'action', type: 'Noun', vi: 'Hành động' },
-            { en: 'actor', type: 'Noun', vi: 'Diễn Viên' },
-            { en: 'actress', type: 'Noun', vi: 'Nữ diễn viên' },
-            { en: 'activity', type: 'Noun', vi: 'Hoạt động' },
-            { en: 'add', type: 'Verb', vi: 'Thêm' },
-            { en: 'address', type: 'Noun', vi: 'Địa chỉ' },
-            { en: 'adult', type: 'Noun', vi: 'Người lớn' },
-            { en: 'advice', type: 'Noun', vi: 'Khuyên bảo' },
-            { en: 'afraid', type: 'Adjective', vi: 'Sợ' },
-            { en: 'after', type: 'Preposition', vi: 'Sau đó' },
-            { en: 'afternoon', type: 'Noun', vi: 'Buổi chiều' },
-            { en: 'again', type: 'Adverb', vi: 'Lặp lại' },
-            { en: 'age', type: 'Noun', vi: 'Tuổi' },
-            { en: 'ago', type: 'Adverb', vi: 'Trước kia' },
-            { en: 'agree', type: 'Verb', vi: 'Đồng ý' },
-            { en: 'air', type: 'Noun', vi: 'Không khí' },
-            { en: 'airport', type: 'Noun', vi: 'Sân bay' },
-            { en: 'all', type: 'Determiner/Pronoun', vi: 'Tất cả' },
-            { en: 'also', type: 'Adverb', vi: 'Mà còn' },
-            { en: 'always', type: 'Adverb', vi: 'Luôn luôn' },
-            { en: 'amazing', type: 'Adjective', vi: 'Ngạc nhiên' },
-            { en: 'an', type: 'Indefinite article', vi: 'Một' },
-            { en: 'and', type: 'Conjunction', vi: 'Và' },
-            { en: 'angry', type: 'Adjective', vi: 'Giận dữ' },
-            { en: 'animal', type: 'Noun', vi: 'Động vật' },
-            { en: 'another', type: 'Determiner/Pronoun', vi: 'Khác' },
-            { en: 'answer', type: 'Noun/Verb', vi: 'Trả lời' },
-            { en: 'any', type: 'Determiner/Pronoun', vi: 'Bất kì' },
-            { en: 'anyone', type: 'Pronoun', vi: 'Bất kì ai' },
-            { en: 'anything', type: 'Pronoun', vi: 'Bất kì điều gì' }
-        ];
-
-        // NGỮ PHÁP TIẾNG ANH
-        const grammarRules = {
-            "at": { title: "Giới từ AT", text: "Sử dụng 'at' với các tính từ như good/bad/amazing/brilliant/terrible... để nói về kỹ năng và khả năng.<br><br><b>Ví dụ:</b><br>- He's really good at English.<br>- I'm not very good at drawing.", color: "bg-blue-100 text-blue-800" },
-            "about": { title: "Giới từ ABOUT", text: "Sử dụng 'about' với các tính từ chỉ cảm xúc (angry/excited/nervous/worried...) để giải thích nguyên nhân gây ra cảm xúc đó.<br><br><b>Ví dụ:</b><br>- I'm angry about the decision.<br>- She's excited about the new job.", color: "bg-orange-100 text-orange-800" },
-            "of": { title: "Giới từ OF", text: "Đôi khi dùng 'of' để diễn đạt cảm giác (afraid/frightened/scared/proud...).<br><br><b>Ví dụ:</b><br>- She was afraid of telling her mum.<br>- You should be proud of your progress.", color: "bg-purple-100 text-purple-800" },
-            "to": { title: "Giới từ TO", text: "Dùng 'to' để thể hiện mối liên hệ (married/addicted/allergic/similar) hoặc hành vi đối với người khác (friendly/nice/polite/rude).<br><br><b>Ví dụ:</b><br>- I'm addicted to my phone.<br>- He is always polite to everyone.", color: "bg-pink-100 text-pink-800" },
-            "for": { title: "Giới từ FOR", text: "Dùng với good/bad/famous/responsible...<br><br><b>Ví dụ:</b><br>- Exercise is good for you.<br>- I'm responsible for the financial side.", color: "bg-green-100 text-green-800" },
-            "in": { title: "Giới từ IN", text: "Dùng với interested/experienced/involved...<br><br><b>Ví dụ:</b><br>- She's interested in the project.<br>- They want someone who's experienced in design.", color: "bg-yellow-100 text-yellow-800" }
-        };
-
-        const grammarQuestions = [
-            { q: "I'm really proud ___ you!", options: ["Of", "To", "With"], ans: "Of", ruleKey: "of" },
-            { q: "She's responsible ___ health and safety.", options: ["For", "In", "Of"], ans: "For", ruleKey: "for" },
-            { q: "He's allergic ___ seafood.", options: ["Of", "To", "With"], ans: "To", ruleKey: "to" },
-            { q: "They're interested ___ our project.", options: ["About", "In", "On"], ans: "In", ruleKey: "in" },
-            { q: "I'm addicted ___ that new series on Channel 4.", options: ["Of", "To", "With"], ans: "To", ruleKey: "to" },
-            { q: "Sugar is bad ___ your teeth.", options: ["At", "For", "Of"], ans: "For", ruleKey: "for" },
-            { q: "I'm really excited ___ the new house.", options: ["About", "Of", "To"], ans: "About", ruleKey: "about" },
-            { q: "My boss is terrible ___ communicating.", options: ["At", "In", "To"], ans: "At", ruleKey: "at" }
-        ];
-
-        // 3. G-DRAGON PLAYLIST (Đủ 6 Bài Tracks)
-        const gdSongs = [
-            { title: "G-Dragon - Track 1", url: "https://files.catbox.moe/ov2hwx.mp4" },
-            { title: "G-Dragon - Track 2", url: "https://files.catbox.moe/3v0jic.mp4" },
-            { title: "G-Dragon - Track 3", url: "https://files.catbox.moe/jvnizl.mp4" },
-            { title: "G-Dragon - Track 4", url: "https://files.catbox.moe/zrocb8.mp4" },
-            { title: "G-Dragon - Track 5", url: "https://files.catbox.moe/8u37vc.mp4" },
-            { title: "G-Dragon - Track 6", url: "https://files.catbox.moe/r6ssam.mp4" }
-        ];
+        // BIẾN DATA
+        let places = []; let formCurrentTab = 'food'; let currentRating = 4; let editingId = null; let viewingId = null;
+        const vocabData = [ {en:'about',type:'Adverb/Preposition',vi:'Về cái gì đó'}, {en:'above',type:'Adverb/Preposition',vi:'Hơn cái gì đó'}, {en:'across',type:'Adverb/Preposition',vi:'Băng qua, Ngang qua'}, {en:'action',type:'Noun',vi:'Hành động'}, {en:'actor',type:'Noun',vi:'Diễn Viên'}, {en:'actress',type:'Noun',vi:'Nữ diễn viên'}, {en:'activity',type:'Noun',vi:'Hoạt động'}, {en:'add',type:'Verb',vi:'Thêm'}, {en:'address',type:'Noun',vi:'Địa chỉ'}, {en:'adult',type:'Noun',vi:'Người lớn'}, {en:'advice',type:'Noun',vi:'Khuyên bảo'}, {en:'afraid',type:'Adjective',vi:'Sợ'}, {en:'after',type:'Preposition',vi:'Sau đó'}, {en:'afternoon',type:'Noun',vi:'Buổi chiều'}, {en:'again',type:'Adverb',vi:'Lặp lại'}, {en:'age',type:'Noun',vi:'Tuổi'}, {en:'ago',type:'Adverb',vi:'Trước kia'}, {en:'agree',type:'Verb',vi:'Đồng ý'}, {en:'air',type:'Noun',vi:'Không khí'}, {en:'airport',type:'Noun',vi:'Sân bay'}, {en:'all',type:'Determiner/Pronoun',vi:'Tất cả'}, {en:'also',type:'Adverb',vi:'Mà còn'}, {en:'always',type:'Adverb',vi:'Luôn luôn'}, {en:'amazing',type:'Adjective',vi:'Ngạc nhiên'}, {en:'an',type:'Indefinite article',vi:'Một'}, {en:'and',type:'Conjunction',vi:'Và'}, {en:'angry',type:'Adjective',vi:'Giận dữ'}, {en:'animal',type:'Noun',vi:'Động vật'}, {en:'another',type:'Determiner/Pronoun',vi:'Khác'}, {en:'answer',type:'Noun/Verb',vi:'Trả lời'}, {en:'any',type:'Determiner/Pronoun',vi:'Bất kì'}, {en:'anyone',type:'Pronoun',vi:'Bất kì ai'}, {en:'anything',type:'Pronoun',vi:'Bất kì điều gì'} ];
+        const grammarRules = { "at": {title: "Giới từ AT", text: "Dùng 'at' với good/bad/amazing... Ví dụ: He's good at English.", color: "bg-blue-100 text-blue-800"}, "about": {title: "Giới từ ABOUT", text: "Dùng với angry/excited/worried... Ví dụ: I'm angry about the decision.", color: "bg-orange-100 text-orange-800"}, "of": {title: "Giới từ OF", text: "Dùng với afraid/scared/proud... Ví dụ: You should be proud of your progress.", color: "bg-purple-100 text-purple-800"}, "to": {title: "Giới từ TO", text: "Dùng với married/addicted/polite... Ví dụ: I'm addicted to my phone.", color: "bg-pink-100 text-pink-800"}, "for": {title: "Giới từ FOR", text: "Dùng với good/bad/responsible... Ví dụ: Exercise is good for you.", color: "bg-green-100 text-green-800"}, "in": {title: "Giới từ IN", text: "Dùng với interested/experienced... Ví dụ: She's interested in the project.", color: "bg-yellow-100 text-yellow-800"} };
+        const grammarQuestions = [ {q: "I'm really proud ___ you!", options: ["Of","To","With"], ans: "Of", ruleKey: "of"}, {q: "She's responsible ___ health and safety.", options: ["For","In","Of"], ans: "For", ruleKey: "for"}, {q: "He's allergic ___ seafood.", options: ["Of","To","With"], ans: "To", ruleKey: "to"}, {q: "They're interested ___ our project.", options: ["About","In","On"], ans: "In", ruleKey: "in"}, {q: "I'm addicted ___ that new series.", options: ["Of","To","With"], ans: "To", ruleKey: "to"}, {q: "Sugar is bad ___ your teeth.", options: ["At","For","Of"], ans: "For", ruleKey: "for"}, {q: "I'm really excited ___ the new house.", options: ["About","Of","To"], ans: "About", ruleKey: "about"}, {q: "My boss is terrible ___ communicating.", options: ["At","In","To"], ans: "At", ruleKey: "at"} ];
+        const gdSongs = [ {title:"G-Dragon - Track 1", url:"https://files.catbox.moe/ov2hwx.mp4"}, {title:"G-Dragon - Track 2", url:"https://files.catbox.moe/3v0jic.mp4"}, {title:"G-Dragon - Track 3", url:"https://files.catbox.moe/jvnizl.mp4"}, {title:"G-Dragon - Track 4", url:"https://files.catbox.moe/zrocb8.mp4"}, {title:"G-Dragon - Track 5", url:"https://files.catbox.moe/8u37vc.mp4"}, {title:"G-Dragon - Track 6", url:"https://files.catbox.moe/r6ssam.mp4"} ];
         
-        let currentGDSongIndex = 0; const gdAudio = new Audio();
-        let studyState = { mode: '', currentIndex: 0, shuffledData: [] };
-        let gramState = { currentQ: 0 };
-
-        // 4. GACHA CARDS DATA
+        // TỶ LỆ MỚI (Bí ẩn 0.1%, Siêu hiếm 0.9%, Cao cấp 9%, Hiếm 30%, Thường 60%)
         const RARITIES = [
-            { id: 'thuong', name: 'Thường', prob: 0.55, color: '#A0A0A0', filePrefix: 'c', path: 'thuong', glowClass: 'card-thuong' },
-            { id: 'hiem', name: 'Hiếm', prob: 0.28, color: '#3b82f6', filePrefix: 't', path: 'hiem', glowClass: 'card-hiem' },
-            { id: 'caocap', name: 'Cao Cấp', prob: 0.12, color: '#a855f7', filePrefix: 'r', path: 'caocap', glowClass: 'card-caocap' },
-            { id: 'sieuhiem', name: 'Siêu Hiếm', prob: 0.04, color: '#eab308', filePrefix: 'k', path: 'sieuhiem', glowClass: 'card-sieuhiem' },
-            { id: 'bian', name: 'Bí Ẩn', prob: 0.01, color: '#ef4444', filePrefix: 'g', path: 'bian', glowClass: 'card-bian' }
+            { id: 'thuong', name: 'Thường', prob: 0.60, color: '#A0A0A0', filePrefix: 'c', path: 'thuong', glowClass: 'card-thuong' },
+            { id: 'hiem', name: 'Hiếm', prob: 0.30, color: '#3b82f6', filePrefix: 't', path: 'hiem', glowClass: 'card-hiem' },
+            { id: 'caocap', name: 'Cao Cấp', prob: 0.09, color: '#a855f7', filePrefix: 'r', path: 'caocap', glowClass: 'card-caocap' },
+            { id: 'sieuhiem', name: 'Siêu Hiếm', prob: 0.009, color: '#eab308', filePrefix: 'k', path: 'sieuhiem', glowClass: 'card-sieuhiem' },
+            { id: 'bian', name: 'Bí Ẩn', prob: 0.001, color: '#ef4444', filePrefix: 'g', path: 'bian', glowClass: 'card-bian' }
         ];
-        let ALL_CARDS = [];
-        RARITIES.forEach(r => { for(let i=1; i<=10; i++) ALL_CARDS.push({ id: `${r.id}_${i}`, rarity: r.id, name: `${r.name} #${i}`, img: `${r.path}/${r.filePrefix}${i}.png`, rarityData: r }); });
+        let ALL_CARDS = []; RARITIES.forEach(r => { for(let i=1; i<=10; i++) ALL_CARDS.push({ id: `${r.id}_${i}`, rarity: r.id, name: `${r.name} #${i}`, img: `${r.path}/${r.filePrefix}${i}.png`, rarityData: r }); });
 
-        // 5. DOM LOADED & INITIALIZATION
+        let currentGDSongIndex = 0; const gdAudio = new Audio(); let studyState = { mode: '', currentIndex: 0, shuffledData: [] }; let gramState = { currentQ: 0 };
+
+        // 3. INIT BẮT ĐẦU VÀ NÚT TẮT NHẠC XỊN CHỐNG LỖI
         document.addEventListener('DOMContentLoaded', () => {
-            const video = document.getElementById('bg-video');
-            const startBtn = document.getElementById('start-btn');
-            
-            function showStartBubble() {
-                startBtn.classList.remove('scale-0', 'opacity-0');
-                startBtn.classList.add('scale-100', 'opacity-100');
-            }
-            if(video) { video.addEventListener('ended', showStartBubble); video.addEventListener('error', showStartBubble); }
-            setTimeout(showStartBubble, 2000);
+            const video = document.getElementById('bg-video'); const startBtn = document.getElementById('start-btn');
+            function showStartBubble() { startBtn.classList.remove('scale-0', 'opacity-0'); startBtn.classList.add('scale-100', 'opacity-100'); }
+            if(video) { video.addEventListener('ended', showStartBubble); video.addEventListener('error', showStartBubble); } setTimeout(showStartBubble, 2000);
 
             startBtn.addEventListener('click', () => {
-                startBtn.style.animation = 'none';
-                startBtn.classList.replace('scale-100', 'scale-150');
-                startBtn.classList.replace('opacity-100', 'opacity-0');
-                
+                startBtn.style.animation = 'none'; startBtn.classList.replace('scale-100', 'scale-150'); startBtn.classList.replace('opacity-100', 'opacity-0');
                 audioBg.volume = 0.4; audioBg.play().catch(e => {});
-                
-                document.getElementById('music-toggle').classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
-                document.getElementById('music-toggle').classList.add('opacity-100', 'translate-y-0');
-
-                setTimeout(() => {
-                    document.getElementById('intro-screen').style.opacity = '0';
-                    setTimeout(() => {
-                        document.getElementById('intro-screen').style.display = 'none';
-                        document.getElementById('body').classList.remove('no-scroll');
-                        switchView('hub');
-                    }, 500);
-                }, 300);
+                document.getElementById('music-toggle').classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4'); document.getElementById('music-toggle').classList.add('opacity-100', 'translate-y-0');
+                setTimeout(() => { document.getElementById('intro-screen').style.opacity = '0'; setTimeout(() => { document.getElementById('intro-screen').style.display = 'none'; document.getElementById('body').classList.remove('no-scroll'); switchView('hub'); }, 500); }, 300);
             });
 
-            document.getElementById('music-toggle').addEventListener('click', () => {
-                if(!gdAudio.paused) {
-                    gdAudio.pause();
-                    document.getElementById('gd-icon-play').classList.remove('hidden');
-                    document.getElementById('gd-icon-pause').classList.add('hidden');
-                    document.getElementById('record-disk').style.transform = 'rotate(0deg)'; 
-                }
-                if (audioBg.paused) {
-                    audioBg.play();
-                    document.getElementById('icon-music-play').classList.remove('hidden');
-                    document.getElementById('icon-music-pause').classList.add('hidden');
-                } else {
-                    audioBg.pause();
-                    document.getElementById('icon-music-play').classList.add('hidden');
-                    document.getElementById('icon-music-pause').classList.remove('hidden');
-                }
-            });
-
-            // Load GD Playlist Items
             const playlistContainer = document.getElementById('gd-playlist-container');
             gdSongs.forEach((song, index) => {
-                playlistContainer.innerHTML += `
-                    <li onclick="playClickSound(); playGDSong(${index})" class="group flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 cursor-pointer transition-colors border border-transparent hover:border-white/10">
-                        <div class="w-10 h-10 rounded-lg bg-vipDark flex items-center justify-center border border-[#E63946]/50 shadow-inner group-hover:bg-[#E63946] transition-colors"><svg class="w-4 h-4 text-[#E63946] group-hover:text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.536l8-1.6V12.114A4.369 4.369 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"></path></svg></div>
-                        <div><p class="text-white font-medium text-sm">${song.title}</p><p class="text-white/40 text-xs">V.I.P Exclusive</p></div>
-                    </li>`;
+                playlistContainer.innerHTML += `<li onclick="playClickSound(); playGDSong(${index})" class="group flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 cursor-pointer transition-colors border border-transparent hover:border-white/10"><div class="w-10 h-10 rounded-lg bg-vipDark flex items-center justify-center border border-[#E63946]/50 shadow-inner group-hover:bg-[#E63946] transition-colors"><svg class="w-4 h-4 text-[#E63946] group-hover:text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.536l8-1.6V12.114A4.369 4.369 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"></path></svg></div><div><p class="text-white font-medium text-sm">${song.title}</p><p class="text-white/40 text-xs">V.I.P Exclusive</p></div></li>`;
             });
             gdAudio.addEventListener('ended', nextGDSong);
 
-            // Fetch Places Realtime
-            db.collection("places").orderBy("createdAt", "desc").onSnapshot((snap) => {
-                places = []; snap.forEach((doc) => { places.push({ id: doc.id, ...doc.data() }); });
-                renderPlaces(); 
-            });
+            db.collection("places").orderBy("createdAt", "desc").onSnapshot((snap) => { places = []; snap.forEach((doc) => { places.push({ id: doc.id, ...doc.data() }); }); renderPlaces(); });
         });
 
-        // 6. LOGIN & USER SYSTEM
-        function handleLogin() {
-            const user = document.getElementById('login-user').value.trim().toLowerCase();
-            const pass = document.getElementById('login-pass').value.trim();
-            const err = document.getElementById('login-error');
-            const btn = document.getElementById('login-btn');
-            
-            if((user === 'luuthiethoa' && pass === '123') || (user === 'hamy' && pass === '123')) {
-                err.classList.add('hidden'); btn.innerText = "Đang kết nối..."; btn.classList.add('opacity-50', 'pointer-events-none');
-                currentUser = user;
-                initUserSystem();
-            } else { err.classList.remove('hidden'); }
+        // Hàm tắt mở nhạc đồng nhất
+        function toggleMainMusic() {
+            playClickSound();
+            if(!gdAudio.paused) {
+                gdAudio.pause();
+                document.getElementById('gd-icon-play').classList.remove('hidden'); document.getElementById('gd-icon-pause').classList.add('hidden');
+                document.getElementById('record-disk').style.transform = 'rotate(0deg)'; 
+            }
+            if (audioBg.paused) {
+                audioBg.play().catch(()=>{});
+                document.getElementById('icon-music-play').classList.remove('hidden'); document.getElementById('icon-music-pause').classList.add('hidden');
+            } else {
+                audioBg.pause();
+                document.getElementById('icon-music-play').classList.add('hidden'); document.getElementById('icon-music-pause').classList.remove('hidden');
+            }
         }
 
-        function initUserSystem() {
-            const userRef = db.collection('users').doc(currentUser);
-            userRef.get().then((doc) => {
-                if (doc.exists) { userData = doc.data(); if(!userData.inventory) userData.inventory = {}; checkDailyLogin(); }
-                else { userData = { coins: 500, tickets: 1, pity: 0, inventory: {}, lastLogin: new Date().toDateString() }; userRef.set(userData); alert("Chào mừng! Tặng bạn 500 Coin & 1 vé quay 🎉"); }
-                
-                updateUI();
-                userRef.onSnapshot((doc) => { if(doc.exists) { userData = doc.data(); updateUI(); updateCollectionGrid(); updateLeaderboard(); } });
+        function handleLogin() { const u = document.getElementById('login-user').value.trim().toLowerCase(), p = document.getElementById('login-pass').value.trim(), err = document.getElementById('login-error'), btn = document.getElementById('login-btn'); if((u === 'luuthiethoa' && p === '123') || (u === 'hamy' && p === '123')) { err.classList.add('hidden'); btn.innerText = "Đang kết nối..."; btn.classList.add('opacity-50', 'pointer-events-none'); currentUser = u; initUserSystem(); } else { err.classList.remove('hidden'); } }
+        function initUserSystem() { db.collection('users').doc(currentUser).get().then(doc => { if(doc.exists) { userData = doc.data(); if(!userData.inventory) userData.inventory={}; checkDailyLogin(); } else { userData = {coins:500, tickets:1, pity:0, inventory:{}, lastLogin: new Date().toDateString()}; db.collection('users').doc(currentUser).set(userData); alert("Tặng bạn 500 Coin & 1 vé quay 🎉"); } updateUI(); db.collection('users').doc(currentUser).onSnapshot(doc => { if(doc.exists) { userData = doc.data(); updateUI(); updateCollectionGrid(); updateLeaderboard(); } }); document.getElementById('login-screen').classList.add('hidden'); document.getElementById('intro-screen').classList.remove('hidden'); setTimeout(()=>document.getElementById('intro-screen').classList.remove('opacity-0'),100); }); }
+        function checkDailyLogin() { const t = new Date().toDateString(); if(userData.lastLogin !== t) { userData.coins+=200; userData.tickets+=1; userData.lastLogin=t; db.collection('users').doc(currentUser).update(userData); alert("🎁 Điểm danh: +200 Coin & +1 Vé quay!"); } }
+        function updateUI() { document.getElementById('hub-username').innerText = currentUser === 'luuthiethoa' ? 'Lưu Thiết Hòa' : 'Hà My'; document.getElementById('hub-avatar').innerText = currentUser.charAt(0).toUpperCase(); document.getElementById('hub-coins').innerText = userData.coins; document.getElementById('bb-coins').innerText = userData.coins; document.getElementById('bb-tickets').innerText = userData.tickets; document.getElementById('pity-counter').innerText = `Pity Bí Ẩn: ${userData.pity} / 150`; document.getElementById('hub-cards').innerText = `${Object.keys(userData.inventory).length} / 50`; document.getElementById('btn-free-ticket').classList[userData.tickets>0?'remove':'add']('hidden'); }
 
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('intro-screen').classList.remove('hidden');
-                setTimeout(() => document.getElementById('intro-screen').classList.remove('opacity-0'), 100);
-            }).catch(e => { alert("Lỗi kết nối Firebase!"); btn.innerText="Vào Không Gian"; btn.classList.remove('opacity-50', 'pointer-events-none'); });
-        }
-
-        function checkDailyLogin() {
-            const today = new Date().toDateString();
-            if(userData.lastLogin !== today) { userData.coins += 200; userData.tickets += 1; userData.lastLogin = today; db.collection('users').doc(currentUser).update(userData); alert("🎁 Điểm danh hôm nay: +200 Coin & +1 Vé quay!"); }
-        }
-
-        function updateUI() {
-            document.getElementById('hub-username').innerText = currentUser === 'luuthiethoa' ? 'Lưu Thiết Hòa' : 'Hà My';
-            document.getElementById('hub-avatar').innerText = currentUser.charAt(0).toUpperCase();
-            document.getElementById('hub-coins').innerText = userData.coins;
-            document.getElementById('bb-coins').innerText = userData.coins;
-            document.getElementById('bb-tickets').innerText = userData.tickets;
-            document.getElementById('pity-counter').innerText = `Pity Bí Ẩn: ${userData.pity} / 90`;
-            document.getElementById('hub-cards').innerText = `${Object.keys(userData.inventory).length} / 50`;
-            document.getElementById('btn-free-ticket').classList[userData.tickets > 0 ? 'remove' : 'add']('hidden');
-        }
-
-        // 7. CHUYỂN MÀN HÌNH CHÍNH (SWITCH VIEW)
         function switchView(viewName) {
             const screens = ['hub-screen', 'places-module', 'study-module', 'music-module', 'blindbox-module'];
-            const targetId = viewName==='hub' ? 'hub-screen' : viewName==='places' ? 'places-module' : viewName==='study' ? 'study-module' : viewName==='music' ? 'music-module' : 'blindbox-module';
-
-            screens.forEach(id => {
-                const el = document.getElementById(id);
-                if(el && id !== targetId) { el.classList.add('opacity-0', 'scale-95'); setTimeout(() => el.classList.add('hidden'), 300); }
-            });
-
-            setTimeout(() => {
-                const target = document.getElementById(targetId);
-                if(target) { target.classList.remove('hidden'); void target.offsetWidth; target.classList.remove('opacity-0', 'scale-95'); }
-                if(viewName === 'blindbox') updateCollectionGrid();
-            }, 300);
+            const targetId = viewName==='hub'?'hub-screen':viewName==='places'?'places-module':viewName==='study'?'study-module':viewName==='music'?'music-module':'blindbox-module';
+            screens.forEach(id => { const el = document.getElementById(id); if(el && id !== targetId) { el.classList.add('opacity-0', 'scale-95'); setTimeout(() => el.classList.add('hidden'), 300); } });
+            setTimeout(() => { const target = document.getElementById(targetId); if(target) { target.classList.remove('hidden'); void target.offsetWidth; target.classList.remove('opacity-0', 'scale-95'); } if(viewName === 'blindbox') updateCollectionGrid(); }, 300);
         }
 
-        // 8. BẢN ĐỒ KỶ NIỆM LOGIC (FULL MODALS & FUNCTIONS)
-        function renderPlaces() {
-            const grid = document.getElementById('places-grid');
-            if (!grid) return;
-            grid.innerHTML = '';
-            if (places.length === 0) { grid.innerHTML = `<div class="col-span-full text-center py-12"><p class="text-textGray">Chưa có địa điểm nào. Hãy thêm địa điểm đầu tiên nhé! ☁️</p></div>`; return; }
+        // BẢN ĐỒ KỶ NIỆM MODALS
+        function renderPlaces() { const grid = document.getElementById('places-grid'); if (!grid) return; grid.innerHTML = ''; if (places.length === 0) { grid.innerHTML = `<div class="col-span-full text-center py-12"><p class="text-textGray">Chưa có địa điểm nào ☁️</p></div>`; return; } places.forEach(p => { const starsHTML = Array.from({length: 5}, (_, i) => `<svg class="w-4 h-4 ${i < p.rating ? 'text-yellow-400' : 'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`).join(''); grid.innerHTML += `<div onclick="playClickSound(); openViewModal('${p.id}')" class="bubble-card glass-card rounded-3xl overflow-hidden flex flex-col h-full border border-white/60"><div class="h-48 bg-gray-200 relative overflow-hidden"><img src="${p.image || 'https://i.postimg.cc/mD8zQxGj/placeholder.png'}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"><div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold ${p.visited ? 'text-emerald-600' : 'text-primary'} shadow-sm">${p.visited ? '🌸 Đã đi' : '📌 Sẽ đi'}</div></div><div class="p-5 flex-1 flex flex-col justify-between"><div><h3 class="font-serif font-bold text-xl text-textDark mb-1">${p.name}</h3><p class="text-xs text-textGray flex items-center gap-1 mb-3">📍 ${p.address || 'Chưa cập nhật'}</p></div><div class="flex items-center justify-between border-t border-gray-100 pt-3"><span class="text-xs font-medium bg-accent/50 text-textDark px-2.5 py-1 rounded-lg">${p.type || 'Địa điểm'}</span><div class="flex items-center gap-0.5">${starsHTML}</div></div></div></div>`; }); }
+        function openFormModal(id=null) { editingId=id; const over=document.getElementById('form-modal-overlay'), cont=document.getElementById('form-modal-content'); over.classList.remove('hidden'); over.classList.add('flex'); cont.classList.remove('modal-leave','modal-leave-active'); cont.classList.add('modal-enter','modal-enter-active'); if(id) { const p=places.find(x=>x.id===id); document.getElementById('form-title').innerText="Sửa kỷ niệm 📝"; document.getElementById('input-name').value=p.name||''; document.getElementById('input-address').value=p.address||''; document.getElementById('input-visited').value=p.visited?"true":"false"; setRating(p.rating||4); document.getElementById('input-pros').value=p.pros||''; document.getElementById('input-cons').value=p.cons||''; document.getElementById('input-image').value=p.image||''; document.getElementById('input-menu').value=p.menu||''; switchFormTab(p.category||'food'); } else { document.getElementById('form-title').innerText="Lưu kỷ niệm mới ☁️"; document.getElementById('add-form').reset(); setRating(4); switchFormTab('food'); } toggleRating(); }
+        function closeFormModal() { const c=document.getElementById('form-modal-content'); c.classList.add('modal-leave-active'); setTimeout(()=>{ document.getElementById('form-modal-overlay').classList.add('hidden'); document.getElementById('form-modal-overlay').classList.remove('flex'); c.classList.remove('modal-leave-active'); }, 200); }
+        function switchFormTab(tab) { formCurrentTab=tab; document.getElementById('tab-food').className=tab==='food'?"flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm":"flex-1 py-2 rounded-lg text-textGray font-medium text-sm"; document.getElementById('tab-homestay').className=tab==='homestay'?"flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm":"flex-1 py-2 rounded-lg text-textGray font-medium text-sm"; document.getElementById('form-food-fields').classList[tab==='food'?'remove':'add']('hidden'); document.getElementById('form-homestay-fields').classList[tab==='homestay'?'remove':'add']('hidden'); }
+        function setRating(r) { currentRating=r; document.querySelectorAll('#star-group .star').forEach((s,idx)=>s.classList[idx<r?'add':'remove']('active')); }
+        function toggleRating() { const v=document.getElementById('input-visited').value==='true'; document.getElementById('rating-container').style.display=v?'block':'none'; document.getElementById('review-details').style.display=v?'block':'none'; }
+        function handleFormSubmit(e) { e.preventDefault(); const n=document.getElementById('input-name').value.trim(), a=document.getElementById('input-address').value.trim(), v=document.getElementById('input-visited').value==='true', p=document.getElementById('input-pros').value.trim(), c=document.getElementById('input-cons').value.trim(), img=document.getElementById('input-image').value.trim(), m=document.getElementById('input-menu').value.trim(), type=formCurrentTab==='food'?document.getElementById('input-food-type').value:document.getElementById('input-home-type').value, ex=formCurrentTab==='food'?document.getElementById('input-format').value:document.getElementById('input-price').value.trim(); const data={name:n, address:a, visited:v, rating:v?currentRating:0, pros:p, cons:c, image:img, menu:m, category:formCurrentTab, type, extra:ex, createdAt:firebase.firestore.FieldValue.serverTimestamp()}; if(editingId) { db.collection("places").doc(editingId).update(data).then(()=>{ closeFormModal(); if(viewingId) openViewModal(editingId); }); } else { db.collection("places").add(data).then(()=>closeFormModal()); } }
+        function openViewModal(id) { viewingId=id; const p=places.find(x=>x.id===id); if(!p) return; const o=document.getElementById('view-modal-overlay'); o.classList.remove('hidden'); o.classList.add('flex'); document.getElementById('view-image').src=p.image||'https://i.postimg.cc/mD8zQxGj/placeholder.png'; document.getElementById('view-name').innerText=p.name; document.getElementById('view-address').innerText=`📍 ${p.address||'Chưa cập nhật'}`; document.getElementById('view-status-badge').innerHTML=p.visited?'<span class="text-emerald-600">🌸 Đã đi rùi</span>':'<span class="text-primary">📌 Sẽ đi</span>'; document.getElementById('view-type').innerText=p.type||'Khác'; document.getElementById('view-extra-label').innerText=p.category==='food'?'Hình thức':'Giá cả'; document.getElementById('view-extra-value').innerText=p.extra||'Không rõ'; document.getElementById('view-stars').innerHTML=Array.from({length:5},(_,i)=>`<svg class="w-4 h-4 ${i<(p.rating||0)?'text-yellow-400':'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`).join(''); if(p.visited&&(p.pros||p.cons)) { document.getElementById('view-pros-cons').classList.remove('hidden'); document.getElementById('view-pros-container').classList[p.pros?'remove':'add']('hidden'); document.getElementById('view-pros').innerText=p.pros||''; document.getElementById('view-cons-container').classList[p.cons?'remove':'add']('hidden'); document.getElementById('view-cons').innerText=p.cons||''; } else document.getElementById('view-pros-cons').classList.add('hidden'); if(p.menu) { document.getElementById('view-menu-container').classList.remove('hidden'); document.getElementById('view-menu-image').src=p.menu; } else document.getElementById('view-menu-container').classList.add('hidden'); }
+        function closeViewModal() { document.getElementById('view-modal-overlay').classList.add('hidden'); document.getElementById('view-modal-overlay').classList.remove('flex'); viewingId=null; } function editCurrentPlace() { if(viewingId){ closeViewModal(); openFormModal(viewingId); } } function deleteCurrentPlace() { if(viewingId&&confirm("Xóa địa điểm này?")) db.collection("places").doc(viewingId).delete().then(()=>closeViewModal()); }
 
-            places.forEach(place => {
-                const starsHTML = Array.from({length: 5}, (_, i) => `<svg class="w-4 h-4 ${i < place.rating ? 'text-yellow-400' : 'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`).join('');
-                
-                grid.innerHTML += `
-                    <div onclick="playClickSound(); openViewModal('${place.id}')" class="bubble-card glass-card rounded-3xl overflow-hidden flex flex-col h-full border border-white/60">
-                        <div class="h-48 bg-gray-200 relative overflow-hidden"><img src="${place.image || 'https://i.postimg.cc/mD8zQxGj/placeholder.png'}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"><div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold ${place.visited ? 'text-emerald-600' : 'text-primary'} shadow-sm">${place.visited ? '🌸 Đã đi rùi' : '📌 Sẽ đi'}</div></div>
-                        <div class="p-5 flex-1 flex flex-col justify-between">
-                            <div><h3 class="font-serif font-bold text-xl text-textDark mb-1">${place.name}</h3><p class="text-xs text-textGray flex items-center gap-1 mb-3">📍 ${place.address || 'Chưa có địa chỉ'}</p></div>
-                            <div class="flex items-center justify-between border-t border-gray-100 pt-3"><span class="text-xs font-medium bg-accent/50 text-textDark px-2.5 py-1 rounded-lg">${place.type || 'Địa điểm'}</span><div class="flex items-center gap-0.5">${starsHTML}</div></div>
-                        </div>
-                    </div>`;
-            });
-        }
-
-        function openFormModal(editId = null) {
-            editingId = editId;
-            const overlay = document.getElementById('form-modal-overlay');
-            const content = document.getElementById('form-modal-content');
-            overlay.classList.remove('hidden'); overlay.classList.add('flex');
-            content.classList.remove('modal-leave', 'modal-leave-active'); content.classList.add('modal-enter', 'modal-enter-active');
-            
-            if(editId) {
-                const p = places.find(x => x.id === editId);
-                document.getElementById('form-title').innerText = "Sửa kỷ niệm 📝";
-                document.getElementById('input-name').value = p.name || '';
-                document.getElementById('input-address').value = p.address || '';
-                document.getElementById('input-visited').value = p.visited ? "true" : "false";
-                setRating(p.rating || 4);
-                document.getElementById('input-pros').value = p.pros || '';
-                document.getElementById('input-cons').value = p.cons || '';
-                document.getElementById('input-image').value = p.image || '';
-                document.getElementById('input-menu').value = p.menu || '';
-                switchFormTab(p.category || 'food');
-            } else {
-                document.getElementById('form-title').innerText = "Lưu lại một kỷ niệm ☁️";
-                document.getElementById('add-form').reset();
-                setRating(4); switchFormTab('food');
-            }
-            toggleRating();
-        }
-
-        function closeFormModal() {
-            const content = document.getElementById('form-modal-content');
-            content.classList.add('modal-leave-active');
-            setTimeout(() => {
-                document.getElementById('form-modal-overlay').classList.add('hidden');
-                document.getElementById('form-modal-overlay').classList.remove('flex');
-                content.classList.remove('modal-leave-active');
-            }, 200);
-        }
-
-        function switchFormTab(tab) {
-            formCurrentTab = tab;
-            document.getElementById('tab-food').className = tab === 'food' ? "flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm" : "flex-1 py-2 rounded-lg text-textGray font-medium text-sm";
-            document.getElementById('tab-homestay').className = tab === 'homestay' ? "flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm" : "flex-1 py-2 rounded-lg text-textGray font-medium text-sm";
-            document.getElementById('form-food-fields').classList[tab === 'food' ? 'remove' : 'add']('hidden');
-            document.getElementById('form-homestay-fields').classList[tab === 'homestay' ? 'remove' : 'add']('hidden');
-        }
-
-        function setRating(r) {
-            currentRating = r;
-            const stars = document.querySelectorAll('#star-group .star');
-            stars.forEach((s, idx) => s.classList[idx < r ? 'add' : 'remove']('active'));
-        }
-
-        function toggleRating() {
-            const visited = document.getElementById('input-visited').value === 'true';
-            document.getElementById('rating-container').style.display = visited ? 'block' : 'none';
-            document.getElementById('review-details').style.display = visited ? 'block' : 'none';
-        }
-
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            const name = document.getElementById('input-name').value.trim();
-            const address = document.getElementById('input-address').value.trim();
-            const visited = document.getElementById('input-visited').value === 'true';
-            const pros = document.getElementById('input-pros').value.trim();
-            const cons = document.getElementById('input-cons').value.trim();
-            const image = document.getElementById('input-image').value.trim();
-            const menu = document.getElementById('input-menu').value.trim();
-            
-            let type = formCurrentTab === 'food' ? document.getElementById('input-food-type').value : document.getElementById('input-home-type').value;
-            let extra = formCurrentTab === 'food' ? document.getElementById('input-format').value : document.getElementById('input-price').value.trim();
-
-            const data = { name, address, visited, rating: visited ? currentRating : 0, pros, cons, image, menu, category: formCurrentTab, type, extra, createdAt: firebase.firestore.FieldValue.serverTimestamp() };
-
-            if(editingId) {
-                db.collection("places").doc(editingId).update(data).then(() => { closeFormModal(); if(viewingId) openViewModal(editingId); });
-            } else {
-                db.collection("places").add(data).then(() => { closeFormModal(); });
-            }
-        }
-
-        function openViewModal(id) {
-            viewingId = id; const p = places.find(x => x.id === id); if(!p) return;
-            const overlay = document.getElementById('view-modal-overlay');
-            overlay.classList.remove('hidden'); overlay.classList.add('flex');
-            
-            document.getElementById('view-image').src = p.image || 'https://i.postimg.cc/mD8zQxGj/placeholder.png';
-            document.getElementById('view-name').innerText = p.name;
-            document.getElementById('view-address').innerText = `📍 ${p.address || 'Chưa cập nhật'}`;
-            document.getElementById('view-status-badge').innerHTML = p.visited ? '<span class="text-emerald-600">🌸 Đã đi rùi</span>' : '<span class="text-primary">📌 Sẽ đi</span>';
-            document.getElementById('view-type').innerText = p.type || 'Khác';
-            document.getElementById('view-extra-label').innerText = p.category === 'food' ? 'Hình thức' : 'Giá cả';
-            document.getElementById('view-extra-value').innerText = p.extra || 'Không rõ';
-            
-            const starsHTML = Array.from({length: 5}, (_, i) => `<svg class="w-4 h-4 ${i < (p.rating||0) ? 'text-yellow-400' : 'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`).join('');
-            document.getElementById('view-stars').innerHTML = starsHTML;
-
-            if(p.visited && (p.pros || p.cons)) {
-                document.getElementById('view-pros-cons').classList.remove('hidden');
-                document.getElementById('view-pros-container').classList[p.pros ? 'remove' : 'add']('hidden');
-                document.getElementById('view-pros').innerText = p.pros || '';
-                document.getElementById('view-cons-container').classList[p.cons ? 'remove' : 'add']('hidden');
-                document.getElementById('view-cons').innerText = p.cons || '';
-            } else { document.getElementById('view-pros-cons').classList.add('hidden'); }
-
-            if(p.menu) { document.getElementById('view-menu-container').classList.remove('hidden'); document.getElementById('view-menu-image').src = p.menu; }
-            else { document.getElementById('view-menu-container').classList.add('hidden'); }
-        }
-
-        function closeViewModal() { document.getElementById('view-modal-overlay').classList.add('hidden'); document.getElementById('view-modal-overlay').classList.remove('flex'); viewingId = null; }
-        function editCurrentPlace() { if(viewingId) { closeViewModal(); openFormModal(viewingId); } }
-        function deleteCurrentPlace() { if(viewingId && confirm("Xóa địa điểm này khỏi bản đồ kỷ niệm?")) { db.collection("places").doc(viewingId).delete().then(() => closeViewModal()); } }
-
-        // 9. G-DRAGON VIP MUSIC CONTROLS
+        // G-DRAGON VIP MUSIC CONTROLS
+        let spinDegree=0, spinInterval;
         function openMusicConfirm() { document.getElementById('music-confirm-modal').classList.remove('hidden'); document.getElementById('music-confirm-modal').classList.add('flex'); }
         function closeMusicConfirm() { document.getElementById('music-confirm-modal').classList.add('hidden'); document.getElementById('music-confirm-modal').classList.remove('flex'); }
         function enterMusicHub() { closeMusicConfirm(); switchView('music'); }
+        function playGDSong(index) { currentGDSongIndex=index; gdAudio.src=gdSongs[index].url; gdAudio.play().catch(()=>{}); audioBg.pause(); document.getElementById('icon-music-play').classList.add('hidden'); document.getElementById('icon-music-pause').classList.remove('hidden'); document.getElementById('gd-now-playing-title').innerText=gdSongs[index].title; document.getElementById('gd-icon-play').classList.add('hidden'); document.getElementById('gd-icon-pause').classList.remove('hidden'); clearInterval(spinInterval); spinInterval=setInterval(()=>{spinDegree+=1; document.getElementById('record-disk').style.transform=`rotate(${spinDegree}deg)`;},20); }
+        function toggleGDSong() { if(!gdAudio.src) { playGDSong(0); return; } if(gdAudio.paused) { gdAudio.play().catch(()=>{}); audioBg.pause(); document.getElementById('gd-icon-play').classList.add('hidden'); document.getElementById('gd-icon-pause').classList.remove('hidden'); spinInterval=setInterval(()=>{spinDegree+=1; document.getElementById('record-disk').style.transform=`rotate(${spinDegree}deg)`;},20); } else { gdAudio.pause(); document.getElementById('gd-icon-play').classList.remove('hidden'); document.getElementById('gd-icon-pause').classList.add('hidden'); clearInterval(spinInterval); } }
+        function nextGDSong() { let n=currentGDSongIndex+1; if(n>=gdSongs.length) n=0; playGDSong(n); } function prevGDSong() { let p=currentGDSongIndex-1; if(p<0) p=gdSongs.length-1; playGDSong(p); }
 
-        let spinDegree = 0; let spinInterval;
-        function playGDSong(index) {
-            currentGDSongIndex = index; gdAudio.src = gdSongs[index].url; gdAudio.play();
-            audioBg.pause();
-            document.getElementById('icon-music-play').classList.add('hidden'); document.getElementById('icon-music-pause').classList.remove('hidden');
-            document.getElementById('gd-now-playing-title').innerText = gdSongs[index].title;
-            document.getElementById('gd-icon-play').classList.add('hidden'); document.getElementById('gd-icon-pause').classList.remove('hidden');
-            clearInterval(spinInterval);
-            spinInterval = setInterval(() => { spinDegree += 1; document.getElementById('record-disk').style.transform = `rotate(${spinDegree}deg)`; }, 20);
-        }
-        function toggleGDSong() {
-            if(!gdAudio.src) { playGDSong(0); return; }
-            if (gdAudio.paused) {
-                gdAudio.play(); audioBg.pause();
-                document.getElementById('gd-icon-play').classList.add('hidden'); document.getElementById('gd-icon-pause').classList.remove('hidden');
-                spinInterval = setInterval(() => { spinDegree += 1; document.getElementById('record-disk').style.transform = `rotate(${spinDegree}deg)`; }, 20);
-            } else {
-                gdAudio.pause();
-                document.getElementById('gd-icon-play').classList.remove('hidden'); document.getElementById('gd-icon-pause').classList.add('hidden');
-                clearInterval(spinInterval);
-            }
-        }
-        function nextGDSong() { let nextIndex = currentGDSongIndex + 1; if (nextIndex >= gdSongs.length) nextIndex = 0; playGDSong(nextIndex); }
-        function prevGDSong() { let prevIndex = currentGDSongIndex - 1; if (prevIndex < 0) prevIndex = gdSongs.length - 1; playGDSong(prevIndex); }
-
-        // 10. GÓC HỌC TIẾNG ANH LOGIC
-        function openStudyMode(mode) {
-            studyState.mode = mode; studyState.currentIndex = 0; studyState.shuffledData = [...vocabData].sort(() => Math.random() - 0.5);
-            document.getElementById('study-menu').classList.add('hidden');
-            document.getElementById('study-content').classList.remove('hidden');
-            ['vocab-list-container', 'quiz-container', 'memory-container', 'grammar-container'].forEach(id => document.getElementById(id).classList.add('hidden'));
-
-            const title = document.getElementById('study-content-title');
-            if(mode === 'list') { title.innerText = `📝 Danh sách từ vựng (${vocabData.length} từ)`; renderVocabList(); }
-            else if (mode === 'memory') { title.innerText = '🧠 Kiểm tra trí nhớ'; document.getElementById('memory-container').classList.remove('hidden'); document.getElementById('memory-input').value = ""; document.getElementById('memory-feedback').classList.add('hidden'); }
-            else if (mode === 'grammar') { title.innerText = '✨ Ngữ Pháp & Bài Tập'; document.getElementById('grammar-container').classList.remove('hidden'); switchGrammarTab('theory'); }
-            else {
-                if(mode === 'en-vi') title.innerText = '🇬🇧 ➡️ 🇻🇳 Dịch sang Tiếng Việt';
-                if(mode === 'vi-en') title.innerText = '🇻🇳 ➡️ 🇬🇧 Dịch sang Tiếng Anh';
-                if(mode === 'type') title.innerText = '🔍 Phân tích loại từ';
-                document.getElementById('quiz-container').classList.remove('hidden');
-                loadQuizQuestion();
-            }
-        }
+        // ENGLISH STUDY MODULE
+        function openStudyMode(mode) { studyState.mode=mode; studyState.currentIndex=0; studyState.shuffledData=[...vocabData].sort(()=>Math.random()-0.5); document.getElementById('study-menu').classList.add('hidden'); document.getElementById('study-content').classList.remove('hidden'); ['vocab-list-container','quiz-container','memory-container','grammar-container'].forEach(id=>document.getElementById(id).classList.add('hidden')); const title=document.getElementById('study-content-title'); if(mode==='list'){ title.innerText=`📝 Danh sách từ vựng (${vocabData.length} từ)`; document.getElementById('vocab-list-container').classList.remove('hidden'); document.getElementById('vocab-list-container').innerHTML = vocabData.map(item=>`<div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-center"><span class="text-xs text-gray-400 mb-1">${item.type}</span><h4 class="text-xl font-bold text-primary mb-1">${item.en}</h4><p class="text-sm text-textDark">${item.vi}</p></div>`).join(''); } else if(mode==='memory'){ title.innerText='🧠 Kiểm tra trí nhớ'; document.getElementById('memory-container').classList.remove('hidden'); document.getElementById('memory-input').value=""; document.getElementById('memory-feedback').classList.add('hidden'); } else if(mode==='grammar'){ title.innerText='✨ Ngữ Pháp & Bài Tập'; document.getElementById('grammar-container').classList.remove('hidden'); switchGrammarTab('theory'); } else { if(mode==='en-vi') title.innerText='🇬🇧 ➡️ 🇻🇳 Dịch Tiếng Việt'; if(mode==='vi-en') title.innerText='🇻🇳 ➡️ 🇬🇧 Dịch Tiếng Anh'; if(mode==='type') title.innerText='🔍 Phân tích loại từ'; document.getElementById('quiz-container').classList.remove('hidden'); loadQuizQuestion(); } }
         function backToStudyMenu() { document.getElementById('study-content').classList.add('hidden'); document.getElementById('study-menu').classList.remove('hidden'); }
-
-        function renderVocabList() {
-            const listContainer = document.getElementById('vocab-list-container');
-            listContainer.classList.remove('hidden'); listContainer.innerHTML = '';
-            vocabData.forEach(item => { listContainer.innerHTML += `<div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-center text-center hover:scale-105 transition-transform"><span class="text-xs font-semibold text-gray-400 mb-1">${item.type}</span><h4 class="text-xl font-bold text-primary mb-1">${item.en}</h4><p class="text-sm text-textDark">${item.vi}</p></div>`; });
-        }
-
-        function loadQuizQuestion() {
-            if(studyState.currentIndex >= vocabData.length) {
-                document.getElementById('quiz-question').innerText = "🎉 Hoàn thành xuất sắc!";
-                document.getElementById('quiz-input').classList.add('hidden'); document.getElementById('quiz-submit-btn').classList.add('hidden');
-                fireConfetti(); return;
-            }
-            document.getElementById('quiz-input').classList.remove('hidden'); document.getElementById('quiz-submit-btn').classList.remove('hidden'); document.getElementById('quiz-feedback').classList.add('hidden');
-            document.getElementById('quiz-input').value = ""; document.getElementById('quiz-input').focus();
-            document.getElementById('quiz-progress').innerText = `Câu ${studyState.currentIndex + 1} / ${vocabData.length}`;
-            const item = studyState.shuffledData[studyState.currentIndex];
-            if(studyState.mode === 'en-vi') { document.getElementById('quiz-hint').innerText = "Dịch sang tiếng Việt"; document.getElementById('quiz-question').innerText = item.en; }
-            else if(studyState.mode === 'vi-en') { document.getElementById('quiz-hint').innerText = "Dịch sang tiếng Anh"; document.getElementById('quiz-question').innerText = item.vi; }
-            else if(studyState.mode === 'type') { document.getElementById('quiz-hint').innerText = "Loại từ là gì? (Noun, Verb...)"; document.getElementById('quiz-question').innerText = item.en; }
-        }
-
-        document.getElementById('quiz-input').addEventListener("keypress", function(e) { if (e.key === "Enter") { e.preventDefault(); checkQuizAnswer(); } });
-
-        function checkQuizAnswer() {
-            if(studyState.currentIndex >= vocabData.length) return;
-            const item = studyState.shuffledData[studyState.currentIndex];
-            const userInput = document.getElementById('quiz-input').value.trim().toLowerCase();
-            let isCorrect = false;
-
-            if(studyState.mode === 'en-vi') { let expected = item.vi.toLowerCase(); if(expected.includes(userInput) && userInput.length > 2 || userInput === expected) isCorrect = true; }
-            else if(studyState.mode === 'vi-en') { if(userInput === item.en.toLowerCase()) isCorrect = true; }
-            else if(studyState.mode === 'type') { if(item.type.toLowerCase().includes(userInput) && userInput.length > 2) isCorrect = true; }
-
-            const fb = document.getElementById('quiz-feedback'); fb.classList.remove('hidden', 'bg-green-100', 'text-green-700', 'bg-red-100', 'text-red-700');
-            if(isCorrect) {
-                audioCoin.currentTime = 0; audioCoin.play().catch(()=>{});
-                userData.coins += 50; db.collection('users').doc(currentUser).update({coins: userData.coins});
-                fb.classList.add('bg-green-100', 'text-green-700'); fb.innerHTML = `✅ Chính xác! +50 🪙. Đáp án: <b>${studyState.mode === 'en-vi' ? item.vi : (studyState.mode === 'vi-en' ? item.en : item.type)}</b>`;
-                studyState.currentIndex++; setTimeout(() => loadQuizQuestion(), 1200);
-            } else {
-                fb.classList.add('bg-red-100', 'text-red-700'); fb.innerHTML = `❌ Chưa chính xác. Đáp án đúng là: <b>${studyState.mode === 'en-vi' ? item.vi : (studyState.mode === 'vi-en' ? item.en : item.type)}</b>`;
-                setTimeout(() => { studyState.currentIndex++; loadQuizQuestion(); }, 2500);
-            }
-        }
-
-        function checkMemory() {
-            const userInput = document.getElementById('memory-input').value.toLowerCase();
-            const fb = document.getElementById('memory-feedback'); fb.classList.remove('hidden', 'bg-green-100', 'text-green-700', 'bg-red-100', 'text-red-700');
-            const userWords = userInput.match(/\b[a-z]+\b/g) || [];
-            const correctOrder = vocabData.map(item => item.en.toLowerCase());
-            let isSuccess = true, errorText = "";
-
-            if(userWords.length < vocabData.length) { isSuccess = false; errorText = `Bạn mới nhập được ${userWords.length}/${vocabData.length} từ. Vẫn còn thiếu!`; }
-            else { for(let i = 0; i < vocabData.length; i++) { if(userWords[i] !== correctOrder[i]) { isSuccess = false; errorText = `Sai ở từ thứ ${i+1}. Bạn nhập "${userWords[i]}" nhưng đáp án là "${correctOrder[i]}".`; break; } } }
-
-            if(isSuccess) {
-                audioCoin.currentTime = 0; audioCoin.play().catch(()=>{});
-                userData.coins += 500; db.collection('users').doc(currentUser).update({coins: userData.coins});
-                fb.classList.add('bg-green-100', 'text-green-700'); fb.innerHTML = `🎉 Tuyệt vời! Bạn nhớ đúng 100%! Thưởng nóng +500 🪙!`; fireConfetti();
-            } else { fb.classList.add('bg-red-100', 'text-red-700'); fb.innerHTML = `🥺 Cố lên! ${errorText}`; }
-        }
-
-        function switchGrammarTab(tab) {
-            document.getElementById('tab-theory').className = tab === 'theory' ? "flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm" : "flex-1 py-2 rounded-lg text-textGray font-medium text-sm";
-            document.getElementById('tab-practice').className = tab === 'practice' ? "flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm" : "flex-1 py-2 rounded-lg text-textGray font-medium text-sm";
-            document.getElementById('grammar-theory-content').classList[tab === 'theory' ? 'remove' : 'add']('hidden');
-            document.getElementById('grammar-practice-content').classList[tab === 'practice' ? 'remove' : 'add']('hidden');
-            if(tab === 'theory') renderGrammarTheory(); else { gramState.currentQ = 0; loadGrammarQuestion(); }
-        }
-
-        function renderGrammarTheory() {
-            const container = document.getElementById('grammar-theory-content'); container.innerHTML = '';
-            for (const key in grammarRules) {
-                const rule = grammarRules[key];
-                container.innerHTML += `<div class="${rule.color} p-5 rounded-2xl shadow-sm border border-white/50 hover:scale-105 transition-transform"><h4 class="font-bold text-lg mb-2 border-b border-current pb-2 opacity-80">${rule.title}</h4><p class="text-sm leading-relaxed">${rule.text}</p></div>`;
-            }
-        }
-
-        function loadGrammarQuestion() {
-            if(gramState.currentQ >= grammarQuestions.length) {
-                document.getElementById('gram-quiz-question').innerHTML = "🎉 Tuyệt vời! Bạn đã hoàn thành bài tập.";
-                document.getElementById('gram-quiz-options').innerHTML = ''; document.getElementById('gram-feedback-container').classList.add('hidden'); fireConfetti(); return;
-            }
-            const q = grammarQuestions[gramState.currentQ];
-            document.getElementById('gram-quiz-progress').innerText = `Câu ${gramState.currentQ + 1} / ${grammarQuestions.length}`;
-            document.getElementById('gram-quiz-question').innerHTML = q.q.replace('___', '<span class="text-primary border-b-2 border-primary border-dashed px-4">___</span>');
-            const optionsContainer = document.getElementById('gram-quiz-options'); optionsContainer.innerHTML = '';
-            q.options.forEach(opt => { optionsContainer.innerHTML += `<button onclick="playClickSound(); checkGrammarAnswer('${opt}')" class="gram-opt-btn bg-gray-50 hover:bg-primary/10 hover:text-primary hover:border-primary text-textDark border-2 border-gray-100 font-bold py-4 rounded-2xl transition-all shadow-sm">${opt}</button>`; });
-            document.getElementById('gram-feedback-container').classList.add('hidden');
-        }
-
-        function checkGrammarAnswer(selected) {
-            const q = grammarQuestions[gramState.currentQ]; const isCorrect = (selected === q.ans);
-            document.querySelectorAll('.gram-opt-btn').forEach(btn => {
-                btn.disabled = true; btn.classList.add('opacity-50', 'cursor-not-allowed');
-                if(btn.innerText === q.ans) btn.classList.add('bg-green-100', 'border-green-400', 'text-green-700');
-                if(btn.innerText === selected && !isCorrect) btn.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
-            });
-            const fbContainer = document.getElementById('gram-feedback-container'); const resultAlert = document.getElementById('gram-result-alert'); const expBox = document.getElementById('gram-explanation-box');
-            fbContainer.classList.remove('hidden');
-            if(isCorrect) {
-                audioCoin.currentTime = 0; audioCoin.play().catch(()=>{});
-                resultAlert.className = "px-5 py-3 rounded-2xl mb-4 text-center font-bold text-lg bg-green-100 text-green-700"; resultAlert.innerText = "✅ Chính xác!"; expBox.classList.add('hidden');
-                setTimeout(() => nextGrammarQuestion(), 1500);
-            } else {
-                resultAlert.className = "px-5 py-3 rounded-2xl mb-4 text-center font-bold text-lg bg-red-100 text-red-700"; resultAlert.innerText = "🥺 Sai rồi nha!"; expBox.classList.remove('hidden');
-                document.getElementById('gram-explanation-content').innerHTML = grammarRules[q.ruleKey].text;
-            }
-        }
+        function loadQuizQuestion() { if(studyState.currentIndex>=vocabData.length){ document.getElementById('quiz-question').innerText="🎉 Hoàn thành!"; document.getElementById('quiz-input').classList.add('hidden'); document.getElementById('quiz-submit-btn').classList.add('hidden'); fireConfetti(); return; } document.getElementById('quiz-input').classList.remove('hidden'); document.getElementById('quiz-submit-btn').classList.remove('hidden'); document.getElementById('quiz-feedback').classList.add('hidden'); document.getElementById('quiz-input').value=""; document.getElementById('quiz-input').focus(); document.getElementById('quiz-progress').innerText=`Câu ${studyState.currentIndex+1} / ${vocabData.length}`; const item=studyState.shuffledData[studyState.currentIndex]; if(studyState.mode==='en-vi'){ document.getElementById('quiz-hint').innerText="Dịch sang tiếng Việt"; document.getElementById('quiz-question').innerText=item.en; } else if(studyState.mode==='vi-en'){ document.getElementById('quiz-hint').innerText="Dịch sang tiếng Anh"; document.getElementById('quiz-question').innerText=item.vi; } else if(studyState.mode==='type'){ document.getElementById('quiz-hint').innerText="Loại từ là gì?"; document.getElementById('quiz-question').innerText=item.en; } }
+        document.getElementById('quiz-input').addEventListener("keypress", function(e) { if(e.key==="Enter"){ e.preventDefault(); checkQuizAnswer(); } });
+        function checkQuizAnswer() { if(studyState.currentIndex>=vocabData.length) return; const item=studyState.shuffledData[studyState.currentIndex], user=document.getElementById('quiz-input').value.trim().toLowerCase(); let c=false; if(studyState.mode==='en-vi'){ let ex=item.vi.toLowerCase(); if((ex.includes(user)&&user.length>2)||user===ex) c=true; } else if(studyState.mode==='vi-en'){ if(user===item.en.toLowerCase()) c=true; } else if(studyState.mode==='type'){ if(item.type.toLowerCase().includes(user)&&user.length>2) c=true; } const fb=document.getElementById('quiz-feedback'); fb.classList.remove('hidden','bg-green-100','text-green-700','bg-red-100','text-red-700'); if(c) { try{if(audioCoin){audioCoin.currentTime=0;audioCoin.play().catch(()=>{});}}catch(e){} userData.coins+=50; db.collection('users').doc(currentUser).update({coins:userData.coins}); fb.classList.add('bg-green-100','text-green-700'); fb.innerHTML=`✅ Chính xác! +50 🪙. Đáp án: <b>${studyState.mode==='en-vi'?item.vi:(studyState.mode==='vi-en'?item.en:item.type)}</b>`; studyState.currentIndex++; setTimeout(()=>loadQuizQuestion(),1200); } else { fb.classList.add('bg-red-100','text-red-700'); fb.innerHTML=`❌ Sai rùi. Đáp án đúng là: <b>${studyState.mode==='en-vi'?item.vi:(studyState.mode==='vi-en'?item.en:item.type)}</b>`; setTimeout(()=>{studyState.currentIndex++; loadQuizQuestion();},2500); } }
+        function checkMemory() { const user=document.getElementById('memory-input').value.toLowerCase(), fb=document.getElementById('memory-feedback'); fb.classList.remove('hidden','bg-green-100','text-green-700','bg-red-100','text-red-700'); const uw=user.match(/\b[a-z]+\b/g)||[], co=vocabData.map(i=>i.en.toLowerCase()); let s=true, err=""; if(uw.length<vocabData.length) { s=false; err=`Mới nhập ${uw.length}/${vocabData.length} từ.`; } else { for(let i=0; i<vocabData.length; i++) { if(uw[i]!==co[i]) { s=false; err=`Sai ở từ thứ ${i+1} ("${uw[i]}", đáp án là "${co[i]}").`; break; } } } if(s){ try{if(audioCoin){audioCoin.currentTime=0;audioCoin.play().catch(()=>{});}}catch(e){} userData.coins+=500; db.collection('users').doc(currentUser).update({coins:userData.coins}); fb.classList.add('bg-green-100','text-green-700'); fb.innerHTML=`🎉 Tuyệt vời! Bạn nhớ đúng 100%! +500 🪙!`; fireConfetti(); } else { fb.classList.add('bg-red-100','text-red-700'); fb.innerHTML=`🥺 Cố lên! ${err}`; } }
+        function switchGrammarTab(tab) { document.getElementById('tab-theory').className=tab==='theory'?"flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm":"flex-1 py-2 rounded-lg text-textGray font-medium text-sm"; document.getElementById('tab-practice').className=tab==='practice'?"flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm":"flex-1 py-2 rounded-lg text-textGray font-medium text-sm"; document.getElementById('grammar-theory-content').classList[tab==='theory'?'remove':'add']('hidden'); document.getElementById('grammar-practice-content').classList[tab==='practice'?'remove':'add']('hidden'); if(tab==='theory'){ const c=document.getElementById('grammar-theory-content'); c.innerHTML=''; for(const k in grammarRules){ const r=grammarRules[k]; c.innerHTML+=`<div class="${r.color} p-5 rounded-2xl shadow-sm border border-white/50"><h4 class="font-bold text-lg mb-2 border-b border-current pb-2">${r.title}</h4><p class="text-sm leading-relaxed">${r.text}</p></div>`; } } else { gramState.currentQ=0; loadGrammarQuestion(); } }
+        function loadGrammarQuestion() { if(gramState.currentQ>=grammarQuestions.length) { document.getElementById('gram-quiz-question').innerHTML="🎉 Hoàn thành bài tập."; document.getElementById('gram-quiz-options').innerHTML=''; document.getElementById('gram-feedback-container').classList.add('hidden'); fireConfetti(); return; } const q=grammarQuestions[gramState.currentQ]; document.getElementById('gram-quiz-progress').innerText=`Câu ${gramState.currentQ+1}/${grammarQuestions.length}`; document.getElementById('gram-quiz-question').innerHTML=q.q.replace('___','<span class="text-primary border-b-2 border-primary border-dashed px-4">___</span>'); const c=document.getElementById('gram-quiz-options'); c.innerHTML=''; q.options.forEach(opt=>{ c.innerHTML+=`<button onclick="playClickSound(); checkGrammarAnswer('${opt}')" class="gram-opt-btn bg-gray-50 hover:bg-primary/10 hover:text-primary hover:border-primary text-textDark border-2 border-gray-100 font-bold py-4 rounded-2xl shadow-sm">${opt}</button>`; }); document.getElementById('gram-feedback-container').classList.add('hidden'); }
+        function checkGrammarAnswer(sel) { const q=grammarQuestions[gramState.currentQ], cor=(sel===q.ans); document.querySelectorAll('.gram-opt-btn').forEach(b=>{ b.disabled=true; b.classList.add('opacity-50','cursor-not-allowed'); if(b.innerText===q.ans) b.classList.add('bg-green-100','border-green-400','text-green-700'); if(b.innerText===sel&&!cor) b.classList.add('bg-red-100','border-red-400','text-red-700'); }); const fb=document.getElementById('gram-feedback-container'), ra=document.getElementById('gram-result-alert'), ex=document.getElementById('gram-explanation-box'); fb.classList.remove('hidden'); if(cor){ try{if(audioCoin){audioCoin.currentTime=0;audioCoin.play().catch(()=>{});}}catch(e){} ra.className="px-5 py-3 rounded-2xl mb-4 text-center font-bold text-lg bg-green-100 text-green-700"; ra.innerText="✅ Chính xác!"; ex.classList.add('hidden'); setTimeout(()=>nextGrammarQuestion(),1500); } else { ra.className="px-5 py-3 rounded-2xl mb-4 text-center font-bold text-lg bg-red-100 text-red-700"; ra.innerText="🥺 Sai rùi!"; ex.classList.remove('hidden'); document.getElementById('gram-explanation-content').innerHTML=grammarRules[q.ruleKey].text; } }
         function nextGrammarQuestion() { gramState.currentQ++; loadGrammarQuestion(); }
 
-        // 11. GACHA BLINDBOX SYSTEM & SOUND
-        let isRolling = false;
-        function getRandomCard(forceN = false) {
-            let roll = Math.random(), chosen = 'thuong';
-            if(forceN) chosen = 'thuong';
-            else { if (userData.pity >= 90) { chosen = 'bian'; userData.pity = 0; } else { if (roll < 0.01) { chosen = 'bian'; userData.pity = 0; } else if (roll < 0.05) chosen = 'sieuhiem'; else if (roll < 0.17) chosen = 'caocap'; else if (roll < 0.45) chosen = 'hiem'; else chosen = 'thuong'; } }
-            if(!forceN && chosen !== 'bian') userData.pity++;
-            const p = ALL_CARDS.filter(c => c.rarity === chosen); return p[Math.floor(Math.random() * p.length)];
-        }
-
-        function useFreeTicket() { if(isRolling || userData.tickets < 1) return; userData.tickets--; db.collection('users').doc(currentUser).update({tickets: userData.tickets}); startCSGORoulette(true); }
-        function rollGacha() { if(isRolling) return; if(userData.coins < 100) return alert("Hết Coin rùi! Làm bài học tiếng Anh để kiếm xu nhé 🥺"); userData.coins -= 100; db.collection('users').doc(currentUser).update({coins: userData.coins}); startCSGORoulette(false); }
-
-        function startCSGORoulette(forceN) {
-            isRolling = true; const strip = document.getElementById('gacha-strip');
-            strip.style.transition = 'none'; strip.style.transform = 'translateX(0px)'; strip.innerHTML = '';
-            let winCard = getRandomCard(forceN), itemsHTML = '';
-            for(let i=0; i<50; i++) {
-                let c = (i === 40) ? winCard : getRandomCard(false);
-                itemsHTML += `<div class="gacha-item"><div class="gacha-card ${c.rarityData.glowClass} w-full h-36"><img src="${c.img}" onerror="this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'"><div class="card-overlay"></div></div></div>`;
-            }
-            strip.innerHTML = itemsHTML;
-            setTimeout(() => {
-                const offset = (40 * 151) - (window.innerWidth < 768 ? window.innerWidth/2 - 75 : 500) + Math.random() * 100;
-                strip.style.transition = 'transform 6s cubic-bezier(0.1, 0.9, 0.2, 1)'; strip.style.transform = `translateX(-${offset}px)`;
-                
-                // Sound hiệu ứng xoay Roulette
-                let tInt = setInterval(() => { if(audioTick) { audioTick.currentTime=0; audioTick.play().catch(()=>{}); } }, 250);
-                setTimeout(() => clearInterval(tInt), 4500);
-
-                setTimeout(() => {
-                    isRolling = false;
-                    if(!userData.inventory[winCard.id]) userData.inventory[winCard.id] = 0;
-                    userData.inventory[winCard.id]++;
-                    db.collection('users').doc(currentUser).update({ inventory: userData.inventory, pity: userData.pity });
-                    showCardReveal(winCard);
-                }, 6500);
-            }, 100);
-        }
-
-        function showCardReveal(c) {
-            if(audioReveal) { audioReveal.currentTime=0; audioReveal.play().catch(()=>{}); }
-            document.getElementById('reveal-img').src = c.img; document.getElementById('reveal-img').onerror = function(){this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'};
-            document.getElementById('reveal-rarity-text').innerText = c.rarityData.name; document.getElementById('reveal-rarity-text').style.color = c.rarityData.color;
-            document.getElementById('reveal-card-front').className = `card-front bg-gray-900 rounded-xl overflow-hidden border-4 ${c.rarityData.glowClass}`;
-            document.getElementById('card-reveal-modal').classList.remove('hidden'); document.getElementById('card-reveal-modal').classList.add('flex');
-            if(c.rarity === 'sieuhiem' || c.rarity === 'bian') fireConfetti();
-        }
+        // GACHA VIP MODULE
+        let isRolling=false;
+        function getRandomCard(forceN=false) { let r=Math.random(), c='thuong'; if(forceN) c='thuong'; else { if(userData.pity>=150) { c='bian'; userData.pity=0; } else { if(r<0.001) { c='bian'; userData.pity=0; } else if(r<0.01) c='sieuhiem'; else if(r<0.10) c='caocap'; else if(r<0.40) c='hiem'; else c='thuong'; } } if(!forceN&&c!=='bian') userData.pity++; const p=ALL_CARDS.filter(x=>x.rarity===c); return p[Math.floor(Math.random()*p.length)]; }
+        function useFreeTicket() { if(isRolling||userData.tickets<1) return; userData.tickets--; db.collection('users').doc(currentUser).update({tickets:userData.tickets}); startCSGORoulette(true); }
+        function rollGacha() { if(isRolling) return; if(userData.coins<100) return alert("Hết Coin rùi! Làm bài học tiếng Anh để kiếm xu nhé 🥺"); userData.coins-=100; db.collection('users').doc(currentUser).update({coins:userData.coins}); startCSGORoulette(false); }
+        function startCSGORoulette(forceN) { isRolling=true; const strip=document.getElementById('gacha-strip'); strip.style.transition='none'; strip.style.transform='translateX(0px)'; strip.innerHTML=''; let winCard=getRandomCard(forceN), h=''; for(let i=0;i<50;i++) { let c=(i===40)?winCard:getRandomCard(false); h+=`<div class="gacha-item"><div class="gacha-card ${c.rarityData.glowClass} w-full h-36"><img src="${c.img}" onerror="this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'"><div class="card-overlay"></div></div></div>`; } strip.innerHTML=h; setTimeout(()=>{ const o=(40*151)-(window.innerWidth<768?window.innerWidth/2-75:500)+Math.random()*100; strip.style.transition='transform 6s cubic-bezier(0.1, 0.9, 0.2, 1)'; strip.style.transform=`translateX(-${o}px)`; let tInt=setInterval(()=>{ try{if(audioTick){audioTick.currentTime=0;audioTick.play().catch(()=>{});}}catch(e){} }, 250); setTimeout(()=>clearInterval(tInt), 4500); setTimeout(()=>{ isRolling=false; if(!userData.inventory[winCard.id]) userData.inventory[winCard.id]=0; userData.inventory[winCard.id]++; db.collection('users').doc(currentUser).update({inventory:userData.inventory, pity:userData.pity}); showCardReveal(winCard); }, 6500); }, 100); }
+        function showCardReveal(c) { try{if(audioReveal){audioReveal.currentTime=0;audioReveal.play().catch(()=>{});}}catch(e){} document.getElementById('reveal-img').src=c.img; document.getElementById('reveal-rarity-text').innerText=c.rarityData.name; document.getElementById('reveal-rarity-text').style.color=c.rarityData.color; document.getElementById('reveal-card-front').className=`card-front bg-gray-900 rounded-xl overflow-hidden border-4 ${c.rarityData.glowClass}`; document.getElementById('card-reveal-modal').classList.remove('hidden'); document.getElementById('card-reveal-modal').classList.add('flex'); if(c.rarity==='sieuhiem'||c.rarity==='bian') fireConfetti(); }
         function closeReveal() { document.getElementById('card-reveal-modal').classList.add('hidden'); document.getElementById('card-reveal-modal').classList.remove('flex'); document.querySelector('.card-3d-wrapper').classList.remove('flipped'); }
-
-        function switchBoxTab(t) {
-            ['gacha','collection','auction','top'].forEach(x => { document.getElementById(`bb-tab-${x}`).classList.add('hidden'); document.getElementById(`btab-${x}`).className="px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white"; });
-            document.getElementById(`bb-tab-${t}`).classList.remove('hidden'); document.getElementById(`btab-${t}`).className="px-6 py-2 rounded-lg font-bold text-sm bg-primary text-white";
-            if(t==='collection') updateCollectionGrid(); if(t==='top') updateLeaderboard(); if(t==='auction') loadFakeAuction();
-        }
-
-        let currFilter = 'all'; function filterCollection(r) { currFilter = r; updateCollectionGrid(); }
-        function updateCollectionGrid() {
-            if(!document.getElementById('bb-tab-collection')) return;
-            const grid = document.getElementById('collection-grid'); grid.innerHTML = '';
-            let s = { thuong:0, hiem:0, caocap:0, sieuhiem:0, bian:0, total:0 };
-            ALL_CARDS.forEach(c => {
-                let q = userData.inventory[c.id] || 0; if(q > 0) { s[c.rarity]++; s.total++; }
-                if(currFilter !== 'all' && c.rarity !== currFilter) return;
-                if(q > 0) grid.innerHTML += `<div class="gacha-card owned ${c.rarityData.glowClass} cursor-pointer" onclick="playClickSound(); showCardReveal(${JSON.stringify(c).replace(/"/g, '&quot;')})"><img src="${c.img}" onerror="this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'" class="w-full h-full object-cover"><div class="card-overlay"></div><div class="card-badge" style="color: ${c.rarityData.color}">${c.rarityData.name}</div><div class="card-count">x${q}</div></div>`;
-                else grid.innerHTML += `<div class="gacha-card border-2 border-dashed border-gray-600 bg-black/40 opacity-50"><div class="mystery-box">?</div><div class="card-badge text-gray-500">Chưa có</div></div>`;
-            });
-            document.getElementById('prog-t').innerText=`${s.thuong}/10`; document.getElementById('prog-h').innerText=`${s.hiem}/10`; document.getElementById('prog-c').innerText=`${s.caocap}/10`; document.getElementById('prog-sh').innerText=`${s.sieuhiem}/10`; document.getElementById('prog-b').innerText=`${s.bian}/10`; document.getElementById('prog-total').innerText=`${Math.round((s.total/50)*100)}%`;
-        }
-
-        function updateLeaderboard() {
-            db.collection('users').get().then(snap => {
-                let u = []; snap.forEach(d => { u.push({ name: d.id, u: Object.keys(d.data().inventory || {}).length, c: d.data().coins }); });
-                u.sort((a,b) => b.u - a.u);
-                document.getElementById('leaderboard-container').innerHTML = u.map((x,i) => `<div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl mb-2 border border-white/5"><div class="flex items-center gap-4"><div class="text-3xl">${i===0?'🥇':i===1?'🥈':'🥉'}</div><div><p class="font-bold text-lg text-white capitalize">${x.name}</p><p class="text-xs text-blue-400">🪙 ${x.c}</p></div></div><div class="text-right"><p class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-600">${x.u}/50</p></div></div>`).join('');
-            });
-        }
-        function loadFakeAuction() {
-            document.getElementById('auction-grid').innerHTML = [1,2,3,4].map(() => {
-                let c = getRandomCard(false); let p = Math.floor(Math.random()*500)+(c.rarity==='bian'?5000:c.rarity==='sieuhiem'?2000:200);
-                return `<div class="bg-black/40 rounded-2xl p-4 border border-white/10 flex flex-col items-center"><div class="w-full aspect-[2/3] gacha-card ${c.rarityData.glowClass} pointer-events-none mb-4"><img src="${c.img}" onerror="this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'"><div class="card-overlay"></div></div><p class="font-bold text-sm mb-1 text-white">${c.name}</p><p class="text-xs ${c.rarityData.color} mb-4">${c.rarityData.name}</p><button onclick="playClickSound()" class="w-full bg-blue-500/20 text-blue-300 py-2 rounded-xl font-bold">Mua: ${p} 🪙</button></div>`;
-            }).join('');
-        }
-
+        function switchBoxTab(t) { ['gacha','collection','auction','top'].forEach(x=>{ document.getElementById(`bb-tab-${x}`).classList.add('hidden'); document.getElementById(`btab-${x}`).className="px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white"; }); document.getElementById(`bb-tab-${t}`).classList.remove('hidden'); document.getElementById(`btab-${t}`).className="px-6 py-2 rounded-lg font-bold text-sm bg-primary text-white"; if(t==='collection') updateCollectionGrid(); if(t==='top') updateLeaderboard(); if(t==='auction') loadFakeAuction(); }
+        let currFilter='all'; function filterCollection(r) { currFilter=r; updateCollectionGrid(); }
+        function updateCollectionGrid() { if(!document.getElementById('bb-tab-collection')) return; const grid=document.getElementById('collection-grid'); grid.innerHTML=''; let s={thuong:0,hiem:0,caocap:0,sieuhiem:0,bian:0,total:0}; ALL_CARDS.forEach(c=>{ let q=userData.inventory[c.id]||0; if(q>0){ s[c.rarity]++; s.total++; } if(currFilter!=='all'&&c.rarity!==currFilter) return; if(q>0) grid.innerHTML+=`<div class="gacha-card owned ${c.rarityData.glowClass} cursor-pointer" onclick="playClickSound(); showCardReveal(${JSON.stringify(c).replace(/"/g, '&quot;')})"><img src="${c.img}" onerror="this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'" class="w-full h-full object-cover"><div class="card-overlay"></div><div class="card-badge" style="color: ${c.rarityData.color}">${c.rarityData.name}</div><div class="card-count">x${q}</div></div>`; else grid.innerHTML+=`<div class="gacha-card border-2 border-dashed border-gray-600 bg-black/40 opacity-50"><div class="mystery-box">?</div><div class="card-badge text-gray-500">Chưa có</div></div>`; }); document.getElementById('prog-t').innerText=`${s.thuong}/10`; document.getElementById('prog-h').innerText=`${s.hiem}/10`; document.getElementById('prog-c').innerText=`${s.caocap}/10`; document.getElementById('prog-sh').innerText=`${s.sieuhiem}/10`; document.getElementById('prog-b').innerText=`${s.bian}/10`; document.getElementById('prog-total').innerText=`${Math.round((s.total/50)*100)}%`; }
+        function updateLeaderboard() { db.collection('users').get().then(snap=>{ let u=[]; snap.forEach(d=>{ u.push({name:d.id, u:Object.keys(d.data().inventory||{}).length, c:d.data().coins}); }); u.sort((a,b)=>b.u-a.u); document.getElementById('leaderboard-container').innerHTML=u.map((x,i)=>`<div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl mb-2 border border-white/5"><div class="flex items-center gap-4"><div class="text-3xl">${i===0?'🥇':i===1?'🥈':'🥉'}</div><div><p class="font-bold text-lg text-white capitalize">${x.name}</p><p class="text-xs text-blue-400">🪙 ${x.c}</p></div></div><div class="text-right"><p class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-600">${x.u}/50</p></div></div>`).join(''); }); }
+        function loadFakeAuction() { document.getElementById('auction-grid').innerHTML=[1,2,3,4].map(()=>{ let c=getRandomCard(false); let p=Math.floor(Math.random()*500)+(c.rarity==='bian'?5000:c.rarity==='sieuhiem'?2000:200); return `<div class="bg-black/40 rounded-2xl p-4 border border-white/10 flex flex-col items-center"><div class="w-full aspect-[2/3] gacha-card ${c.rarityData.glowClass} pointer-events-none mb-4"><img src="${c.img}" onerror="this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'"><div class="card-overlay"></div></div><p class="font-bold text-sm mb-1 text-white">${c.name}</p><p class="text-xs ${c.rarityData.color} mb-4">${c.rarityData.name}</p><button onclick="playClickSound()" class="w-full bg-blue-500/20 text-blue-300 py-2 rounded-xl font-bold">Mua: ${p} 🪙</button></div>`; }).join(''); }
         function fireConfetti() { confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } }); }
     </script>
 </body>
