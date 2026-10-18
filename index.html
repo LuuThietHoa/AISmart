@@ -252,12 +252,8 @@
                         <p class="text-textDark font-serif text-lg leading-relaxed bg-indigo-50 p-4 rounded-xl border border-indigo-100 mb-6" id="para-source-text">Source text here</p>
                         <label class="block text-sm font-bold text-textGray mb-2">Bản dịch của bạn:</label>
                         <textarea id="para-input" rows="6" placeholder="Nhập bản dịch vào đây nhé..." class="w-full px-4 py-3 rounded-xl border-2 border-indigo-100 focus:outline-none focus:border-indigo-400 text-base mb-4 transition-colors resize-y"></textarea>
-                        <button onclick="playClickSound(); checkParagraph()" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-3 rounded-xl font-bold transition-all shadow-md">Kiểm tra kết quả</button>
-                        <div id="para-result" class="mt-6 hidden">
-                            <p class="text-sm font-bold text-emerald-600 mb-2">Đáp án chuẩn để tham khảo:</p>
-                            <p class="text-textDark text-sm leading-relaxed bg-emerald-50 p-4 rounded-xl border border-emerald-100 mb-4" id="para-expected-text"></p>
-                            <div class="flex gap-3"><button onclick="playClickSound(); awardParaCoins()" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2.5 rounded-xl font-bold text-sm">Mình dịch khá sát (+200 🪙)</button><button onclick="playClickSound(); closeParagraph()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2.5 rounded-xl font-bold text-sm">Mình cần dịch lại</button></div>
-                        </div>
+                        <button id="btn-check-para" onclick="playClickSound(); checkParagraph()" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-3 rounded-xl font-bold transition-all shadow-md">Hoàn thành & Kiểm tra</button>
+                        <div id="para-result" class="mt-6 hidden"></div>
                     </div>
                 </div>
 
@@ -333,7 +329,7 @@
         const firebaseConfig = { apiKey: "AIzaSyAm5PXedBf4HH4OhzHOKJ4_-ESrJNSABYk", authDomain: "bautroi-738c9.firebaseapp.com", projectId: "bautroi-738c9", storageBucket: "bautroi-738c9.firebasestorage.app" };
         firebase.initializeApp(firebaseConfig); const db = firebase.firestore();
 
-        // 2. BIẾN AUDIO & HÀM PLAY SOUND
+        // 2. BIẾN AUDIO & HÀM PLAY SOUND (ĐÃ GIẢM ÂM LƯỢNG)
         let currentUser = null, userData = { coins: 0, tickets: 0, pity: 0, inventory: {}, highScoreFalling: 0 };
         const audioBg = document.getElementById('bg-music');
         const audioClick = document.getElementById('sound-click');
@@ -341,6 +337,13 @@
         const audioReveal = document.getElementById('sound-reveal');
         const audioCoin = document.getElementById('sound-coin');
         const audioError = document.getElementById('sound-error');
+
+        // Setup volume cho đỡ ồn
+        if(audioCoin) audioCoin.volume = 0.2; 
+        if(audioError) audioError.volume = 0.2;
+        if(audioClick) audioClick.volume = 0.4;
+        if(audioReveal) audioReveal.volume = 0.4;
+        if(audioTick) audioTick.volume = 0.4;
 
         function playClickSound() { try { if(audioClick) { audioClick.currentTime = 0; audioClick.play().catch(e=>{}); } } catch(e) {} }
 
@@ -390,7 +393,7 @@
         let ALL_CARDS = []; RARITIES.forEach(r => { for(let i=1; i<=10; i++) ALL_CARDS.push({ id: `${r.id}_${i}`, rarity: r.id, name: `${r.name} #${i}`, img: `${r.path}/${r.filePrefix}${i}.png`, rarityData: r }); });
 
         let currentGDSongIndex = 0; const gdAudio = new Audio(); let studyState = { mode: '', currentIndex: 0, shuffledData: [] };
-        let quizStats = { combo: 0, correct: 0, wrong: 0 }; // LƯU TRỮ COMBO VÀ ĐIỂM SỐ
+        let quizStats = { combo: 0, correct: 0, wrong: 0 }; 
 
         // 3. INIT BẮT ĐẦU VÀ NÚT TẮT NHẠC
         document.addEventListener('DOMContentLoaded', () => {
@@ -431,9 +434,44 @@
 
         // INIT USER
         function handleLogin() { const u = document.getElementById('login-user').value.trim().toLowerCase(), p = document.getElementById('login-pass').value.trim(), err = document.getElementById('login-error'), btn = document.getElementById('login-btn'); if((u === 'luuthiethoa' && p === '123') || (u === 'hamy' && p === '123')) { err.classList.add('hidden'); btn.innerText = "Đang kết nối..."; btn.classList.add('opacity-50', 'pointer-events-none'); currentUser = u; initUserSystem(); } else { err.classList.remove('hidden'); } }
-        function initUserSystem() { db.collection('users').doc(currentUser).get().then(doc => { if(doc.exists) { userData = doc.data(); if(!userData.inventory) userData.inventory={}; if(!userData.highScoreFalling) userData.highScoreFalling=0; checkDailyLogin(); } else { userData = {coins:500, tickets:1, pity:0, inventory:{}, highScoreFalling:0, lastLogin: new Date().toDateString()}; db.collection('users').doc(currentUser).set(userData); alert("Tặng bạn 500 Coin & 1 vé quay 🎉"); } updateUI(); db.collection('users').doc(currentUser).onSnapshot(doc => { if(doc.exists) { userData = doc.data(); updateUI(); updateCollectionGrid(); updateLeaderboard(); } }); document.getElementById('login-screen').classList.add('hidden'); document.getElementById('intro-screen').classList.remove('hidden'); setTimeout(()=>document.getElementById('intro-screen').classList.remove('opacity-0'),100); }); }
+        
+        function initUserSystem() { 
+            db.collection('users').doc(currentUser).get().then(doc => { 
+                if(doc.exists) { 
+                    userData = doc.data(); 
+                    if(!userData.inventory) userData.inventory={}; 
+                    if(typeof userData.highScoreFalling === 'undefined') userData.highScoreFalling = 0; // FIX HIGHSCORE
+                    checkDailyLogin(); 
+                } else { 
+                    userData = {coins:500, tickets:1, pity:0, inventory:{}, highScoreFalling:0, lastLogin: new Date().toDateString()}; 
+                    db.collection('users').doc(currentUser).set(userData); 
+                    alert("Tặng bạn 500 Coin & 1 vé quay 🎉"); 
+                } 
+                updateUI(); 
+                db.collection('users').doc(currentUser).onSnapshot(doc => { 
+                    if(doc.exists) { 
+                        userData = doc.data(); 
+                        if(typeof userData.highScoreFalling === 'undefined') userData.highScoreFalling = 0;
+                        updateUI(); updateCollectionGrid(); updateLeaderboard(); 
+                    } 
+                }); 
+                document.getElementById('login-screen').classList.add('hidden'); document.getElementById('intro-screen').classList.remove('hidden'); setTimeout(()=>document.getElementById('intro-screen').classList.remove('opacity-0'),100); 
+            }); 
+        }
+        
         function checkDailyLogin() { const t = new Date().toDateString(); if(userData.lastLogin !== t) { userData.coins+=200; userData.tickets+=1; userData.lastLogin=t; db.collection('users').doc(currentUser).update(userData); alert("🎁 Điểm danh ngày mới: +200 Coin & +1 Vé quay!"); } }
-        function updateUI() { document.getElementById('hub-username').innerText = currentUser === 'luuthiethoa' ? 'Lưu Thiết Hòa' : 'Hà My'; document.getElementById('hub-avatar').innerText = currentUser.charAt(0).toUpperCase(); document.getElementById('hub-coins').innerText = userData.coins; document.getElementById('bb-coins').innerText = userData.coins; document.getElementById('bb-tickets').innerText = userData.tickets; document.getElementById('pity-counter').innerText = `Pity Bí Ẩn: ${userData.pity} / 150`; document.getElementById('hub-cards').innerText = `${Object.keys(userData.inventory).length} / 50`; document.getElementById('btn-free-ticket').classList[userData.tickets>0?'remove':'add']('hidden'); if(document.getElementById('fw-highscore')) document.getElementById('fw-highscore').innerText = userData.highScoreFalling || 0; }
+        
+        function updateUI() { 
+            document.getElementById('hub-username').innerText = currentUser === 'luuthiethoa' ? 'Lưu Thiết Hòa' : 'Hà My'; 
+            document.getElementById('hub-avatar').innerText = currentUser.charAt(0).toUpperCase(); 
+            document.getElementById('hub-coins').innerText = userData.coins; 
+            document.getElementById('bb-coins').innerText = userData.coins; 
+            document.getElementById('bb-tickets').innerText = userData.tickets; 
+            document.getElementById('pity-counter').innerText = `Pity Bí Ẩn: ${userData.pity} / 150`; 
+            document.getElementById('hub-cards').innerText = `${Object.keys(userData.inventory).length} / 50`; 
+            document.getElementById('btn-free-ticket').classList[userData.tickets>0?'remove':'add']('hidden'); 
+            if(document.getElementById('fw-highscore')) document.getElementById('fw-highscore').innerText = userData.highScoreFalling || 0; 
+        }
 
         function switchView(viewName) {
             const screens = ['hub-screen', 'places-module', 'study-module', 'music-module', 'blindbox-module'];
@@ -443,7 +481,7 @@
             if(fwActive) endFallingGame(true);
         }
 
-        // BẢN ĐỒ KỶ NIỆM
+        // BẢN ĐỒ KỶ NIỆM (Giữ nguyên)
         function renderPlaces() { const grid = document.getElementById('places-grid'); if (!grid) return; grid.innerHTML = ''; if (places.length === 0) { grid.innerHTML = `<div class="col-span-full text-center py-12"><p class="text-textGray">Chưa có địa điểm nào ☁️</p></div>`; return; } places.forEach(p => { const starsHTML = Array.from({length: 5}, (_, i) => `<svg class="w-4 h-4 ${i < p.rating ? 'text-yellow-400' : 'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`).join(''); grid.innerHTML += `<div onclick="playClickSound(); openViewModal('${p.id}')" class="bubble-card glass-card rounded-3xl overflow-hidden flex flex-col h-full border border-white/60"><div class="h-48 bg-gray-200 relative overflow-hidden"><img src="${p.image || 'https://i.postimg.cc/mD8zQxGj/placeholder.png'}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"><div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold ${p.visited ? 'text-emerald-600' : 'text-primary'} shadow-sm">${p.visited ? '🌸 Đã đi' : '📌 Sẽ đi'}</div></div><div class="p-5 flex-1 flex flex-col justify-between"><div><h3 class="font-serif font-bold text-xl text-textDark mb-1">${p.name}</h3><p class="text-xs text-textGray flex items-center gap-1 mb-3">📍 ${p.address || 'Chưa cập nhật'}</p></div><div class="flex items-center justify-between border-t border-gray-100 pt-3"><span class="text-xs font-medium bg-accent/50 text-textDark px-2.5 py-1 rounded-lg">${p.type || 'Địa điểm'}</span><div class="flex items-center gap-0.5">${starsHTML}</div></div></div></div>`; }); }
         function openFormModal(id=null) { editingId=id; const over=document.getElementById('form-modal-overlay'), cont=document.getElementById('form-modal-content'); over.classList.remove('hidden'); over.classList.add('flex'); cont.classList.remove('modal-leave','modal-leave-active'); cont.classList.add('modal-enter','modal-enter-active'); if(id) { const p=places.find(x=>x.id===id); document.getElementById('form-title').innerText="Sửa kỷ niệm 📝"; document.getElementById('input-name').value=p.name||''; document.getElementById('input-address').value=p.address||''; document.getElementById('input-visited').value=p.visited?"true":"false"; setRating(p.rating||4); document.getElementById('input-pros').value=p.pros||''; document.getElementById('input-cons').value=p.cons||''; document.getElementById('input-image').value=p.image||''; document.getElementById('input-menu').value=p.menu||''; switchFormTabPlaces(p.category||'food'); } else { document.getElementById('form-title').innerText="Lưu kỷ niệm mới ☁️"; document.getElementById('add-form').reset(); setRating(4); switchFormTabPlaces('food'); } toggleRating(); }
         function closeFormModal() { const c=document.getElementById('form-modal-content'); c.classList.add('modal-leave-active'); setTimeout(()=>{ document.getElementById('form-modal-overlay').classList.add('hidden'); document.getElementById('form-modal-overlay').classList.remove('flex'); c.classList.remove('modal-leave-active'); }, 200); }
@@ -486,15 +524,13 @@
                 title.innerText='☄️ Mini Game: Chữ Rơi Bất Tận'; document.getElementById('falling-container').classList.remove('hidden'); document.getElementById('fw-highscore').innerText = userData.highScoreFalling || 0;
             } else { 
                 if(mode==='en-vi') title.innerText='🇬🇧 ➡️ 🇻🇳 Dịch Tiếng Việt'; if(mode==='vi-en') title.innerText='🇻🇳 ➡️ 🇬🇧 Dịch Tiếng Anh'; if(mode==='type') title.innerText='🔍 Phân tích loại từ'; 
-                quizStats = { combo: 0, correct: 0, wrong: 0 }; // RESET ĐIỂM SỐ COMBO
+                quizStats = { combo: 0, correct: 0, wrong: 0 }; 
                 document.getElementById('quiz-container').classList.remove('hidden'); loadQuizQuestion(); 
             } 
         }
         function backToStudyMenu() { document.getElementById('study-content').classList.add('hidden'); document.getElementById('study-menu').classList.remove('hidden'); if(fwActive) endFallingGame(true); }
         
-        // ----------------------------------------------------
-        // FIX NGỮ PHÁP (GRAMMAR)
-        // ----------------------------------------------------
+        // NGỮ PHÁP (GRAMMAR)
         function switchGrammarTab(tab) {
             document.getElementById('tab-theory').className = tab === 'theory' ? "flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm transition-all" : "flex-1 py-2 rounded-lg text-textGray font-medium text-sm hover:text-primary transition-all";
             document.getElementById('tab-practice').className = tab === 'practice' ? "flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm transition-all" : "flex-1 py-2 rounded-lg text-textGray font-medium text-sm hover:text-primary transition-all";
@@ -552,9 +588,9 @@
             
             if (ans === q.ans) {
                 try{if(audioCoin){audioCoin.currentTime=0;audioCoin.play().catch(()=>{});}}catch(e){}
-                userData.coins += 50; db.collection('users').doc(currentUser).update({coins: userData.coins});
+                userData.coins += 10; db.collection('users').doc(currentUser).update({coins: userData.coins});
                 alertBox.className = "px-5 py-3 rounded-2xl mb-4 text-center font-bold text-lg bg-green-100 text-green-700";
-                alertBox.innerHTML = `✅ Chính xác! +50 🪙. Đáp án là <b>${q.ans}</b>`;
+                alertBox.innerHTML = `✅ Chính xác! +10 🪙. Đáp án là <b>${q.ans}</b>`;
                 expBox.classList.add('hidden');
                 setTimeout(() => nextGrammarQuestion(), 1500); 
             } else {
@@ -571,9 +607,7 @@
             loadGrammarQuestion();
         }
 
-        // ----------------------------------------------------
-        // QUIZ - COMBO & GIẢM TIỀN & TỔNG KẾT
-        // ----------------------------------------------------
+        // QUIZ - COMBO & TỔNG KẾT
         function loadQuizQuestion() { 
             if(studyState.currentIndex>=vocabData.length){ 
                 document.getElementById('quiz-question').innerHTML = `🎉 Hoàn thành!<br><div class="flex justify-center gap-6 mt-4 text-xl"><span class="text-green-500 font-bold">✅ Đúng: ${quizStats.correct}</span><span class="text-red-500 font-bold">❌ Sai: ${quizStats.wrong}</span></div>`; 
@@ -611,7 +645,7 @@
             if(c) { 
                 quizStats.combo++; quizStats.correct++;
                 try{if(audioCoin){audioCoin.currentTime=0;audioCoin.play().catch(()=>{});}}catch(e){} 
-                userData.coins+=10; db.collection('users').doc(currentUser).update({coins:userData.coins}); // Giảm còn 10 xu
+                userData.coins+=10; db.collection('users').doc(currentUser).update({coins:userData.coins}); 
                 
                 let comboMsg = "";
                 if(quizStats.combo === 10) { comboMsg = "<br><span class='text-orange-500 font-black text-lg'>🔥 ĐỈNH QUÁ! COMBO x10! 🔥</span>"; fireConfetti(); }
@@ -632,31 +666,87 @@
             } 
         }
 
-        // KIỂM TRA TRÍ NHỚ (GIỮ NGUYÊN - VẪN NHẬN 500 VÌ KHÓ)
+        // KIỂM TRA TRÍ NHỚ
         function checkMemory() { const user=document.getElementById('memory-input').value.toLowerCase(), fb=document.getElementById('memory-feedback'); fb.classList.remove('hidden','bg-green-100','text-green-700','bg-red-100','text-red-700'); const uw=user.match(/\b[a-z]+\b/g)||[], co=vocabData.map(i=>i.en.toLowerCase()); let s=true, err=""; if(uw.length<vocabData.length) { s=false; err=`Mới nhập ${uw.length}/${vocabData.length} từ.`; } else { for(let i=0; i<vocabData.length; i++) { if(uw[i]!==co[i]) { s=false; err=`Sai ở từ thứ ${i+1} ("${uw[i]}", đáp án là "${co[i]}").`; break; } } } if(s){ try{if(audioCoin){audioCoin.currentTime=0;audioCoin.play().catch(()=>{});}}catch(e){} userData.coins+=500; db.collection('users').doc(currentUser).update({coins:userData.coins}); fb.classList.add('bg-green-100','text-green-700'); fb.innerHTML=`🎉 Tuyệt vời! Bạn nhớ đúng 100%! +500 🪙!`; fireConfetti(); } else { try{if(audioError){audioError.currentTime=0;audioError.play().catch(()=>{});}}catch(e){} fb.classList.add('bg-red-100','text-red-700'); fb.innerHTML=`🥺 Cố lên! ${err}`; } }
 
-        // PARAGRAPH
+        // DỊCH ĐOẠN VĂN (THÔNG MINH)
         let currentParaIndex = -1;
         function loadParagraphList() {
             const listDiv = document.getElementById('para-list'); document.getElementById('para-workspace').classList.add('hidden'); listDiv.classList.remove('hidden');
             listDiv.innerHTML = paragraphData.map((p, index) => `<div onclick="playClickSound(); openParagraph(${index})" class="bg-white border border-indigo-100 hover:border-indigo-400 p-5 rounded-2xl shadow-sm cursor-pointer hover:scale-[1.02] transition-transform flex items-center justify-between group"><div><h4 class="font-bold text-lg text-indigo-700 group-hover:text-indigo-500">${p.title}</h4><p class="text-sm text-textGray mt-1 line-clamp-1">${p.src}</p></div><div class="text-2xl">✍️</div></div>`).join('');
         }
         function openParagraph(index) {
-            currentParaIndex = index; const p = paragraphData[index]; document.getElementById('para-list').classList.add('hidden'); document.getElementById('para-workspace').classList.remove('hidden'); document.getElementById('para-work-title').innerText = p.title; document.getElementById('para-source-text').innerText = p.src; document.getElementById('para-input').value = ""; document.getElementById('para-result').classList.add('hidden');
+            currentParaIndex = index; const p = paragraphData[index]; 
+            document.getElementById('para-list').classList.add('hidden'); 
+            document.getElementById('para-workspace').classList.remove('hidden'); 
+            document.getElementById('para-work-title').innerText = p.title; 
+            document.getElementById('para-source-text').innerText = p.src; 
+            
+            // Reset input form
+            document.getElementById('para-input').value = ""; 
+            document.getElementById('para-input').disabled = false;
+            document.getElementById('btn-check-para').classList.remove('hidden');
+            document.getElementById('para-result').innerHTML = "";
+            document.getElementById('para-result').classList.add('hidden');
         }
         function closeParagraph() { document.getElementById('para-workspace').classList.add('hidden'); document.getElementById('para-list').classList.remove('hidden'); }
+        
         function checkParagraph() {
-            if(currentParaIndex < 0) return; const p = paragraphData[currentParaIndex]; const userText = document.getElementById('para-input').value.trim(); if(!userText) { alert("Bạn chưa nhập gì cả!"); return; }
-            document.getElementById('para-result').classList.remove('hidden'); document.getElementById('para-expected-text').innerText = p.expected;
-        }
-        function awardParaCoins() {
-            try{if(audioCoin){audioCoin.currentTime=0;audioCoin.play().catch(()=>{});}}catch(e){}
-            userData.coins += 200; db.collection('users').doc(currentUser).update({coins: userData.coins}); alert("Đỉnh quá! +200 🪙 vì sự chăm chỉ!"); closeParagraph();
+            if(currentParaIndex < 0) return; 
+            const p = paragraphData[currentParaIndex]; 
+            const userText = document.getElementById('para-input').value.trim(); 
+            if(!userText || userText.length < 10) { alert("Hãy nhập một đoạn dịch dài hơn chút nhé!"); return; }
+
+            // Thuật toán so sánh chéo từ vựng cơ bản để đánh giá
+            let expectedWords = p.expected.toLowerCase().replace(/[.,!?'"()]/g, '').split(/\s+/).filter(w=>w);
+            let userWords = userText.toLowerCase().replace(/[.,!?'"()]/g, '').split(/\s+/).filter(w=>w);
+            
+            let matchCount = 0;
+            let userWordsCopy = [...userWords];
+            expectedWords.forEach(w => {
+                let idx = userWordsCopy.indexOf(w);
+                if(idx !== -1) { matchCount++; userWordsCopy.splice(idx, 1); }
+            });
+            
+            let accuracy = expectedWords.length > 0 ? (matchCount / expectedWords.length) : 0;
+            
+            let feedbackMsg = ""; let fbClass = "";
+            if(accuracy < 0.4) {
+                feedbackMsg = "⚠️ Có vẻ bạn dịch sai hoặc thiếu khá nhiều ý. Lần sau cố lên nhé!";
+                fbClass = "text-rose-600 bg-rose-50 border-rose-200";
+                try{if(audioError){audioError.currentTime=0;audioError.play().catch(()=>{});}}catch(e){}
+            } else if (accuracy < 0.75) {
+                feedbackMsg = "👍 Bạn dịch tương đối tốt, nhưng vẫn còn vài chỗ chưa sát nghĩa lắm.";
+                fbClass = "text-yellow-700 bg-yellow-50 border-yellow-200";
+                try{if(audioCoin){audioCoin.currentTime=0;audioCoin.play().catch(()=>{});}}catch(e){}
+            } else {
+                feedbackMsg = "🌟 Xuất sắc! Bản dịch của bạn rất chính xác và sát nghĩa gốc!";
+                fbClass = "text-emerald-700 bg-emerald-50 border-emerald-200";
+                try{if(audioCoin){audioCoin.currentTime=0;audioCoin.play().catch(()=>{});}}catch(e){}
+                fireConfetti();
+            }
+
+            // Tự động cộng xu
+            userData.coins += 200; 
+            db.collection('users').doc(currentUser).update({coins: userData.coins}); 
+
+            // Hiển thị kết quả
+            document.getElementById('para-result').classList.remove('hidden'); 
+            document.getElementById('para-result').innerHTML = `
+                <div class="p-4 rounded-xl border ${fbClass} mb-5 font-medium text-sm text-center shadow-sm">
+                    ${feedbackMsg}<br><span class="font-black text-lg mt-2 block text-primary">+200 🪙 đã tự động cộng vào ví!</span>
+                </div>
+                <p class="text-sm font-bold text-emerald-600 mb-2">Đáp án chuẩn để tham khảo:</p>
+                <p class="text-textDark text-sm leading-relaxed bg-emerald-50 p-4 rounded-xl border border-emerald-100 mb-4">${p.expected}</p>
+                <button onclick="playClickSound(); closeParagraph()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-bold text-sm transition-colors shadow-sm">Hoàn tất & Quay lại danh sách</button>
+            `;
+            
+            // Khóa khung điền để tránh spam xu
+            document.getElementById('para-input').disabled = true;
+            document.getElementById('btn-check-para').classList.add('hidden');
         }
 
-        // ----------------------------------------------------
         // GAME CHỮ RƠI (3D DỄ THƯƠNG)
-        // ----------------------------------------------------
         let fwActive = false; let fwReq = null; let fwScore = 0; let fwLives = 3; let fwSpeedBase = 1.0; let fwWords = []; let fwLastSpawn = 0;
 
         function makeWordMask(fullWord) {
@@ -666,11 +756,8 @@
             let hideLen = fullWord.length - showLen;
 
             for(let i = 0; i < fullWord.length; i++) {
-                if(i < hideLen) {
-                    html += `<span class="letter-box hidden-box">?</span>`;
-                } else {
-                    html += `<span class="letter-box show-box">${fullWord[i]}</span>`;
-                }
+                if(i < hideLen) { html += `<span class="letter-box hidden-box">?</span>`; } 
+                else { html += `<span class="letter-box show-box">${fullWord[i]}</span>`; }
             }
             html += '</div>';
             return html;
@@ -700,12 +787,18 @@
                 document.getElementById('fw-gameover-overlay').classList.remove('hidden');
                 document.getElementById('fw-final-score').innerText = fwScore;
                 
-                if(fwScore > userData.highScoreFalling) {
-                    userData.highScoreFalling = fwScore; db.collection('users').doc(currentUser).update({highScoreFalling: fwScore});
-                    document.getElementById('fw-highscore').innerText = fwScore; alert("🎉 Kỷ lục mới! " + fwScore + " điểm!");
+                if(fwScore > (userData.highScoreFalling || 0)) {
+                    userData.highScoreFalling = fwScore; 
+                    db.collection('users').doc(currentUser).update({highScoreFalling: fwScore});
+                    document.getElementById('fw-highscore').innerText = fwScore; 
+                    alert("🎉 Kỷ lục mới! " + fwScore + " điểm!");
                 }
+                
                 let coinReward = Math.floor(fwScore / 2);
-                if(coinReward > 0) { userData.coins += coinReward; db.collection('users').doc(currentUser).update({coins: userData.coins}); }
+                if(coinReward > 0) { 
+                    userData.coins += coinReward; 
+                    db.collection('users').doc(currentUser).update({coins: userData.coins}); 
+                }
             }
         }
 
