@@ -102,6 +102,12 @@
         <svg id="icon-music-pause" class="w-6 h-6 hidden text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path></svg>
     </button>
 
+    <!-- NÚT BARISTA TEST (GÓC TRÁI) -->
+    <button id="barista-btn" onclick="playClickSound(); openBaristaModal()" class="fixed bottom-6 left-6 w-14 h-14 rounded-full bg-gradient-to-br from-amber-700 to-amber-500 text-white flex items-center justify-center cursor-pointer z-[9999] shadow-[0_0_20px_rgba(217,119,6,0.4)] hover:scale-110 transition-all duration-500 border-2 border-amber-300 opacity-0 pointer-events-none translate-y-4 group">
+        <span class="text-2xl drop-shadow-md">☕</span>
+        <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-amber-800 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">KT Pha Chế</div>
+    </button>
+
     <!-- 0. LOGIN SCREEN -->
     <div id="login-screen" class="fixed inset-0 z-[200] flex items-center justify-center bg-[#E0F2FE] transition-all duration-500">
         <div class="glass-card p-10 rounded-3xl w-full max-w-md text-center shadow-2xl border-2 border-white">
@@ -309,6 +315,55 @@
         </div>
     </div>
     
+    <!-- BARISTA TEST MODAL -->
+    <div id="barista-modal" class="fixed inset-0 bg-textDark/60 backdrop-blur-sm z-[400] hidden items-center justify-center p-4 transition-opacity">
+        <div class="bg-white rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl relative flex flex-col slide-down-enter-active">
+            <!-- Header -->
+            <div class="bg-amber-50 p-6 border-b border-amber-100 flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-serif font-bold text-amber-900">Góc Pha Chế ☕</h2>
+                    <p class="text-sm text-amber-700 font-medium">Kiểm tra trí nhớ công thức</p>
+                </div>
+                <button onclick="playClickSound(); closeBaristaModal()" class="w-10 h-10 rounded-full bg-amber-200/50 flex items-center justify-center text-amber-800 hover:bg-amber-200 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-6 md:p-8" id="barista-content">
+                <!-- Step 1: Guess Name -->
+                <div id="barista-step-1" class="text-center">
+                    <div class="w-24 h-24 mx-auto bg-amber-100 rounded-full flex items-center justify-center text-4xl mb-4 shadow-inner">🥤</div>
+                    <p class="text-textGray mb-2 font-medium">Mã món uống</p>
+                    <h3 class="text-5xl font-black text-amber-600 mb-8 tracking-wide drop-shadow-sm" id="barista-code">T3</h3>
+                    <input type="text" id="barista-name-input" autocomplete="off" placeholder="Tên món là gì? (vd: Cà phê đen)" class="w-full px-5 py-3.5 rounded-xl border-2 border-amber-200 focus:outline-none focus:border-amber-500 text-center text-lg mb-4 font-medium transition-colors shadow-inner">
+                    <button onclick="playClickSound(); checkBaristaName()" class="w-full bg-amber-500 hover:bg-amber-600 text-white py-3.5 rounded-xl font-bold text-lg shadow-lg shadow-amber-200/50 transition-all transform hover:scale-105">Tiếp tục 🚀</button>
+                    <p id="barista-name-error" class="text-rose-500 text-sm mt-4 hidden font-bold">Sai rùi, hãy thử lại tên món nha!</p>
+                </div>
+
+                <!-- Step 2: Write Recipe -->
+                <div id="barista-step-2" class="hidden flex flex-col">
+                    <div class="bg-green-50 text-green-700 px-4 py-3 rounded-xl font-bold text-sm text-center mb-6 border border-green-200 shadow-sm">✅ Tên món chính xác: <span id="barista-drink-name" class="uppercase text-green-800 text-base ml-1">Cà Phê Đen</span></div>
+                    <label class="block text-sm font-bold text-amber-900 mb-3">Bạn hãy nhập công thức nhé:<br><span class="text-xs font-normal text-amber-700">(Ghi rõ số lượng và tên nguyên liệu, mỗi món 1 dòng)</span></label>
+                    <textarea id="barista-recipe-input" rows="5" placeholder="Ví dụ:&#10;50 ml cafe&#10;20 ml đường nước..." class="w-full px-5 py-4 rounded-xl border-2 border-amber-200 focus:outline-none focus:border-amber-500 text-base mb-6 transition-colors resize-none leading-relaxed shadow-inner"></textarea>
+                    <button onclick="playClickSound(); checkBaristaRecipe()" class="w-full bg-amber-500 hover:bg-amber-600 text-white py-3.5 rounded-xl font-bold text-lg shadow-lg shadow-amber-200/50 transition-all transform hover:scale-105">Nộp Công Thức</button>
+                </div>
+
+                <!-- Step 3: Result -->
+                <div id="barista-step-3" class="hidden flex flex-col">
+                    <h3 class="text-lg font-bold text-amber-900 mb-2 flex items-center gap-2">📖 Đáp án chuẩn:</h3>
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-2xl mb-6 shadow-inner">
+                        <p id="barista-correct-recipe" class="text-amber-900 font-medium whitespace-pre-line leading-relaxed text-lg"></p>
+                    </div>
+                    <p class="text-sm text-textGray text-center mb-4 font-bold">Bạn tự chấm xem mình có gõ đúng như trên không nhé?</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <button onclick="playClickSound(); finishBarista(100)" class="bg-green-500 hover:bg-green-600 text-white py-2.5 rounded-xl font-bold shadow-md transform hover:scale-105 transition-all text-sm">Hoàn hảo (+100🪙)</button>
+                        <button onclick="playClickSound(); finishBarista(50)" class="bg-yellow-500 hover:bg-yellow-600 text-white py-2.5 rounded-xl font-bold shadow-md transform hover:scale-105 transition-all text-sm">Tương đối (+50🪙)</button>
+                        <button onclick="playClickSound(); finishBarista(0)" class="bg-rose-400 hover:bg-rose-500 text-white py-2.5 rounded-xl font-bold shadow-md transform hover:scale-105 transition-all text-sm">Trật lất (0🪙)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="card-reveal-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-[300] hidden items-center justify-center p-4">
         <div id="reveal-particles" class="absolute inset-0 pointer-events-none"></div>
         <div class="relative z-10 w-full max-w-sm flex flex-col items-center" id="card-reveal-content">
@@ -347,19 +402,151 @@
 
         function playClickSound() { try { if(audioClick) { audioClick.currentTime = 0; audioClick.play().catch(e=>{}); } } catch(e) {} }
 
-        // BIẾN DATA TỪ VỰNG
+        // DATA PHA CHẾ (BARISTA TEST)
+        const baristaData = [
+            { code: "T3", name: "Cà phê đen", recipe: "50 ml cafe\n20 ml đường nước" },
+            { code: "T5", name: "Cà phê sữa", recipe: "50 ml cafe\n30 ml sữa đặc" },
+            { code: "T2", name: "Cà phê latte", recipe: "70 ml sữa anchor\n30 ml sữa anchor đánh\n40 ml café" },
+            { code: "T13", name: "Cà phê sữa có kem và nếp", recipe: "50 ml cafe\n30 ml sữa đặc\n4 viên nếp\n1 kem socola" },
+            { code: "T16", name: "Cà phê latte có kem", recipe: "70 ml sữa anchor\n30 ml sữa anchor đánh\n40 ml café\n1 kem" },
+            { code: "T17", name: "Cà phê sữa có kem", recipe: "50 ml cafe\n30 ml sữa đặc\n1 kem socola" },
+            { code: "KEM CHANH", name: "Kem chanh", recipe: "100 ml Whipping đánh bông\n20 ml nước cốt chanh\n30 ml đường\n0.3g muối" },
+            { code: "U4", name: "Trà vải", recipe: "100 ml trà\n40 ml vải\n10 ml đường\n2 pump vải\n3 trái vải" },
+            { code: "S1", name: "Mè nóng", recipe: "100 ml mè\n60 ml sữa anchor" },
+            { code: "S2", name: "Mè latte", recipe: "250 ml mè\n(Giảm 50% đường: 150 ml mè, 100 sữa anchor)" },
+            { code: "S6", name: "Mè nếp", recipe: "250 ml mè\n7 viên nếp\n(Giảm 50% đường: 150 ml mè, 100 sữa anchor)" },
+            { code: "S11", name: "Mè có kem mè đen", recipe: "250 ml mè\n1 kem mè đen\n(Giảm 50% đường: 150 ml mè, 100 sữa anchor)" },
+            { code: "S17", name: "Mè có kem matcha", recipe: "250 ml mè\n1 kem matcha\n(Giảm 50% đường: 150 ml mè, 100 sữa anchor)" },
+            { code: "S18", name: "Mè có kem trà rang", recipe: "250 ml mè\n1 kem trà rang\n(Giảm 50% đường: 150 ml mè, 100 sữa anchor)" },
+            { code: "MF", name: "Matcha bánh Flan", recipe: "140 ml matcha latte\n1 bánh flan" },
+            { code: "MB2", name: "Matcha kem chuối", recipe: "140 ml matcha latte\n1 kem chuối lớn" },
+            { code: "M2", name: "Matcha latte", recipe: "140 ml matcha latte" },
+            { code: "M3", name: "Matcha sữa Mix", recipe: "120 ml sữa mix\n4g bột latte\n80 ml nước sôi" },
+            { code: "M4", name: "Matcha sữa yến mạch", recipe: "70 ml oat (yến mạch)\n20 ml nước đường\n4g bột latte\n80 ml nước sôi" },
+            { code: "M5", name: "Matcha thạch Kanten", recipe: "140 ml matcha latte\n1 vá kanten" },
+            { code: "M6", name: "Matcha trân châu nếp", recipe: "140 ml matcha latte\n7 viên nếp" },
+            { code: "M9", name: "Matcha trân châu", recipe: "140 ml matcha latte\n1 vá trân châu" },
+            { code: "M10", name: "Matcha đậu đỏ", recipe: "140 ml matcha latte\nĐậu đỏ" },
+            { code: "M11", name: "Matcha kem matcha", recipe: "140 ml matcha latte\n1 kem matcha" },
+            { code: "M15", name: "Matcha có kem matcha và nếp", recipe: "140 ml matcha latte\n1 kem matcha\n4 viên nếp" },
+            { code: "M25", name: "Matcha kem whipping socola", recipe: "140 ml matcha latte\n1 kem whipping socola" },
+            { code: "M30", name: "Matcha chiato", recipe: "140 ml matcha latte\n1 lớp chiato" },
+            { code: "M75", name: "Ube matcha", recipe: "60 ml khoai\n10 ml sốt\n80 ml mix\n4g bột latte + 50ml oat\n1 kem whipping\n5 ml sốt" },
+            { code: "M1", name: "Matcha sig nóng", recipe: "100 ml matcha sig\n60 ml sữa meji" },
+            { code: "M19", name: "Matcha Malibu", recipe: "100 ml sữa mix\n1 viên đá vuông\n4g S2 + 80ml nước + 20ml rượu\n50 ml chiato + 10ml rượu\n2g decor bột rắc" },
+            { code: "M22", name: "Matcha sig latte", recipe: "140 ml matcha sig" },
+            { code: "M23", name: "Matcha sig latte có nếp", recipe: "140 ml matcha sig\n7 viên nếp" },
+            { code: "M24", name: "Matcha sig có nếp có kem", recipe: "250 ml matcha sig\n4 viên nếp\n1 kem matcha" },
+            { code: "M26", name: "Matcha Oak Sig", recipe: "100 ml sữa oat\n4g bột sig + 80ml nước" },
+            { code: "M27", name: "Matcha Oak Sig có nếp", recipe: "100 ml sữa oat\n4g bột sig + 80ml nước\n7 viên nếp" },
+            { code: "M28", name: "Matcha Sig đặc biệt", recipe: "200 ml sữa mix\n7g bột sig + 120 ml nước nguội\n1 kem matcha\n4 viên nếp" },
+            { code: "MC1", name: "Matcha cold whisk", recipe: "120 ml sig\n3g sig + 70ml oat" },
+            { code: "MC2", name: "Matcha Sữa mix", recipe: "120 ml sữa mix\n6g sig + 100ml oat" },
+            { code: "M7", name: "Matcha nguyên chất", recipe: "4g bột latte + 120 ml nước" },
+            { code: "M50", name: "Matcha nguyên chất có kanten", recipe: "4g bột latte + 120 ml nước\nKanten" },
+            { code: "M60", name: "Matcha nguyên chất có nếp", recipe: "4g bột latte + 120 ml nước\n7 viên nếp" },
+            { code: "M150", name: "Matcha nguyên chất có nếp và kem", recipe: "4g bột latte + 120 ml nước\n4 viên nếp\n1 kem matcha" },
+            { code: "M41", name: "Matcha sữa dừa", recipe: "60 ml sữa meji\n40 ml cốt dừa\n30 ml sữa đặc (Nếu 50% đường thì 10ml sữa đặc)\n5g bột latte + 80ml nước nguội\n50ml chiato\n10g vụn dừa" },
+            { code: "M42", name: "Matcha lá dứa", recipe: "4g bột số 4 + 70ml nước nguội\n20ml syrup dứa\n10ml đường\n50ml sữa Oat\n50ml chiato\n1g bột rắc decor\n(50% đường thì không bỏ đường)" },
+            { code: "M43", name: "Matcha nước cam", recipe: "100 ml cam\n20 ml đường nước\n5g bột latte + 80 ml nước sôi" }
+        ];
+
+        let currentBaristaDrink = null;
+
+        function normalizeStr(str) {
+            return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/đ/g, 'd').trim();
+        }
+
+        function openBaristaModal() {
+            document.getElementById('barista-modal').classList.remove('hidden');
+            document.getElementById('barista-modal').classList.add('flex');
+            nextBaristaQuestion();
+        }
+
+        function closeBaristaModal() {
+            document.getElementById('barista-modal').classList.add('hidden');
+            document.getElementById('barista-modal').classList.remove('flex');
+        }
+
+        function nextBaristaQuestion() {
+            currentBaristaDrink = baristaData[Math.floor(Math.random() * baristaData.length)];
+            
+            document.getElementById('barista-step-1').classList.remove('hidden');
+            document.getElementById('barista-step-2').classList.add('hidden');
+            document.getElementById('barista-step-3').classList.add('hidden');
+            
+            document.getElementById('barista-code').innerText = currentBaristaDrink.code;
+            
+            const nameInput = document.getElementById('barista-name-input');
+            nameInput.value = "";
+            nameInput.focus();
+            document.getElementById('barista-name-error').classList.add('hidden');
+        }
+
+        // Bắt sự kiện bấm Enter cho input tên món pha chế
+        document.getElementById('barista-name-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') { e.preventDefault(); checkBaristaName(); }
+        });
+
+        function checkBaristaName() {
+            let input = document.getElementById('barista-name-input').value;
+            let correct = currentBaristaDrink.name;
+            
+            let iNorm = normalizeStr(input);
+            let cNorm = normalizeStr(correct);
+            
+            if (iNorm.length > 2 && (cNorm.includes(iNorm) || iNorm.includes(cNorm))) {
+                document.getElementById('barista-step-1').classList.add('hidden');
+                document.getElementById('barista-step-2').classList.remove('hidden');
+                document.getElementById('barista-drink-name').innerText = currentBaristaDrink.name;
+                
+                const recipeInput = document.getElementById('barista-recipe-input');
+                recipeInput.value = "";
+                recipeInput.focus();
+                
+                try{if(audioClick){audioClick.currentTime=0; audioClick.play().catch(()=>{});}}catch(e){}
+            } else {
+                document.getElementById('barista-name-error').classList.remove('hidden');
+                try{if(audioError){audioError.currentTime=0; audioError.play().catch(()=>{});}}catch(e){}
+            }
+        }
+
+        function checkBaristaRecipe() {
+            let input = document.getElementById('barista-recipe-input').value.trim();
+            if (!input) { alert("Bạn chưa nhập công thức kìa!"); return; }
+            
+            document.getElementById('barista-step-2').classList.add('hidden');
+            document.getElementById('barista-step-3').classList.remove('hidden');
+            
+            document.getElementById('barista-correct-recipe').innerText = currentBaristaDrink.recipe;
+        }
+
+        function finishBarista(coinReward) {
+            if (coinReward > 0) {
+                userData.coins += coinReward;
+                db.collection('users').doc(currentUser).update({coins: userData.coins});
+                try{if(audioCoin){audioCoin.currentTime=0; audioCoin.play().catch(()=>{});}}catch(e){}
+                if (coinReward === 100) fireConfetti();
+            } else {
+                try{if(audioError){audioError.currentTime=0; audioError.play().catch(()=>{});}}catch(e){}
+            }
+            
+            setTimeout(() => {
+                nextBaristaQuestion();
+            }, 1000);
+        }
+
+        // BIẾN DATA TỪ VỰNG & NGỮ PHÁP (Học Tiếng Anh)
         let vocabData = [ 
             {en:'about',type:'Adverb/Preposition',vi:'Về cái gì đó'}, {en:'above',type:'Adverb/Preposition',vi:'Hơn cái gì đó'}, {en:'across',type:'Adverb/Preposition',vi:'Băng qua, Ngang qua'}, {en:'action',type:'Noun',vi:'Hành động'}, {en:'actor',type:'Noun',vi:'Diễn Viên'}, {en:'actress',type:'Noun',vi:'Nữ diễn viên'}, {en:'activity',type:'Noun',vi:'Hoạt động'}, {en:'add',type:'Verb',vi:'Thêm'}, {en:'address',type:'Noun',vi:'Địa chỉ'}, {en:'adult',type:'Noun',vi:'Người lớn'}, {en:'advice',type:'Noun',vi:'Khuyên bảo'}, {en:'afraid',type:'Adjective',vi:'Sợ'}, {en:'after',type:'Preposition',vi:'Sau đó'}, {en:'afternoon',type:'Noun',vi:'Buổi chiều'}, {en:'again',type:'Adverb',vi:'Lặp lại'}, {en:'age',type:'Noun',vi:'Tuổi'}, {en:'ago',type:'Adverb',vi:'Trước kia'}, {en:'agree',type:'Verb',vi:'Đồng ý'}, {en:'air',type:'Noun',vi:'Không khí'}, {en:'airport',type:'Noun',vi:'Sân bay'}, {en:'all',type:'Determiner/Pronoun',vi:'Tất cả'}, {en:'also',type:'Adverb',vi:'Mà còn'}, {en:'always',type:'Adverb',vi:'Luôn luôn'}, {en:'amazing',type:'Adjective',vi:'Ngạc nhiên'}, {en:'an',type:'Indefinite article',vi:'Một'}, {en:'and',type:'Conjunction',vi:'Và'}, {en:'angry',type:'Adjective',vi:'Giận dữ'}, {en:'animal',type:'Noun',vi:'Động vật'}, {en:'another',type:'Determiner/Pronoun',vi:'Khác'}, {en:'answer',type:'Noun/Verb',vi:'Trả lời'}, {en:'any',type:'Determiner/Pronoun',vi:'Bất kì'}, {en:'anyone',type:'Pronoun',vi:'Bất kì ai'}, {en:'anything',type:'Pronoun',vi:'Bất kì điều gì'},
             {en:'apartment',type:'Noun',vi:'Căn hộ'}, {en:'apple',type:'Noun',vi:'Quả táo'}, {en:'april',type:'Noun',vi:'Tháng tư'}, {en:'area',type:'Noun',vi:'Khu vực, vùng, diện tích'}, {en:'arm',type:'Noun',vi:'Cánh tay'}, {en:'around',type:'Adverb/Preposition',vi:'Xung quanh'}, {en:'arrive',type:'Verb',vi:'Đến, tới nơi'}, {en:'art',type:'Noun',vi:'Nghệ thuật'}, {en:'article',type:'Noun',vi:'Bài báo, bài viết'}, {en:'artist',type:'Noun',vi:'Nghệ sĩ, họa sĩ'}, {en:'as',type:'Preposition',vi:'Như, như là, khi, vì'}, {en:'ask',type:'Verb',vi:'Hỏi, yêu cầu'}, {en:'at',type:'Preposition',vi:'Ở, tại, lúc'}, {en:'august',type:'Noun',vi:'Tháng tám'}, {en:'aunt',type:'Noun',vi:'Dì, cô, bác'}, {en:'autumn',type:'Noun',vi:'Mùa thu'}, {en:'away',type:'Adverb',vi:'Đi xa, cách xa, rời'}
         ];
         
-        // DATA ĐOẠN VĂN
         const paragraphData = [
             { id: 'p1_en', type: 'en-vi', title: 'Bài 1: Dịch sang Tiếng Việt', src: "I live in a small apartment. I like eating apples. My birthday is in April. The area around my house is very beautiful. Yesterday my arm hurt a little. I often walk around the park. My friend arrives at 7 o’clock. I like art and read articles. She is an artist. I work as a teacher. I ask her a question. I am at home in the evening. August is very hot. My aunt lives far away. Autumn is very beautiful.", expected: "Tôi sống trong một căn hộ nhỏ. Tôi thích ăn táo. Sinh nhật tôi vào tháng Tư. Khu vực quanh nhà tôi rất đẹp. Hôm qua cánh tay tôi hơi đau. Tôi thường đi dạo quanh công viên. Bạn tôi đến lúc 7 giờ. Tôi thích nghệ thuật và đọc bài báo. Cô ấy là một nghệ sĩ. Tôi làm việc như một giáo viên. Tôi hỏi cô ấy một câu hỏi. Tôi ở nhà vào buổi tối. Tháng Tám rất nóng. Dì tôi sống ở xa. Mùa thu rất đẹp." },
             { id: 'p1_vi', type: 'vi-en', title: 'Bài 1: Dịch sang Tiếng Anh', src: "Tôi sống trong một căn hộ nhỏ. Tôi thích ăn táo. Sinh nhật tôi vào tháng Tư. Khu vực quanh nhà tôi rất đẹp. Hôm qua cánh tay tôi hơi đau. Tôi thường đi dạo quanh công viên. Bạn tôi đến lúc 7 giờ. Tôi thích nghệ thuật và đọc bài báo. Cô ấy là một nghệ sĩ. Tôi làm việc như một giáo viên. Tôi hỏi cô ấy một câu hỏi. Tôi ở nhà vào buổi tối. Tháng Tám rất nóng. Dì tôi sống ở xa. Mùa thu rất đẹp.", expected: "I live in a small apartment. I like eating apples. My birthday is in April. The area around my house is very beautiful. Yesterday my arm hurt a little. I often walk around the park. My friend arrives at 7 o'clock. I like art and read articles. She is an artist. I work as a teacher. I ask her a question. I am at home in the evening. August is very hot. My aunt lives far away. Autumn is very beautiful." }
         ];
 
-        // NGỮ PHÁP
         let gramState = { currentQ: 0 };
         const grammarRules = { 
             "at": {title: "Giới từ AT", text: "Chúng ta sử dụng 'at' với các tính từ như good / bad / amazing / brilliant / terrible, v.v. để nói về kỹ năng và khả năng.\nVí dụ:\nHe's really good at English.\nShe's amazing at the piano.", color: "bg-blue-100 text-blue-800"}, 
@@ -405,6 +592,8 @@
                 startBtn.style.animation = 'none'; startBtn.classList.replace('scale-100', 'scale-150'); startBtn.classList.replace('opacity-100', 'opacity-0');
                 audioBg.volume = 0.4; audioBg.play().catch(e => {});
                 document.getElementById('music-toggle').classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4'); document.getElementById('music-toggle').classList.add('opacity-100', 'translate-y-0');
+                // Nút Barista
+                document.getElementById('barista-btn').classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4'); document.getElementById('barista-btn').classList.add('opacity-100', 'translate-y-0');
                 setTimeout(() => { document.getElementById('intro-screen').style.opacity = '0'; setTimeout(() => { document.getElementById('intro-screen').style.display = 'none'; document.getElementById('body').classList.remove('no-scroll'); switchView('hub'); }, 500); }, 300);
             });
 
@@ -440,7 +629,7 @@
                 if(doc.exists) { 
                     userData = doc.data(); 
                     if(!userData.inventory) userData.inventory={}; 
-                    if(typeof userData.highScoreFalling === 'undefined') userData.highScoreFalling = 0; // FIX HIGHSCORE
+                    if(typeof userData.highScoreFalling === 'undefined') userData.highScoreFalling = 0;
                     checkDailyLogin(); 
                 } else { 
                     userData = {coins:500, tickets:1, pity:0, inventory:{}, highScoreFalling:0, lastLogin: new Date().toDateString()}; 
