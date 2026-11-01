@@ -102,7 +102,7 @@
         <svg id="icon-music-pause" class="w-6 h-6 hidden text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path></svg>
     </button>
 
-    <!-- NÚT BARISTA TEST (GÓC TRÁI) -->
+    <!-- NÚT BARISTA TEST -->
     <button id="barista-btn" onclick="playClickSound(); openBaristaModal()" class="fixed bottom-6 left-6 w-14 h-14 rounded-full bg-gradient-to-br from-amber-700 to-amber-500 text-white flex items-center justify-center cursor-pointer z-[9999] shadow-[0_0_20px_rgba(217,119,6,0.4)] hover:scale-110 transition-all duration-500 border-2 border-amber-300 opacity-0 pointer-events-none translate-y-4 group">
         <span class="text-2xl drop-shadow-md">☕</span>
         <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-amber-800 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">KT Pha Chế</div>
@@ -201,7 +201,7 @@
         <header class="max-w-4xl mx-auto pt-24 px-6 text-center mb-10"><h1 class="font-serif text-4xl font-semibold mb-4 text-textDark">Góc <span class="text-primary italic">Tiếng Anh</span></h1><p class="text-textGray">Cùng nhau ôn tập từ vựng và ngữ pháp nhé! 📖</p></header>
         <main class="max-w-5xl mx-auto px-6">
             <div id="study-menu" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <button onclick="playClickSound(); openStudyMode('list')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group"><div class="text-3xl mb-3">📝</div><h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Danh sách từ vựng</h3><p class="text-sm text-textGray">Xem đầy đủ 50 từ</p></button>
+                <button onclick="playClickSound(); openStudyMode('list')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group"><div class="text-3xl mb-3">📝</div><h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Danh sách từ vựng</h3><p class="text-sm text-textGray">Xem đầy đủ từ đã học</p></button>
                 <button onclick="playClickSound(); openStudyMode('en-vi')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-blue-200"><div class="text-3xl mb-3">🇬🇧 ➡️ 🇻🇳</div><h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Dịch Tiếng Việt</h3><p class="text-sm text-textGray">Hỏi tiếng Anh</p></button>
                 <button onclick="playClickSound(); openStudyMode('vi-en')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-green-200"><div class="text-3xl mb-3">🇻🇳 ➡️ 🇬🇧</div><h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Dịch Tiếng Anh</h3><p class="text-sm text-textGray">Hỏi tiếng Việt</p></button>
                 <button onclick="playClickSound(); openStudyMode('type')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-purple-200"><div class="text-3xl mb-3">🔍</div><h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Phân tích loại từ</h3><p class="text-sm text-textGray">Nhập Noun, Verb...</p></button>
@@ -215,11 +215,12 @@
                 <button onclick="playClickSound(); backToStudyMenu()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"><svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                 <h2 id="study-content-title" class="text-2xl font-bold text-primary mb-6 border-b border-primary/20 pb-4">Tiêu đề</h2>
                 
+                <!-- CONTAINER DANH SÁCH TỪ VỰNG CÓ CHỨC NĂNG LỌC -->
                 <div id="vocab-list-container" class="hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"></div>
                 
                 <div id="quiz-container" class="hidden flex flex-col items-center">
                     <div class="text-sm text-textGray mb-2 font-medium" id="quiz-progress">Câu 1 / 10</div>
-                    <div class="w-full bg-white rounded-2xl p-8 text-center shadow-sm border border-gray-100 mb-6"><p class="text-xs text-primary font-bold uppercase tracking-widest mb-2" id="quiz-hint">Dịch sang tiếng Việt</p><h3 class="text-3xl font-serif font-bold text-textDark" id="quiz-question">Word</h3></div>
+                    <div class="w-full bg-white rounded-2xl p-8 text-center shadow-sm border border-gray-100 mb-6"><p class="text-xs text-primary font-bold uppercase tracking-widest mb-2" id="quiz-hint">Dịch sang tiếng Việt</p><h3 class="text-3xl font-serif font-bold text-textDark capitalize" id="quiz-question">Word</h3></div>
                     <input type="text" id="quiz-input" autocomplete="off" placeholder="Nhập đáp án của bạn..." class="w-full max-w-md px-5 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-primary text-center text-lg mb-4 transition-colors">
                     <button id="quiz-submit-btn" onclick="playClickSound(); checkQuizAnswer()" class="bg-primary hover:bg-[#4FC3F7] text-white px-8 py-3 rounded-xl font-bold transition-all shadow-md w-full max-w-md">Kiểm tra (+10🪙)</button>
                     <div id="quiz-feedback" class="mt-4 p-4 rounded-xl w-full max-w-md hidden text-center font-medium"></div>
@@ -399,7 +400,7 @@
         const firebaseConfig = { apiKey: "AIzaSyAm5PXedBf4HH4OhzHOKJ4_-ESrJNSABYk", authDomain: "bautroi-738c9.firebaseapp.com", projectId: "bautroi-738c9", storageBucket: "bautroi-738c9.firebasestorage.app" };
         firebase.initializeApp(firebaseConfig); const db = firebase.firestore();
 
-        // 2. BIẾN AUDIO & HÀM PLAY SOUND (ĐÃ GIẢM ÂM LƯỢNG)
+        // 2. BIẾN AUDIO & HÀM PLAY SOUND
         let currentUser = null, userData = { coins: 0, tickets: 0, pity: 0, inventory: {}, highScoreFalling: 0 };
         const audioBg = document.getElementById('bg-music');
         const audioClick = document.getElementById('sound-click');
@@ -417,7 +418,7 @@
 
         function playClickSound() { try { if(audioClick) { audioClick.currentTime = 0; audioClick.play().catch(e=>{}); } } catch(e) {} }
 
-        // DATA PHA CHẾ ĐÃ ĐƯỢC CHIA MENU VÀ GIỮ NGUYÊN DANH SÁCH CŨ
+        // DATA PHA CHẾ
         const baristaData = [
             { code: "T3", name: "Cà phê đen", recipe: "50 ml cafe\n20 ml đường nước", menu: 1 },
             { code: "T5", name: "Cà phê sữa", recipe: "50 ml cafe\n30 ml sữa đặc", menu: 1 },
@@ -524,7 +525,6 @@
             document.getElementById('barista-name-error').classList.add('hidden');
         }
 
-        // Bắt sự kiện bấm Enter cho input tên món pha chế
         document.getElementById('barista-name-input').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') { e.preventDefault(); checkBaristaName(); }
         });
@@ -568,7 +568,7 @@
                 db.collection('users').doc(currentUser).update({coins: userData.coins});
                 try{if(audioCoin){audioCoin.currentTime=0; audioCoin.play().catch(()=>{});}}catch(e){}
                 if (coinReward === 100) fireConfetti();
-                // Cập nhật lại UI hiển thị số xu mới
+                // Cập nhật lại UI
                 document.getElementById('hub-coins').innerText = userData.coins;
                 document.getElementById('bb-coins').innerText = userData.coins;
             } else {
@@ -580,10 +580,12 @@
             }, 1000);
         }
 
-        // BIẾN DATA TỪ VỰNG & NGỮ PHÁP (Học Tiếng Anh)
+        // BIẾN DATA TỪ VỰNG & NGỮ PHÁP (Học Tiếng Anh) - ĐÃ CẬP NHẬT TỪ VỰNG CHỮ A VÀ B
         let vocabData = [ 
-            {en:'about',type:'Adverb/Preposition',vi:'Về cái gì đó'}, {en:'above',type:'Adverb/Preposition',vi:'Hơn cái gì đó'}, {en:'across',type:'Adverb/Preposition',vi:'Băng qua, Ngang qua'}, {en:'action',type:'Noun',vi:'Hành động'}, {en:'actor',type:'Noun',vi:'Diễn Viên'}, {en:'actress',type:'Noun',vi:'Nữ diễn viên'}, {en:'activity',type:'Noun',vi:'Hoạt động'}, {en:'add',type:'Verb',vi:'Thêm'}, {en:'address',type:'Noun',vi:'Địa chỉ'}, {en:'adult',type:'Noun',vi:'Người lớn'}, {en:'advice',type:'Noun',vi:'Khuyên bảo'}, {en:'afraid',type:'Adjective',vi:'Sợ'}, {en:'after',type:'Preposition',vi:'Sau đó'}, {en:'afternoon',type:'Noun',vi:'Buổi chiều'}, {en:'again',type:'Adverb',vi:'Lặp lại'}, {en:'age',type:'Noun',vi:'Tuổi'}, {en:'ago',type:'Adverb',vi:'Trước kia'}, {en:'agree',type:'Verb',vi:'Đồng ý'}, {en:'air',type:'Noun',vi:'Không khí'}, {en:'airport',type:'Noun',vi:'Sân bay'}, {en:'all',type:'Determiner/Pronoun',vi:'Tất cả'}, {en:'also',type:'Adverb',vi:'Mà còn'}, {en:'always',type:'Adverb',vi:'Luôn luôn'}, {en:'amazing',type:'Adjective',vi:'Ngạc nhiên'}, {en:'an',type:'Indefinite article',vi:'Một'}, {en:'and',type:'Conjunction',vi:'Và'}, {en:'angry',type:'Adjective',vi:'Giận dữ'}, {en:'animal',type:'Noun',vi:'Động vật'}, {en:'another',type:'Determiner/Pronoun',vi:'Khác'}, {en:'answer',type:'Noun/Verb',vi:'Trả lời'}, {en:'any',type:'Determiner/Pronoun',vi:'Bất kì'}, {en:'anyone',type:'Pronoun',vi:'Bất kì ai'}, {en:'anything',type:'Pronoun',vi:'Bất kì điều gì'},
-            {en:'apartment',type:'Noun',vi:'Căn hộ'}, {en:'apple',type:'Noun',vi:'Quả táo'}, {en:'april',type:'Noun',vi:'Tháng tư'}, {en:'area',type:'Noun',vi:'Khu vực, vùng, diện tích'}, {en:'arm',type:'Noun',vi:'Cánh tay'}, {en:'around',type:'Adverb/Preposition',vi:'Xung quanh'}, {en:'arrive',type:'Verb',vi:'Đến, tới nơi'}, {en:'art',type:'Noun',vi:'Nghệ thuật'}, {en:'article',type:'Noun',vi:'Bài báo, bài viết'}, {en:'artist',type:'Noun',vi:'Nghệ sĩ, họa sĩ'}, {en:'as',type:'Preposition',vi:'Như, như là, khi, vì'}, {en:'ask',type:'Verb',vi:'Hỏi, yêu cầu'}, {en:'at',type:'Preposition',vi:'Ở, tại, lúc'}, {en:'august',type:'Noun',vi:'Tháng tám'}, {en:'aunt',type:'Noun',vi:'Dì, cô, bác'}, {en:'autumn',type:'Noun',vi:'Mùa thu'}, {en:'away',type:'Adverb',vi:'Đi xa, cách xa, rời'}
+            // Chữ A
+            {en:'about',type:'Adverb/Preposition',vi:'Về cái gì đó'}, {en:'above',type:'Adverb/Preposition',vi:'Hơn cái gì đó'}, {en:'across',type:'Adverb/Preposition',vi:'Băng qua, Ngang qua'}, {en:'action',type:'Noun',vi:'Hành động'}, {en:'actor',type:'Noun',vi:'Diễn Viên'}, {en:'actress',type:'Noun',vi:'Nữ diễn viên'}, {en:'activity',type:'Noun',vi:'Hoạt động'}, {en:'add',type:'Verb',vi:'Thêm'}, {en:'address',type:'Noun',vi:'Địa chỉ'}, {en:'adult',type:'Noun',vi:'Người lớn'}, {en:'advice',type:'Noun',vi:'Khuyên bảo'}, {en:'afraid',type:'Adjective',vi:'Sợ'}, {en:'after',type:'Preposition',vi:'Sau đó'}, {en:'afternoon',type:'Noun',vi:'Buổi chiều'}, {en:'again',type:'Adverb',vi:'Lặp lại'}, {en:'age',type:'Noun',vi:'Tuổi'}, {en:'ago',type:'Adverb',vi:'Trước kia'}, {en:'agree',type:'Verb',vi:'Đồng ý'}, {en:'air',type:'Noun',vi:'Không khí'}, {en:'airport',type:'Noun',vi:'Sân bay'}, {en:'all',type:'Determiner/Pronoun',vi:'Tất cả'}, {en:'also',type:'Adverb',vi:'Mà còn'}, {en:'always',type:'Adverb',vi:'Luôn luôn'}, {en:'amazing',type:'Adjective',vi:'Ngạc nhiên'}, {en:'an',type:'Indefinite article',vi:'Một'}, {en:'and',type:'Conjunction',vi:'Và'}, {en:'angry',type:'Adjective',vi:'Giận dữ'}, {en:'animal',type:'Noun',vi:'Động vật'}, {en:'another',type:'Determiner/Pronoun',vi:'Khác'}, {en:'answer',type:'Noun/Verb',vi:'Trả lời'}, {en:'any',type:'Determiner/Pronoun',vi:'Bất kì'}, {en:'anyone',type:'Pronoun',vi:'Bất kì ai'}, {en:'anything',type:'Pronoun',vi:'Bất kì điều gì'}, {en:'apartment',type:'Noun',vi:'Căn hộ'}, {en:'apple',type:'Noun',vi:'Quả táo'}, {en:'april',type:'Noun',vi:'Tháng tư'}, {en:'area',type:'Noun',vi:'Khu vực, vùng, diện tích'}, {en:'arm',type:'Noun',vi:'Cánh tay'}, {en:'around',type:'Adverb/Preposition',vi:'Xung quanh'}, {en:'arrive',type:'Verb',vi:'Đến, tới nơi'}, {en:'art',type:'Noun',vi:'Nghệ thuật'}, {en:'article',type:'Noun',vi:'Bài báo, bài viết'}, {en:'artist',type:'Noun',vi:'Nghệ sĩ, họa sĩ'}, {en:'as',type:'Preposition',vi:'Như, như là, khi, vì'}, {en:'ask',type:'Verb',vi:'Hỏi, yêu cầu'}, {en:'at',type:'Preposition',vi:'Ở, tại, lúc'}, {en:'august',type:'Noun',vi:'Tháng tám'}, {en:'aunt',type:'Noun',vi:'Dì, cô, bác'}, {en:'autumn',type:'Noun',vi:'Mùa thu'}, {en:'away',type:'Adverb',vi:'Đi xa, cách xa, rời'},
+            // Chữ B (Mới thêm)
+            {en:'baby', type:'Noun', vi:'Đứa bé'}, {en:'back', type:'Adverb', vi:'Lưng, phía sau, trở lại'}, {en:'bad', type:'Adjective', vi:'Xấu, tồi, tệ, dở'}, {en:'ball', type:'Noun', vi:'Quả bóng'}, {en:'banana', type:'Noun', vi:'Chuối'}, {en:'band', type:'Noun', vi:'Ban nhạc, dải, băng'}, {en:'bank', type:'Noun', vi:'Ngân hàng'}, {en:'bar', type:'Noun', vi:'Quầy rượu'}, {en:'bath', type:'Noun', vi:'Bồn tắm'}, {en:'bathroom', type:'Noun', vi:'Phòng tắm'}, {en:'be', type:'Verb', vi:'Thì, là, ở'}, {en:'beach', type:'Noun', vi:'Bãi biển, bờ biển'}, {en:'beautiful', type:'Adjective', vi:'Đẹp, xinh đẹp'}, {en:'because', type:'Conjunction', vi:'Bởi vì'}, {en:'because of', type:'Preposition', vi:'Bởi vì, do, vì'}, {en:'become', type:'Verb', vi:'Trở thành, trở nên'}, {en:'bed', type:'Noun', vi:'Giường'}, {en:'bedroom', type:'Noun', vi:'Phòng ngủ'}, {en:'beer', type:'Noun', vi:'Bia'}, {en:'before', type:'Preposition', vi:'Trước, trước khi'}, {en:'begin', type:'Verb', vi:'Bắt đầu, khởi đầu'}, {en:'beginning', type:'Noun', vi:'Đang bắt đầu'}, {en:'behave', type:'Verb', vi:'Cư xử, hành xử'}, {en:'behavior', type:'Noun', vi:'Hành vi, cách cư xử'}, {en:'behind', type:'Adverb/Preposition', vi:'Phía sau, đằng sau'}, {en:'being', type:'Noun', vi:'Sự tồn tại; đang'}, {en:'belief', type:'Noun', vi:'Niềm tin, tín ngưỡng'}, {en:'believe', type:'Verb', vi:'Tin, tin tưởng'}, {en:'bell', type:'Noun', vi:'Cái chuông'}, {en:'belong', type:'Verb', vi:'Thuộc về, là của'}, {en:'below', type:'Adverb/Preposition', vi:'Bên dưới, phía dưới'}
         ];
         
         const paragraphData = [
@@ -746,7 +748,8 @@
             if(mode==='list'){ 
                 title.innerText=`📝 Danh sách từ vựng (${vocabData.length} từ)`; 
                 document.getElementById('vocab-list-container').classList.remove('hidden'); 
-                document.getElementById('vocab-list-container').innerHTML = vocabData.map(item=>`<div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-center hover:scale-105 transition-transform"><span class="text-xs text-gray-400 mb-1">${item.type}</span><h4 class="text-xl font-bold text-primary mb-1">${item.en}</h4><p class="text-sm text-textDark">${item.vi}</p></div>`).join(''); 
+                // Gọi hàm render để có Lọc A B
+                renderVocabList('all');
             } else if(mode==='memory'){ 
                 title.innerText='🧠 Kiểm tra trí nhớ'; document.getElementById('memory-container').classList.remove('hidden'); document.getElementById('memory-input').value=""; document.getElementById('memory-feedback').classList.add('hidden'); 
             } else if(mode==='grammar'){ 
@@ -761,6 +764,40 @@
                 document.getElementById('quiz-container').classList.remove('hidden'); loadQuizQuestion(); 
             } 
         }
+
+        // HÀM RENDER VÀ FILTER CHO DANH SÁCH TỪ VỰNG
+        function renderVocabList(filter = 'all') {
+            const container = document.getElementById('vocab-list-container');
+            let filteredData = vocabData;
+            
+            if (filter !== 'all') {
+                filteredData = vocabData.filter(w => w.en.toLowerCase().startsWith(filter));
+            }
+
+            // Thanh lọc chữ cái
+            let html = `
+            <div class="col-span-full flex flex-wrap gap-2 mb-4 justify-center">
+                <button onclick="renderVocabList('all')" class="px-5 py-2 rounded-full text-sm font-bold transition-colors ${filter==='all' ? 'bg-primary text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}">Tất cả (${vocabData.length})</button>
+                <button onclick="renderVocabList('a')" class="px-5 py-2 rounded-full text-sm font-bold transition-colors ${filter==='a' ? 'bg-primary text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}">Chữ A</button>
+                <button onclick="renderVocabList('b')" class="px-5 py-2 rounded-full text-sm font-bold transition-colors ${filter==='b' ? 'bg-primary text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}">Chữ B</button>
+            </div>
+            `;
+
+            if (filteredData.length === 0) {
+                html += `<div class="col-span-full text-center py-10 text-gray-400 font-medium">Chưa có từ nào thuộc nhóm này.</div>`;
+            } else {
+                html += filteredData.map(item => `
+                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-center hover:scale-105 transition-transform flex flex-col justify-between">
+                        <span class="text-xs text-gray-400 mb-1 capitalize">${item.type}</span>
+                        <h4 class="text-xl font-bold text-primary mb-1 capitalize">${item.en}</h4>
+                        <p class="text-sm text-textDark">${item.vi}</p>
+                    </div>
+                `).join('');
+            }
+
+            container.innerHTML = html;
+        }
+
         function backToStudyMenu() { document.getElementById('study-content').classList.add('hidden'); document.getElementById('study-menu').classList.remove('hidden'); if(fwActive) endFallingGame(true); }
         
         // NGỮ PHÁP (GRAMMAR)
