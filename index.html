@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trạm Kỷ Niệm & Học Tập VIP</title>
+    <title>Trạm Kỷ Niệm & Học Tập VIP | Shadow Hunter 3D</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <!-- Font Ma mị cho Shadow Hunter -->
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
     
+    <!-- 3D Model Viewer -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -33,29 +38,25 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
+        /* ================= BẢN GỐC ================= */
         body { background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 50%, #7DD3FC 100%); min-height: 100vh; margin: 0; overflow-x: hidden; scroll-behavior: smooth; }
         .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 8px 32px rgba(91, 155, 255, 0.1); }
         .vip-glass { background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(20px); border-left: 1px solid rgba(255, 255, 255, 0.1); box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
-        
         .bubble-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
         .bubble-card:hover { transform: scale(1.03) translateY(-5px); box-shadow: 0 20px 40px rgba(91, 155, 255, 0.2); border-color: rgba(91, 155, 255, 0.4); }
-        
         .start-bubble { background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.2)); box-shadow: inset 0 0 20px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.4), 0 15px 30px rgba(91, 155, 255, 0.4); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.6); animation: floatBubble 3s ease-in-out infinite; }
         @keyframes floatBubble { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-15px) scale(1.05); } }
-        
         .hub-icon { animation: floatSlow 4s ease-in-out infinite; } .hub-icon:nth-child(2) { animation-delay: 1s; } .hub-icon:nth-child(3) { animation-delay: 2s; } .hub-icon:nth-child(4) { animation-delay: 0.5s; }
         @keyframes floatSlow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
         .modal-enter { opacity: 0; transform: scale(0.95) translateY(10px); } .modal-enter-active { opacity: 1; transform: scale(1) translateY(0); transition: all 0.3s ease-out; }
         .modal-leave { opacity: 1; transform: scale(1) translateY(0); } .modal-leave-active { opacity: 0; transform: scale(0.95) translateY(10px); transition: all 0.2s ease-in; }
         .slide-down-enter { opacity: 0; transform: translateY(-20px); transition: all 0.4s ease; } .slide-down-enter-active { opacity: 1; transform: translateY(0); }
-
         .dark-scroll::-webkit-scrollbar { width: 6px; } .dark-scroll::-webkit-scrollbar-track { background: transparent; } .dark-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
         ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #A5D8FF; border-radius: 10px; }
         .no-scroll { overflow: hidden; height: 100vh; }
         .star { cursor: pointer; color: #cbd5e1; transition: color 0.2s; } .star.active { color: #fbbf24; }
-
-        /* GACHA STYLES */
+        
+        /* Gacha Styles */
         :root { --rarity-thuong: #A0A0A0; --rarity-hiem: #3b82f6; --rarity-caocap: #a855f7; --rarity-sieuhiem: #eab308; --rarity-bian: #ef4444; }
         .blind-box-bg { background: radial-gradient(circle at center, #1e1e2f 0%, #0a0a0f 100%); color: white; }
         .gacha-window { position: relative; width: 100%; height: 250px; background: rgba(0,0,0,0.5); overflow: hidden; border-radius: 1rem; border: 2px solid rgba(255,255,255,0.1); box-shadow: inset 0 0 50px rgba(0,0,0,0.8); }
@@ -75,7 +76,7 @@
         .mystery-box { font-size: 3rem; font-weight: bold; color: rgba(255,255,255,0.2); }
         .card-3d-wrapper { perspective: 1000px; } .card-3d-inner { transition: transform 0.8s; transform-style: preserve-3d; } .card-3d-wrapper.flipped .card-3d-inner { transform: rotateY(180deg); } .card-front, .card-back { backface-visibility: hidden; position: absolute; inset: 0; } .card-back { transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; background: url('https://i.postimg.cc/85z1DkS0/card-back.jpg') center/cover; border-radius: 0.75rem; border: 2px solid rgba(255,255,255,0.2); }
 
-        /* STYLE GAME CHỮ RƠI */
+        /* Game Chữ Rơi Styles */
         .cute-falling-word { position: absolute; padding: 12px 16px; background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%); border-radius: 24px; border: 2px solid #bae6fd; border-bottom: 6px solid #7dd3fc; box-shadow: 0 10px 25px rgba(56, 189, 248, 0.25), inset 0 3px 0 white; text-align: center; will-change: transform, top; animation: floatWobble 2s ease-in-out infinite alternate; z-index: 10; }
         .cute-hint { font-size: 0.85rem; color: #0284c7; font-weight: 800; margin-bottom: 6px; display: block; text-shadow: 1px 1px 0px rgba(255,255,255,0.8); }
         .letter-box { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 32px; border-radius: 8px; font-weight: 900; font-size: 16px; text-transform: uppercase; margin: 0 2px; }
@@ -84,6 +85,17 @@
         .cute-falling-word.hit { background: linear-gradient(135deg, #bbf7d0, #4ade80); border-color: #22c55e; border-bottom-color: #16a34a; transform: scale(1.1); opacity: 0; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes floatWobble { 0% { transform: rotate(-3deg) translateX(-2px); } 100% { transform: rotate(3deg) translateX(2px); } }
         @keyframes pulseGlow { 0% { box-shadow: 0 0 0 rgba(56, 189, 248, 0); } 100% { box-shadow: 0 0 10px rgba(56, 189, 248, 0.5); } }
+
+        /* ================= SHADOW HUNTER CSS ================= */
+        .sh-theme { background: radial-gradient(circle at center, #1a0000 0%, #000000 100%); color: #ff3333; font-family: 'Inter', sans-serif; }
+        .blood-text { font-family: 'Creepster', cursive; text-shadow: 0 0 10px #ff0000, 0 0 20px #8b0000; }
+        .fog-overlay { position: absolute; inset: 0; background: url('https://i.postimg.cc/k4W0G3w3/fog.png') repeat-x; background-size: cover; opacity: 0.15; animation: fogMove 20s linear infinite; pointer-events: none; mix-blend-mode: screen; }
+        @keyframes fogMove { 0% { background-position: 0% 0; } 100% { background-position: 100% 0; } }
+        .sh-btn { background: linear-gradient(180deg, #4a0000 0%, #1a0000 100%); border: 1px solid #ff0000; box-shadow: 0 0 10px rgba(255,0,0,0.3); transition: all 0.3s; }
+        .sh-btn:hover { box-shadow: 0 0 20px rgba(255,0,0,0.8); text-shadow: 0 0 5px white; transform: scale(1.05); }
+        .sh-card { background: rgba(20, 0, 0, 0.8); border: 1px solid #550000; backdrop-filter: blur(5px); }
+        .glitch-anim { animation: glitch 0.2s linear infinite alternate; }
+        @keyframes glitch { 0% { transform: translate(1px, 1px); } 100% { transform: translate(-1px, -1px); } }
     </style>
 </head>
 <body class="text-textDark antialiased no-scroll" id="body">
@@ -108,14 +120,21 @@
         <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-amber-800 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">KT Pha Chế</div>
     </button>
 
-    <!-- 0. LOGIN SCREEN -->
+    <!-- 0. LOGIN SCREEN (Cập nhật Nút vào Shadow Hunter) -->
     <div id="login-screen" class="fixed inset-0 z-[200] flex items-center justify-center bg-[#E0F2FE] transition-all duration-500">
         <div class="glass-card p-10 rounded-3xl w-full max-w-md text-center shadow-2xl border-2 border-white">
             <h2 class="font-serif text-3xl font-bold text-primary mb-2">Đăng Nhập</h2>
             <p class="text-sm text-textGray mb-8">Đồng bộ dữ liệu Kỷ niệm, Học tập & Gacha!</p>
             <input type="text" id="login-user" placeholder="Tên đăng nhập (luuthiethoa / hamy)" class="w-full px-5 py-3.5 rounded-xl border border-blue-200 mb-4 text-center focus:outline-none focus:border-primary">
             <input type="password" id="login-pass" placeholder="Mật khẩu" class="w-full px-5 py-3.5 rounded-xl border border-blue-200 mb-6 text-center focus:outline-none focus:border-primary">
+            
             <button id="login-btn" onclick="playClickSound(); handleLogin()" class="w-full bg-primary hover:bg-[#4FC3F7] text-white py-3.5 rounded-xl font-bold transition-all shadow-lg shadow-primary/30">Vào Không Gian</button>
+            
+            <!-- NÚT VÀO SHADOW HUNTER -->
+            <button id="sh-login-btn" onclick="playClickSound(); handleSHLogin()" class="w-full mt-4 bg-transparent border-2 border-red-900 text-red-600 hover:bg-red-900 hover:text-white py-3.5 rounded-xl font-bold transition-all shadow-[0_0_15px_rgba(150,0,0,0.5)]">
+                Vào Kênh Game Shadow Hunter 💀
+            </button>
+
             <p id="login-error" class="text-rose-500 text-sm mt-4 hidden font-medium">Sai tài khoản hoặc mật khẩu!</p>
         </div>
     </div>
@@ -215,7 +234,6 @@
                 <button onclick="playClickSound(); backToStudyMenu()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"><svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                 <h2 id="study-content-title" class="text-2xl font-bold text-primary mb-6 border-b border-primary/20 pb-4">Tiêu đề</h2>
                 
-                <!-- CONTAINER DANH SÁCH TỪ VỰNG CÓ CHỨC NĂNG LỌC -->
                 <div id="vocab-list-container" class="hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"></div>
                 
                 <div id="quiz-container" class="hidden flex flex-col items-center">
@@ -391,7 +409,100 @@
         </div>
     </div>
 
-    <!-- ================= SCRIPTS ================= -->
+    <!-- ================= SHADOW HUNTER MODULE 3D ================= -->
+    <div id="sh-module" class="fixed inset-0 z-[600] hidden sh-theme overflow-hidden flex-col">
+        <div class="fog-overlay"></div>
+        <audio id="sh-bgm" loop src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio> <!-- Thay link nhạc ma mị nếu muốn -->
+        
+        <!-- 1. SẢNH CHỜ & SHOP (LOBBY) -->
+        <div id="sh-lobby" class="relative z-10 w-full h-full flex flex-col items-center justify-center p-4">
+            <button onclick="exitSH()" class="absolute top-4 left-4 text-red-500 font-bold border border-red-900 px-4 py-1 rounded bg-black/50 hover:bg-red-900">⬅ Thoát Game</button>
+            <div class="absolute top-4 right-4 text-red-500 font-bold bg-black/50 border border-red-900 px-4 py-1 rounded">
+                🩸 Xu Đen: <span id="sh-coins-display">0</span>
+            </div>
+            
+            <h1 class="blood-text text-5xl md:text-7xl mb-2 text-red-600 text-center uppercase tracking-widest">Shadow Hunter</h1>
+            <p class="text-red-400/70 mb-8 text-sm tracking-widest text-center">The board game of deception and survival</p>
+
+            <!-- 3D Avatar Viewer -->
+            <div class="w-full max-w-sm h-64 mb-6 border border-red-800 rounded-xl relative overflow-hidden bg-black shadow-[0_0_30px_rgba(255,0,0,0.2)]">
+                <model-viewer id="sh-main-model" src="nhanvatkhoidau.glb" class="w-full h-full" auto-rotate camera-controls shadow-intensity="1" exposure="0.8"></model-viewer>
+                <div class="absolute bottom-2 left-2 right-2 flex justify-between items-end">
+                    <span class="bg-black/80 px-2 py-1 text-xs border border-red-900 rounded text-red-500" id="sh-current-model-name">Nhân vật khởi đầu</span>
+                    <button onclick="openSHShop()" class="sh-btn px-4 py-1 rounded font-bold text-sm text-red-100">🛒 Cửa Hàng</button>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-4 w-full max-w-sm">
+                <h3 class="text-center font-bold text-red-600 border-b border-red-900 pb-2">Tạo Phòng</h3>
+                <div class="flex gap-4">
+                    <button onclick="startSHMatch(4)" class="flex-1 sh-btn py-3 rounded-lg font-bold text-red-100 uppercase">Phòng 4 Người</button>
+                    <button onclick="startSHMatch(6)" class="flex-1 sh-btn py-3 rounded-lg font-bold text-red-100 uppercase">Phòng 6 Người</button>
+                </div>
+                <button onclick="startSHMatch(0)" class="w-full mt-2 border border-red-900 bg-red-950/30 text-red-400 py-3 rounded-lg font-bold hover:bg-red-900/50 transition-all">🤖 Ghép với AI (Luật chuẩn)</button>
+            </div>
+        </div>
+
+        <!-- 2. CỬA HÀNG 3D (SHOP) -->
+        <div id="sh-shop" class="hidden absolute inset-0 z-20 bg-black/95 backdrop-blur flex flex-col p-6 overflow-y-auto">
+            <button onclick="closeSHShop()" class="absolute top-4 right-4 text-red-500 font-bold border border-red-900 px-4 py-1 rounded bg-black">Đóng X</button>
+            <h2 class="blood-text text-4xl text-center mb-8 mt-10">Ký Giao Ước</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto w-full" id="sh-shop-grid">
+                <!-- Render via JS -->
+            </div>
+        </div>
+
+        <!-- 3. GAME BOARD -->
+        <div id="sh-board" class="hidden relative z-10 w-full h-full flex flex-col">
+            <!-- Khu vực Map -->
+            <div class="flex-1 relative p-4 grid grid-cols-2 md:grid-cols-3 gap-2" id="sh-map-areas">
+                <div class="sh-card rounded-lg flex flex-col items-center justify-center p-2 text-center relative border-green-900"><span class="text-xs text-green-500 font-bold">2-3</span><p class="font-bold text-sm">Hermit's Cabin</p><p class="text-[10px] text-gray-400">Rút bài Xanh</p><div id="area-2-3" class="flex gap-1 mt-1 flex-wrap"></div></div>
+                <div class="sh-card rounded-lg flex flex-col items-center justify-center p-2 text-center relative border-gray-500"><span class="text-xs text-white font-bold">4-5</span><p class="font-bold text-sm">Underworld Gate</p><p class="text-[10px] text-gray-400">Rút 1 bài tùy chọn</p><div id="area-4-5" class="flex gap-1 mt-1 flex-wrap"></div></div>
+                <div class="sh-card rounded-lg flex flex-col items-center justify-center p-2 text-center relative border-white"><span class="text-xs text-white font-bold">6</span><p class="font-bold text-sm">Church</p><p class="text-[10px] text-gray-400">Rút bài Trắng</p><div id="area-6" class="flex gap-1 mt-1 flex-wrap"></div></div>
+                <div class="sh-card rounded-lg flex flex-col items-center justify-center p-2 text-center relative border-gray-700"><span class="text-xs text-gray-400 font-bold">8</span><p class="font-bold text-sm">Cemetery</p><p class="text-[10px] text-gray-400">Rút bài Đen</p><div id="area-8" class="flex gap-1 mt-1 flex-wrap"></div></div>
+                <div class="sh-card rounded-lg flex flex-col items-center justify-center p-2 text-center relative border-purple-900"><span class="text-xs text-purple-500 font-bold">9</span><p class="font-bold text-sm">Weird Woods</p><p class="text-[10px] text-gray-400">Nhận 2 dmg hoặc Hồi 1</p><div id="area-9" class="flex gap-1 mt-1 flex-wrap"></div></div>
+                <div class="sh-card rounded-lg flex flex-col items-center justify-center p-2 text-center relative border-yellow-900"><span class="text-xs text-yellow-600 font-bold">10</span><p class="font-bold text-sm">Erstwhile Altar</p><p class="text-[10px] text-gray-400">Cướp 1 Equipment</p><div id="area-10" class="flex gap-1 mt-1 flex-wrap"></div></div>
+            </div>
+
+            <!-- Khung nhật ký game -->
+            <div class="h-24 bg-black/80 border-t border-b border-red-900 overflow-y-auto p-2 text-xs font-mono text-gray-300" id="sh-log">
+                <p class="text-red-500">Màn đêm buông xuống... Trò chơi bắt đầu.</p>
+            </div>
+
+            <!-- Bảng điều khiển của người chơi -->
+            <div class="h-auto p-4 bg-gradient-to-t from-[#1a0000] to-transparent border-t border-red-900 flex flex-col gap-2">
+                <div class="flex justify-between items-center mb-1">
+                    <div>
+                        <h3 class="font-bold text-white text-lg" id="sh-my-name">Player</h3>
+                        <p class="text-xs font-bold text-red-500" id="sh-my-role">Phe: ❓ Ẩn</p>
+                        <p class="text-xs text-blue-400" id="sh-my-char">Nhân vật: ❓</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-bold text-xl text-green-500">HP: <span id="sh-my-hp">10</span>/<span id="sh-my-maxhp">10</span></p>
+                        <p class="text-xs text-gray-400" id="sh-my-equip">Trang bị: 0</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-2 mt-2">
+                    <button id="btn-sh-move" onclick="shRollMove()" disabled class="sh-btn py-3 rounded text-sm font-bold text-gray-300 disabled:opacity-30">🎲 Đổ Xúc Xắc</button>
+                    <button id="btn-sh-action" onclick="shAction()" disabled class="sh-btn py-3 rounded text-sm font-bold text-gray-300 disabled:opacity-30">🃏 Rút Bài</button>
+                    <button id="btn-sh-attack" onclick="shAttackTarget()" disabled class="sh-btn py-3 rounded text-sm font-bold text-red-400 disabled:opacity-30">⚔️ Tấn Công</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal Lộ Thân Phận / Hiệu ứng -->
+        <div id="sh-alert-modal" class="hidden absolute inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
+            <div class="sh-card p-6 w-full max-w-sm text-center border-red-600 shadow-[0_0_50px_rgba(255,0,0,0.5)] transform scale-110 glitch-anim" id="sh-alert-content">
+                <h2 class="blood-text text-4xl mb-4" id="sh-alert-title">KẾT LIỄU</h2>
+                <p class="text-lg text-white mb-6" id="sh-alert-desc">Người chơi đã lộ diện!</p>
+                <button onclick="document.getElementById('sh-alert-modal').classList.add('hidden')" class="sh-btn px-6 py-2 text-white font-bold rounded">Tiếp tục</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================= SCRIPTS BẢN GỐC ================= -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
@@ -409,7 +520,6 @@
         const audioCoin = document.getElementById('sound-coin');
         const audioError = document.getElementById('sound-error');
 
-        // Setup volume cho đỡ ồn
         if(audioCoin) audioCoin.volume = 0.2; 
         if(audioError) audioError.volume = 0.2;
         if(audioClick) audioClick.volume = 0.4;
@@ -580,11 +690,11 @@
             }, 1000);
         }
 
-        // BIẾN DATA TỪ VỰNG & NGỮ PHÁP (Học Tiếng Anh) - ĐÃ CẬP NHẬT TỪ VỰNG CHỮ A VÀ B
+        // BIẾN DATA TỪ VỰNG & NGỮ PHÁP (Học Tiếng Anh)
         let vocabData = [ 
             // Chữ A
             {en:'about',type:'Adverb/Preposition',vi:'Về cái gì đó'}, {en:'above',type:'Adverb/Preposition',vi:'Hơn cái gì đó'}, {en:'across',type:'Adverb/Preposition',vi:'Băng qua, Ngang qua'}, {en:'action',type:'Noun',vi:'Hành động'}, {en:'actor',type:'Noun',vi:'Diễn Viên'}, {en:'actress',type:'Noun',vi:'Nữ diễn viên'}, {en:'activity',type:'Noun',vi:'Hoạt động'}, {en:'add',type:'Verb',vi:'Thêm'}, {en:'address',type:'Noun',vi:'Địa chỉ'}, {en:'adult',type:'Noun',vi:'Người lớn'}, {en:'advice',type:'Noun',vi:'Khuyên bảo'}, {en:'afraid',type:'Adjective',vi:'Sợ'}, {en:'after',type:'Preposition',vi:'Sau đó'}, {en:'afternoon',type:'Noun',vi:'Buổi chiều'}, {en:'again',type:'Adverb',vi:'Lặp lại'}, {en:'age',type:'Noun',vi:'Tuổi'}, {en:'ago',type:'Adverb',vi:'Trước kia'}, {en:'agree',type:'Verb',vi:'Đồng ý'}, {en:'air',type:'Noun',vi:'Không khí'}, {en:'airport',type:'Noun',vi:'Sân bay'}, {en:'all',type:'Determiner/Pronoun',vi:'Tất cả'}, {en:'also',type:'Adverb',vi:'Mà còn'}, {en:'always',type:'Adverb',vi:'Luôn luôn'}, {en:'amazing',type:'Adjective',vi:'Ngạc nhiên'}, {en:'an',type:'Indefinite article',vi:'Một'}, {en:'and',type:'Conjunction',vi:'Và'}, {en:'angry',type:'Adjective',vi:'Giận dữ'}, {en:'animal',type:'Noun',vi:'Động vật'}, {en:'another',type:'Determiner/Pronoun',vi:'Khác'}, {en:'answer',type:'Noun/Verb',vi:'Trả lời'}, {en:'any',type:'Determiner/Pronoun',vi:'Bất kì'}, {en:'anyone',type:'Pronoun',vi:'Bất kì ai'}, {en:'anything',type:'Pronoun',vi:'Bất kì điều gì'}, {en:'apartment',type:'Noun',vi:'Căn hộ'}, {en:'apple',type:'Noun',vi:'Quả táo'}, {en:'april',type:'Noun',vi:'Tháng tư'}, {en:'area',type:'Noun',vi:'Khu vực, vùng, diện tích'}, {en:'arm',type:'Noun',vi:'Cánh tay'}, {en:'around',type:'Adverb/Preposition',vi:'Xung quanh'}, {en:'arrive',type:'Verb',vi:'Đến, tới nơi'}, {en:'art',type:'Noun',vi:'Nghệ thuật'}, {en:'article',type:'Noun',vi:'Bài báo, bài viết'}, {en:'artist',type:'Noun',vi:'Nghệ sĩ, họa sĩ'}, {en:'as',type:'Preposition',vi:'Như, như là, khi, vì'}, {en:'ask',type:'Verb',vi:'Hỏi, yêu cầu'}, {en:'at',type:'Preposition',vi:'Ở, tại, lúc'}, {en:'august',type:'Noun',vi:'Tháng tám'}, {en:'aunt',type:'Noun',vi:'Dì, cô, bác'}, {en:'autumn',type:'Noun',vi:'Mùa thu'}, {en:'away',type:'Adverb',vi:'Đi xa, cách xa, rời'},
-            // Chữ B (Mới thêm)
+            // Chữ B
             {en:'baby', type:'Noun', vi:'Đứa bé'}, {en:'back', type:'Adverb', vi:'Lưng, phía sau, trở lại'}, {en:'bad', type:'Adjective', vi:'Xấu, tồi, tệ, dở'}, {en:'ball', type:'Noun', vi:'Quả bóng'}, {en:'banana', type:'Noun', vi:'Chuối'}, {en:'band', type:'Noun', vi:'Ban nhạc, dải, băng'}, {en:'bank', type:'Noun', vi:'Ngân hàng'}, {en:'bar', type:'Noun', vi:'Quầy rượu'}, {en:'bath', type:'Noun', vi:'Bồn tắm'}, {en:'bathroom', type:'Noun', vi:'Phòng tắm'}, {en:'be', type:'Verb', vi:'Thì, là, ở'}, {en:'beach', type:'Noun', vi:'Bãi biển, bờ biển'}, {en:'beautiful', type:'Adjective', vi:'Đẹp, xinh đẹp'}, {en:'because', type:'Conjunction', vi:'Bởi vì'}, {en:'because of', type:'Preposition', vi:'Bởi vì, do, vì'}, {en:'become', type:'Verb', vi:'Trở thành, trở nên'}, {en:'bed', type:'Noun', vi:'Giường'}, {en:'bedroom', type:'Noun', vi:'Phòng ngủ'}, {en:'beer', type:'Noun', vi:'Bia'}, {en:'before', type:'Preposition', vi:'Trước, trước khi'}, {en:'begin', type:'Verb', vi:'Bắt đầu, khởi đầu'}, {en:'beginning', type:'Noun', vi:'Đang bắt đầu'}, {en:'behave', type:'Verb', vi:'Cư xử, hành xử'}, {en:'behavior', type:'Noun', vi:'Hành vi, cách cư xử'}, {en:'behind', type:'Adverb/Preposition', vi:'Phía sau, đằng sau'}, {en:'being', type:'Noun', vi:'Sự tồn tại; đang'}, {en:'belief', type:'Noun', vi:'Niềm tin, tín ngưỡng'}, {en:'believe', type:'Verb', vi:'Tin, tin tưởng'}, {en:'bell', type:'Noun', vi:'Cái chuông'}, {en:'belong', type:'Verb', vi:'Thuộc về, là của'}, {en:'below', type:'Adverb/Preposition', vi:'Bên dưới, phía dưới'}
         ];
         
@@ -668,7 +778,15 @@
         }
 
         // INIT USER
-        function handleLogin() { const u = document.getElementById('login-user').value.trim().toLowerCase(), p = document.getElementById('login-pass').value.trim(), err = document.getElementById('login-error'), btn = document.getElementById('login-btn'); if((u === 'luuthiethoa' && p === '123') || (u === 'hamy' && p === '123')) { err.classList.add('hidden'); btn.innerText = "Đang kết nối..."; btn.classList.add('opacity-50', 'pointer-events-none'); currentUser = u; initUserSystem(); } else { err.classList.remove('hidden'); } }
+        function handleLogin() { 
+            const u = document.getElementById('login-user').value.trim().toLowerCase(), p = document.getElementById('login-pass').value.trim(), err = document.getElementById('login-error'), btn = document.getElementById('login-btn'); 
+            if((u === 'luuthiethoa' && p === '123') || (u === 'hamy' && p === '123')) { 
+                err.classList.add('hidden'); btn.innerText = "Đang kết nối..."; btn.classList.add('opacity-50', 'pointer-events-none'); 
+                currentUser = u; initUserSystem(); 
+            } else { 
+                err.classList.remove('hidden'); 
+            } 
+        }
         
         function initUserSystem() { 
             db.collection('users').doc(currentUser).get().then(doc => { 
@@ -774,7 +892,6 @@
                 filteredData = vocabData.filter(w => w.en.toLowerCase().startsWith(filter));
             }
 
-            // Thanh lọc chữ cái
             let html = `
             <div class="col-span-full flex flex-wrap gap-2 mb-4 justify-center">
                 <button onclick="renderVocabList('all')" class="px-5 py-2 rounded-full text-sm font-bold transition-colors ${filter==='all' ? 'bg-primary text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}">Tất cả (${vocabData.length})</button>
@@ -1196,6 +1313,302 @@
         function updateLeaderboard() { db.collection('users').get().then(snap=>{ let u=[]; snap.forEach(d=>{ u.push({name:d.id, u:Object.keys(d.data().inventory||{}).length, c:d.data().coins}); }); u.sort((a,b)=>b.u-a.u); document.getElementById('leaderboard-container').innerHTML=u.map((x,i)=>`<div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl mb-2 border border-white/5"><div class="flex items-center gap-4"><div class="text-3xl">${i===0?'🥇':i===1?'🥈':'🥉'}</div><div><p class="font-bold text-lg text-white capitalize">${x.name}</p><p class="text-xs text-blue-400">🪙 ${x.c}</p></div></div><div class="text-right"><p class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-600">${x.u}/50</p></div></div>`).join(''); }); }
         function loadFakeAuction() { document.getElementById('auction-grid').innerHTML=[1,2,3,4].map(()=>{ let c=getRandomCard(false); let p=Math.floor(Math.random()*500)+(c.rarity==='bian'?5000:c.rarity==='sieuhiem'?2000:200); return `<div class="bg-black/40 rounded-2xl p-4 border border-white/10 flex flex-col items-center"><div class="w-full aspect-[2/3] gacha-card ${c.rarityData.glowClass} pointer-events-none mb-4"><img src="${c.img}" onerror="this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'"><div class="card-overlay"></div></div><p class="font-bold text-sm mb-1 text-white">${c.name}</p><p class="text-xs ${c.rarityData.color} mb-4">${c.rarityData.name}</p><button onclick="playClickSound()" class="w-full bg-blue-500/20 text-blue-300 py-2 rounded-xl font-bold">Mua: ${p} 🪙</button></div>`; }).join(''); }
         function fireConfetti() { confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } }); }
+
+        /* ================= SHADOW HUNTER LOGIC & AI ================= */
+        // Data Nhân Vật
+        const SH_CHARS = [
+            { id: 'allie', name: 'Allie', hp: 8, faction: 'Neutral', skill: 'Hồi đầy HP (1 lần)' },
+            { id: 'bob', name: 'Bob', hp: 10, faction: 'Neutral', skill: 'Cướp trang bị (≥5 Equip = Thắng)' },
+            { id: 'charles', name: 'Charles', hp: 11, faction: 'Neutral', skill: 'Tự nhận 2 dmg để đánh thêm lần nữa' },
+            { id: 'emi', name: 'Emi', hp: 10, faction: 'Hunter', skill: 'Dịch chuyển không cần xúc xắc' },
+            { id: 'franklin', name: 'Franklin', hp: 12, faction: 'Hunter', skill: 'Gây sát thương bằng xúc xắc d6 (1 lần)' },
+            { id: 'george', name: 'George', hp: 14, faction: 'Hunter', skill: 'Gây sát thương bằng xúc xắc d4 (1 lần)' },
+            { id: 'unknown', name: 'Unknown', hp: 11, faction: 'Shadow', skill: 'Có thể nói dối thẻ Hermit' },
+            { id: 'vampire', name: 'Vampire', hp: 13, faction: 'Shadow', skill: 'Hồi 2 HP khi tấn công trúng' },
+            { id: 'werewolf', name: 'Werewolf', hp: 14, faction: 'Shadow', skill: 'Phản công ngay lập tức khi bị đánh' }
+        ];
+
+        // Dữ liệu Shop 3D
+        const SH_SHOP = [
+            { id: 'nhanvatkhoidau', name: 'Lính Mới', file: 'nhanvatkhoidau.glb', price: 0 },
+            { id: 'the_savior', name: 'Dark Fantasy Paladin', file: 'the_savior__dark_fantasy_paladin.glb', price: 5 },
+            { id: 'eirvana', name: 'The Raven Barbar', file: 'eirvana__the_raven_barbar.glb', price: 10 },
+            { id: 'silver_dragonkin', name: 'Silver Dragonkin', file: 'silver_dragonkin_mir4.glb', price: 15 },
+            { id: 'dragon_nemesis', name: 'The Infernal Wyrm', file: 'dragon_nemesis__the_infernal_wyrm.glb', price: 20 }
+        ];
+
+        let shData = { coins: 0, models: ['nhanvatkhoidau'], equipped: 'nhanvatkhoidau' };
+        let shPlayers = [];
+        let shCurrentTurn = 0;
+        let isAIPlaying = false;
+        let myIndex = 0;
+        let shCurrentUser = '';
+
+        // Đăng nhập Shadow Hunter
+        function handleSHLogin() {
+            const u = document.getElementById('login-user').value.trim().toLowerCase();
+            const p = document.getElementById('login-pass').value.trim();
+            const allowed = ['hoa', 'mymy', 'tan', 'thao']; // Theo đúng yêu cầu của bạn
+            
+            if(allowed.includes(u) && p === '123') {
+                shCurrentUser = u;
+                // Giả lập load dữ liệu game
+                const savedData = localStorage.getItem(`sh_${u}`);
+                if(savedData) {
+                    shData = JSON.parse(savedData);
+                } else {
+                    shData = { coins: 0, models: ['nhanvatkhoidau'], equipped: 'nhanvatkhoidau' };
+                    saveSHData();
+                }
+                
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('sh-module').classList.remove('hidden');
+                document.getElementById('sh-module').classList.add('flex');
+                
+                // Bật nhạc ghê rợn
+                const bgm = document.getElementById('sh-bgm');
+                bgm.volume = 0.5; bgm.play().catch(()=>{});
+                
+                updateSHLobby();
+            } else {
+                alert("Tài khoản Shadow Hunter chưa được cấp phép (Thử: hoa, mymy, tan, thao / Pass: 123)!");
+            }
+        }
+
+        function saveSHData() { localStorage.setItem(`sh_${shCurrentUser}`, JSON.stringify(shData)); }
+
+        function exitSH() {
+            document.getElementById('sh-module').classList.add('hidden');
+            document.getElementById('sh-module').classList.remove('flex');
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('sh-bgm').pause();
+        }
+
+        // Cập nhật Sảnh & Shop
+        function updateSHLobby() {
+            document.getElementById('sh-coins-display').innerText = shData.coins;
+            const currentModel = SH_SHOP.find(x => x.id === shData.equipped);
+            document.getElementById('sh-main-model').src = currentModel.file;
+            document.getElementById('sh-current-model-name').innerText = currentModel.name;
+        }
+
+        function openSHShop() {
+            const grid = document.getElementById('sh-shop-grid');
+            grid.innerHTML = SH_SHOP.map(item => {
+                const isOwned = shData.models.includes(item.id);
+                const isEquipped = shData.equipped === item.id;
+                let btnStr = `<button onclick="buySHModel('${item.id}', ${item.price})" class="sh-btn w-full mt-2 py-2 text-yellow-500 font-bold">Mua: ${item.price} Xu</button>`;
+                if(isEquipped) btnStr = `<button class="w-full mt-2 py-2 bg-red-900 text-white font-bold cursor-default">Đang Dùng</button>`;
+                else if (isOwned) btnStr = `<button onclick="equipSHModel('${item.id}')" class="w-full mt-2 py-2 border border-red-500 text-red-500 font-bold hover:bg-red-900 hover:text-white">Trang Bị</button>`;
+
+                return `<div class="sh-card p-4 rounded-xl flex flex-col items-center border border-red-900/50">
+                    <model-viewer src="${item.file}" class="w-full h-48 bg-black rounded" auto-rotate></model-viewer>
+                    <h4 class="font-bold text-red-500 mt-2">${item.name}</h4>
+                    ${btnStr}
+                </div>`;
+            }).join('');
+            document.getElementById('sh-shop').classList.remove('hidden');
+        }
+        function closeSHShop() { document.getElementById('sh-shop').classList.add('hidden'); }
+
+        function buySHModel(id, price) {
+            if(shData.coins >= price) {
+                shData.coins -= price;
+                shData.models.push(id);
+                saveSHData(); openSHShop(); updateSHLobby();
+                alert("Giao ước thành công! Ác quỷ đã thuộc về bạn.");
+            } else {
+                alert("Máu của ngươi không đủ (Thiếu xu)!");
+            }
+        }
+        function equipSHModel(id) { shData.equipped = id; saveSHData(); openSHShop(); updateSHLobby(); }
+
+        // ================= LÕI GAME SHADOW HUNTER =================
+        function shLog(msg) {
+            const log = document.getElementById('sh-log');
+            log.innerHTML += `<p class="mb-1">${msg}</p>`;
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function startSHMatch(numPlayers) {
+            if(numPlayers === 0) { numPlayers = 4; isAIPlaying = true; } 
+            document.getElementById('sh-lobby').classList.add('hidden');
+            document.getElementById('sh-board').classList.remove('hidden');
+            
+            const factions = numPlayers === 4 ? ['Hunter', 'Hunter', 'Shadow', 'Shadow'] : ['Hunter', 'Hunter', 'Shadow', 'Shadow', 'Neutral', 'Neutral'];
+            factions.sort(() => Math.random() - 0.5); 
+            
+            let charDeck = [...SH_CHARS].sort(() => Math.random() - 0.5);
+
+            shPlayers = Array.from({length: numPlayers}).map((_, i) => {
+                let isMe = (i === 0);
+                let char = charDeck.pop();
+                return {
+                    id: i,
+                    name: isMe ? shCurrentUser.toUpperCase() : `Người chơi ${i+1} (AI)`,
+                    isMe: isMe,
+                    isAI: !isMe && isAIPlaying,
+                    faction: factions[i],
+                    char: char,
+                    hp: char.hp,
+                    maxHp: char.hp,
+                    equip: [],
+                    revealed: false,
+                    area: 0, 
+                    isDead: false
+                };
+            });
+
+            myIndex = 0;
+            shCurrentTurn = 0;
+            shLog(`<span class="text-red-500 font-bold">GAME START! Bạn là ${shPlayers[0].faction}. Tiêu diệt phe đối địch!</span>`);
+            updateBoardUI();
+            playTurn();
+        }
+
+        function updateBoardUI() {
+            [2,4,6,8,9,10].forEach(a => { if(document.getElementById(`area-${a==2||a==3?'2-3':a==4||a==5?'4-5':a}`)) document.getElementById(`area-${a==2||a==3?'2-3':a==4||a==5?'4-5':a}`).innerHTML = ''; });
+            
+            shPlayers.forEach(p => {
+                if(p.area !== 0 && !p.isDead) {
+                    let targetDiv = p.area==2||p.area==3?'2-3':p.area==4||p.area==5?'4-5':p.area;
+                    document.getElementById(`area-${targetDiv}`).innerHTML += `<div class="${p.isMe ? 'bg-red-600' : 'bg-gray-800'} text-white text-[10px] px-1 rounded border border-gray-500">${p.name[0]}</div>`;
+                }
+            });
+
+            const me = shPlayers[myIndex];
+            document.getElementById('sh-my-name').innerText = me.name;
+            document.getElementById('sh-my-role').innerText = me.revealed ? `Phe: ${me.faction}` : `Phe: ❓ Ẩn (${me.faction})`;
+            document.getElementById('sh-my-char').innerText = me.revealed ? `Nhân vật: ${me.char.name}` : `Nhân vật: ❓ (${me.char.name})`;
+            document.getElementById('sh-my-hp').innerText = me.hp;
+            document.getElementById('sh-my-maxhp').innerText = me.maxHp;
+            document.getElementById('sh-my-equip').innerText = `Trang bị: ${me.equip.length}`;
+        }
+
+        function playTurn() {
+            const p = shPlayers[shCurrentTurn];
+            if(p.isDead) { endTurn(); return; }
+            
+            shLog(`--- Lượt của <b class="${p.isMe?'text-red-400':'text-blue-400'}">${p.name}</b> ---`);
+            
+            if(p.isMe) {
+                document.getElementById('btn-sh-move').disabled = false;
+                document.getElementById('btn-sh-action').disabled = true;
+                document.getElementById('btn-sh-attack').disabled = true;
+            } else if(p.isAI) {
+                setTimeout(runAI, 1500); 
+            }
+        }
+
+        function shRollMove() {
+            const p = shPlayers[shCurrentTurn];
+            document.getElementById('btn-sh-move').disabled = true;
+            
+            let d6 = Math.floor(Math.random() * 6) + 1;
+            let d4 = Math.floor(Math.random() * 4) + 1;
+            let sum = d6 + d4;
+            
+            if (sum === 7) sum = [2,4,6,8,9,10][Math.floor(Math.random()*6)]; 
+            
+            p.area = sum;
+            shLog(`${p.name} đổ được ${d6} + ${d4} = Di chuyển đến khu <b>${sum}</b>`);
+            
+            updateBoardUI();
+            if(p.isMe) {
+                document.getElementById('btn-sh-action').disabled = false;
+                document.getElementById('btn-sh-attack').disabled = false; 
+            }
+        }
+
+        function shAction() {
+            const p = shPlayers[shCurrentTurn];
+            document.getElementById('btn-sh-action').disabled = true;
+            
+            let actionTxt = "";
+            if(p.area == 2 || p.area == 3) actionTxt = "rút một lá Hermit (Xanh). Khám phá danh tính người khác.";
+            else if(p.area == 6) actionTxt = "rút một lá White Card (Trắng). Nhận trang bị phòng thủ.";
+            else if(p.area == 8) actionTxt = "rút một lá Black Card (Đen). Nhận vũ khí hắc ám.";
+            else actionTxt = "kích hoạt sức mạnh của vùng đất.";
+            
+            shLog(`${p.name} đã ${actionTxt}`);
+        }
+
+        function shAttackTarget() {
+            const p = shPlayers[shCurrentTurn];
+            document.getElementById('btn-sh-attack').disabled = true;
+            
+            let targets = shPlayers.filter(x => !x.isDead && x.id !== p.id);
+            if(targets.length === 0) return;
+            
+            let target = targets[Math.floor(Math.random() * targets.length)];
+            
+            let d6 = Math.floor(Math.random() * 6) + 1;
+            let d4 = Math.floor(Math.random() * 4) + 1;
+            let dmg = Math.abs(d6 - d4);
+            
+            if(dmg === 0) {
+                shLog(`⚔️ ${p.name} tấn công ${target.name} nhưng <b>TRƯỢT (Hụt)!</b>`);
+            } else {
+                shLog(`⚔️ ${p.name} chém ${target.name} mất <b class="text-red-500">${dmg} HP</b>!`);
+                takeDamage(target, dmg);
+            }
+            
+            if(p.isMe) {
+                setTimeout(endTurn, 1000);
+            }
+        }
+
+        function takeDamage(target, dmg) {
+            target.hp -= dmg;
+            if(target.hp <= 0) {
+                target.isDead = true;
+                target.revealed = true;
+                shLog(`💀 <b class="text-red-600">${target.name}</b> đã CHẾT! Thân phận thật là: <b>${target.char.name} (${target.faction})</b>`);
+                checkWinCondition();
+            }
+            updateBoardUI();
+        }
+
+        function endTurn() {
+            shCurrentTurn++;
+            if(shCurrentTurn >= shPlayers.length) shCurrentTurn = 0;
+            playTurn();
+        }
+
+        function runAI() {
+            shRollMove();
+            setTimeout(() => {
+                shAction();
+                setTimeout(() => {
+                    if(Math.random() < 0.6) shAttackTarget();
+                    else shLog(`<i>${shPlayers[shCurrentTurn].name} quyết định ẩn mình, không tấn công ai.</i>`);
+                    setTimeout(endTurn, 1500);
+                }, 1500);
+            }, 1500);
+        }
+
+        function checkWinCondition() {
+            let aliveHunters = shPlayers.filter(p => p.faction === 'Hunter' && !p.isDead);
+            let aliveShadows = shPlayers.filter(p => p.faction === 'Shadow' && !p.isDead);
+            
+            let winner = null;
+            if(aliveShadows.length === 0) winner = "Hunter";
+            else if (aliveHunters.length === 0) winner = "Shadow";
+            
+            if(winner) {
+                let isMyWin = shPlayers[myIndex].faction === winner;
+                document.getElementById('sh-alert-title').innerText = isMyWin ? "VICTORY" : "DEFEAT";
+                document.getElementById('sh-alert-desc').innerText = `Phe ${winner} đã tiêu diệt phe đối địch và giành chiến thắng!`;
+                document.getElementById('sh-alert-modal').classList.remove('hidden');
+                
+                if(isMyWin) {
+                    shData.coins += 1; 
+                    saveSHData();
+                    shLog(`🎉 Bạn đã thắng! Nhận được +1 Xu Đen!`);
+                }
+                shCurrentTurn = -99; 
+            }
+        }
     </script>
 </body>
 </html>
