@@ -1495,5 +1495,152 @@
         }
 
     </script>
+    <script>
+/* ===== PATCH: Luyện tập đủ từ + liệt kê từ sai + thêm đoạn văn A1 ===== */
+
+// --- 1. Luyện tập dùng toàn bộ vocabData, tổng kết hiện từng từ sai ---
+function getQuizQA(item) {
+    if (studyState.mode === 'en-vi') return { q: item.en, a: item.vi };
+    if (studyState.mode === 'vi-en') return { q: item.vi, a: item.en };
+    return { q: item.en, a: item.type };
+}
+
+function loadQuizQuestion() {
+    if (!quizStats.wrongList) quizStats.wrongList = [];
+    const total = studyState.shuffledData.length;
+    if (studyState.currentIndex >= total) {
+        document.getElementById('quiz-progress').innerText = `Hoàn thành ${total} / ${total}`;
+        document.getElementById('quiz-hint').innerText = "Tổng kết";
+        let wrongHTML = '';
+        if (quizStats.wrongList.length === 0) {
+            wrongHTML = `<p class="text-green-600 font-bold text-lg mt-4 normal-case">🎯 Bạn không sai từ nào, quá đỉnh!</p>`;
+        } else {
+            wrongHTML = `
+            <p class="text-base font-bold text-rose-600 mt-5 mb-2 normal-case">📌 Các từ bạn làm sai (${quizStats.wrongList.length}):</p>
+            <div class="max-h-64 overflow-y-auto space-y-2 text-left normal-case">
+                ${quizStats.wrongList.map((w, i) => `
+                <div class="bg-rose-50 border border-rose-100 rounded-xl px-4 py-2 text-sm">
+                    <span class="text-gray-400 font-bold mr-1">${i + 1}.</span>
+                    <b class="text-textDark">${w.q}</b>
+                    <span class="text-green-600"> → ${w.a}</span>
+                    <span class="text-rose-500 text-xs block">Bạn trả lời: ${w.user ? w.user : '(bỏ trống)'}</span>
+                </div>`).join('')}
+            </div>
+            <button onclick="playClickSound(); retryWrongWords()" class="mt-4 w-full bg-rose-500 hover:bg-rose-600 text-white py-2.5 rounded-xl font-bold text-sm normal-case">🔁 Làm lại các từ sai</button>`;
+        }
+        document.getElementById('quiz-question').innerHTML = `
+            <div class="text-2xl normal-case">🎉 Hoàn thành!</div>
+            <div class="flex justify-center gap-6 mt-3 text-lg normal-case">
+                <span class="text-green-500 font-bold">✅ Đúng: ${quizStats.correct}</span>
+                <span class="text-red-500 font-bold">❌ Sai: ${quizStats.wrong}</span>
+            </div>${wrongHTML}`;
+        document.getElementById('quiz-input').classList.add('hidden');
+        document.getElementById('quiz-submit-btn').classList.add('hidden');
+        document.getElementById('quiz-feedback').classList.add('hidden');
+        fireConfetti();
+        return;
+    }
+    document.getElementById('quiz-input').classList.remove('hidden');
+    document.getElementById('quiz-submit-btn').classList.remove('hidden');
+    document.getElementById('quiz-feedback').classList.add('hidden');
+    document.getElementById('quiz-input').value = "";
+    document.getElementById('quiz-input').focus();
+    document.getElementById('quiz-progress').innerText = `Câu ${studyState.currentIndex + 1} / ${total}`;
+    const item = studyState.shuffledData[studyState.currentIndex];
+    if (studyState.mode === 'en-vi') { document.getElementById('quiz-hint').innerText = "Dịch sang tiếng Việt"; document.getElementById('quiz-question').innerText = item.en; }
+    else if (studyState.mode === 'vi-en') { document.getElementById('quiz-hint').innerText = "Dịch sang tiếng Anh"; document.getElementById('quiz-question').innerText = item.vi; }
+    else if (studyState.mode === 'type') { document.getElementById('quiz-hint').innerText = "Loại từ là gì?"; document.getElementById('quiz-question').innerText = item.en; }
+}
+
+function retryWrongWords() {
+    const redo = quizStats.wrongList.map(w => w.item);
+    quizStats = { combo: 0, correct: 0, wrong: 0, wrongList: [] };
+    studyState.shuffledData = redo.sort(() => Math.random() - 0.5);
+    studyState.currentIndex = 0;
+    loadQuizQuestion();
+}
+
+function checkQuizAnswer() {
+    if (studyState.currentIndex >= studyState.shuffledData.length) return;
+    // Bắt đầu phiên mới (openStudyMode đã reset đúng/sai về 0) thì xóa danh sách từ sai cũ
+    if (!quizStats.wrongList || (quizStats.correct + quizStats.wrong === 0)) quizStats.wrongList = [];
+
+    const item = studyState.shuffledData[studyState.currentIndex];
+    const rawUser = document.getElementById('quiz-input').value.trim();
+    const user = rawUser.toLowerCase();
+    let c = false;
+    if (studyState.mode === 'en-vi') { const ex = item.vi.toLowerCase(); if ((ex.includes(user) && user.length > 2) || user === ex) c = true; }
+    else if (studyState.mode === 'vi-en') { if (user === item.en.toLowerCase()) c = true; }
+    else if (studyState.mode === 'type') { if (item.type.toLowerCase().includes(user) && user.length > 2) c = true; }
+
+    const fb = document.getElementById('quiz-feedback');
+    fb.classList.remove('hidden', 'bg-green-100', 'text-green-700', 'bg-red-100', 'text-red-700');
+    const qa = getQuizQA(item);
+
+    if (c) {
+        quizStats.combo++; quizStats.correct++;
+        try { if (audioCoin) { audioCoin.currentTime = 0; audioCoin.play().catch(() => {}); } } catch (e) {}
+        userData.coins += 10; db.collection('users').doc(currentUser).update({ coins: userData.coins });
+        let comboMsg = "";
+        if (quizStats.combo === 10) { comboMsg = "<br><span class='text-orange-500 font-black text-lg'>🔥 ĐỈNH QUÁ! COMBO x10! 🔥</span>"; fireConfetti(); }
+        else if (quizStats.combo === 20) { comboMsg = "<br><span class='text-rose-500 font-black text-lg'>👑 THẦN ĐỒNG! COMBO x20! 👑</span>"; fireConfetti(); }
+        else if (quizStats.combo > 20 && quizStats.combo % 10 === 0) { comboMsg = `<br><span class='text-purple-500 font-black text-lg'>✨ XUẤT SẮC! COMBO x${quizStats.combo}! ✨</span>`; fireConfetti(); }
+        fb.classList.add('bg-green-100', 'text-green-700');
+        fb.innerHTML = `✅ Chính xác! +10 🪙. Đáp án: <b>${qa.a}</b>${comboMsg}`;
+        studyState.currentIndex++;
+        setTimeout(() => loadQuizQuestion(), comboMsg ? 2500 : 1200);
+    } else {
+        quizStats.combo = 0; quizStats.wrong++;
+        quizStats.wrongList.push({ q: qa.q, a: qa.a, user: rawUser, item: item });
+        try { if (audioError) { audioError.currentTime = 0; audioError.play().catch(() => {}); } } catch (e) {}
+        fb.classList.add('bg-red-100', 'text-red-700');
+        fb.innerHTML = `❌ Sai rùi. Đáp án đúng là: <b>${qa.a}</b>`;
+        studyState.currentIndex++;
+        setTimeout(() => loadQuizQuestion(), 2500);
+    }
+}
+
+// --- 2. Nút lọc từ vựng có kèm số lượng (A / B) ---
+function renderVocabList(filter = 'all') {
+    const container = document.getElementById('vocab-list-container');
+    const countA = vocabData.filter(w => w.en.toLowerCase().startsWith('a')).length;
+    const countB = vocabData.filter(w => w.en.toLowerCase().startsWith('b')).length;
+    const data = filter === 'all' ? vocabData : vocabData.filter(w => w.en.toLowerCase().startsWith(filter));
+    const btn = (key, label) => `<button onclick="renderVocabList('${key}')" class="px-5 py-2 rounded-full text-sm font-bold transition-colors ${filter === key ? 'bg-primary text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}">${label}</button>`;
+    let html = `<div class="col-span-full flex flex-wrap gap-2 mb-4 justify-center">${btn('all', `Tất cả (${vocabData.length})`)}${btn('a', `Chữ A (${countA})`)}${btn('b', `Chữ B (${countB})`)}</div>`;
+    html += data.length === 0
+        ? `<div class="col-span-full text-center py-10 text-gray-400 font-medium">Chưa có từ nào thuộc nhóm này.</div>`
+        : data.map(item => `<div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm text-center hover:scale-105 transition-transform flex flex-col justify-between"><span class="text-xs text-gray-400 mb-1 capitalize">${item.type}</span><h4 class="text-xl font-bold text-primary mb-1 capitalize">${item.en}</h4><p class="text-sm text-textDark">${item.vi}</p></div>`).join('');
+    container.innerHTML = html;
+}
+
+// --- 3. Thêm nhiều đoạn văn A1 (mỗi bài tự có cả 2 chiều Anh-Việt và Việt-Anh) ---
+const a1Passages = [
+    { n: 1, en: "I live in a small apartment. I like eating apples. My birthday is in April. The area around my house is very beautiful. Yesterday my arm hurt a little. I often walk around the park. My friend arrives at 7 o'clock. I like art and read articles. She is an artist. I work as a teacher. I ask her a question. I am at home in the evening. August is very hot. My aunt lives far away. Autumn is very beautiful.",
+      vi: "Tôi sống trong một căn hộ nhỏ. Tôi thích ăn táo. Sinh nhật tôi vào tháng Tư. Khu vực quanh nhà tôi rất đẹp. Hôm qua cánh tay tôi hơi đau. Tôi thường đi dạo quanh công viên. Bạn tôi đến lúc 7 giờ. Tôi thích nghệ thuật và đọc bài báo. Cô ấy là một nghệ sĩ. Tôi làm việc như một giáo viên. Tôi hỏi cô ấy một câu hỏi. Tôi ở nhà vào buổi tối. Tháng Tám rất nóng. Dì tôi sống ở xa. Mùa thu rất đẹp." },
+    { n: 2, en: "My name is Anna. I am ten years old. I have a baby brother. He is very small. My mother is a nurse. My father works at a bank. We have a dog. The dog is brown. I love my family very much.",
+      vi: "Tên tôi là Anna. Tôi mười tuổi. Tôi có một em trai nhỏ. Em ấy rất bé. Mẹ tôi là y tá. Bố tôi làm việc ở ngân hàng. Chúng tôi có một con chó. Con chó màu nâu. Tôi rất yêu gia đình của mình." },
+    { n: 3, en: "I get up at six o'clock. I take a bath and eat breakfast. I go to school by bus. In the afternoon I play ball with my friends. In the evening I do my homework. I go to bed at ten.",
+      vi: "Tôi thức dậy lúc sáu giờ. Tôi tắm và ăn sáng. Tôi đi học bằng xe buýt. Vào buổi chiều tôi chơi bóng với bạn bè. Vào buổi tối tôi làm bài tập về nhà. Tôi đi ngủ lúc mười giờ." },
+    { n: 4, en: "This is my house. It has a bedroom, a bathroom and a kitchen. My bed is big and soft. The bathroom is small. Behind the house there is a garden. I like my house because it is quiet.",
+      vi: "Đây là nhà của tôi. Nhà có một phòng ngủ, một phòng tắm và một nhà bếp. Giường của tôi to và mềm. Phòng tắm thì nhỏ. Phía sau nhà có một khu vườn. Tôi thích nhà của mình vì nó yên tĩnh." },
+    { n: 5, en: "I like fruit. I eat a banana every morning. My sister likes apples. My father drinks beer on Sunday. We always eat dinner together. The food is not bad. After dinner we watch TV.",
+      vi: "Tôi thích trái cây. Tôi ăn một quả chuối mỗi buổi sáng. Chị tôi thích táo. Bố tôi uống bia vào Chủ nhật. Chúng tôi luôn ăn tối cùng nhau. Đồ ăn không tệ. Sau bữa tối chúng tôi xem TV." },
+    { n: 6, en: "Today is a beautiful day. We go to the beach. The air is fresh and the sun is hot. Children play with a ball. I am not afraid of the water. After the beach we are happy and tired.",
+      vi: "Hôm nay là một ngày đẹp trời. Chúng tôi đi biển. Không khí trong lành và mặt trời nóng. Bọn trẻ chơi với quả bóng. Tôi không sợ nước. Sau khi đi biển chúng tôi vui và mệt." },
+    { n: 7, en: "My friend is an actor. He works in a big city. He often travels by plane. He arrives at the airport early. He is amazing at his job. He always gives me good advice.",
+      vi: "Bạn tôi là một diễn viên. Anh ấy làm việc ở một thành phố lớn. Anh ấy thường đi bằng máy bay. Anh ấy đến sân bay sớm. Anh ấy làm công việc của mình rất giỏi. Anh ấy luôn cho tôi lời khuyên tốt." },
+    { n: 8, en: "I like music. My brother is in a band. They play every Friday at a bar. I am sometimes angry because they are very loud. But I believe they are good. I begin to like their songs.",
+      vi: "Tôi thích âm nhạc. Anh trai tôi ở trong một ban nhạc. Họ chơi mỗi thứ Sáu ở một quán bar. Đôi khi tôi giận vì họ rất ồn. Nhưng tôi tin là họ chơi hay. Tôi bắt đầu thích các bài hát của họ." },
+    { n: 9, en: "On Monday I go to the bank. I add money to my account. Then I ask a question about my address. The man answers me. I say thank you and go home.",
+      vi: "Vào thứ Hai tôi đến ngân hàng. Tôi gửi thêm tiền vào tài khoản. Sau đó tôi hỏi một câu về địa chỉ của mình. Người đàn ông trả lời tôi. Tôi nói cảm ơn và đi về nhà." }
+];
+
+paragraphData.length = 0; // xóa 2 bài cũ rồi nạp lại toàn bộ
+a1Passages.forEach(p => {
+    paragraphData.push({ id: `p${p.n}_en`, type: 'en-vi', title: `Bài ${p.n}: Dịch sang Tiếng Việt`, src: p.en, expected: p.vi });
+    paragraphData.push({ id: `p${p.n}_vi`, type: 'vi-en', title: `Bài ${p.n}: Dịch sang Tiếng Anh`, src: p.vi, expected: p.en });
+});
+</script>
 </body>
 </html>
