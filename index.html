@@ -41,6 +41,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
     <style>
+	    @keyframes flashRed { 0% { background-color: rgba(153,27,27,0.8); border-color: #ef4444; box-shadow: 0 0 20px #ef4444; } 100% { background-color: transparent; } }
         body { background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 50%, #7DD3FC 100%); min-height: 100vh; margin: 0; overflow-x: hidden; scroll-behavior: smooth; }
         .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 8px 32px rgba(91, 155, 255, 0.1); }
         .vip-glass { background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(20px); border-left: 1px solid rgba(255, 255, 255, 0.1); box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
@@ -703,7 +704,7 @@
         if(audioClick) audioClick.volume = 0.4;
         if(audioReveal) audioReveal.volume = 0.4;
         if(audioTick) audioTick.volume = 0.4;
-
+        function fireConfetti() { if (typeof confetti === 'function') confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, zIndex: 9999 }); }
         function playClickSound() { try { if(audioClick) { audioClick.currentTime = 0; audioClick.play().catch(e=>{}); } } catch(e) {} }
 
         // 3. LOGIC KHỞI TẠO & ĐĂNG NHẬP CHUNG (TRẠM HỌC & HUB)
@@ -873,8 +874,8 @@
             } else {
                 document.getElementById('study-content-title').innerText = "Luyện Tập & Dịch 🎯";
                 document.getElementById('quiz-container').classList.remove('hidden');
-                studyState.shuffledData = [...vocabData].sort(() => Math.random() - 0.5).slice(0, 10);
-                showNextQuiz();
+                studyState.shuffledData = [...vocabData].sort(() => Math.random() - 0.5);
+                loadQuizQuestion();
             }
         }
 
@@ -898,7 +899,7 @@
                 return;
             }
             const data = studyState.shuffledData[studyState.currentIndex];
-            document.getElementById('quiz-progress').innerText = `Câu ${studyState.currentIndex + 1} / 10 (Combo: ${quizStats.combo}🔥)`;
+            document.getElementById('quiz-progress').innerText = `Câu ${studyState.currentIndex + 1} / ${total} (Combo: ${quizStats.combo}🔥)`;
             
             if(studyState.mode === 'en-vi') {
                 document.getElementById('quiz-hint').innerText = `Dịch sang tiếng Việt (${data.type})`;
@@ -1150,7 +1151,7 @@
 
         // 6. BẢN ĐỒ KỶ NIỆM 
         function renderPlaces() { const grid = document.getElementById('places-grid'); if (!grid) return; grid.innerHTML = ''; if (places.length === 0) { grid.innerHTML = `<div class="col-span-full text-center py-12"><p class="text-textGray">Chưa có địa điểm nào ☁️</p></div>`; return; } places.forEach(p => { const starsHTML = Array.from({length: 5}, (_, i) => `<svg class="w-4 h-4 ${i < p.rating ? 'text-yellow-400' : 'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`).join(''); grid.innerHTML += `<div onclick="playClickSound(); openViewModal('${p.id}')" class="bubble-card glass-card rounded-3xl overflow-hidden flex flex-col h-full border border-white/60"><div class="h-48 bg-gray-200 relative overflow-hidden"><img src="${p.image || 'https://i.postimg.cc/mD8zQxGj/placeholder.png'}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"><div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold ${p.visited ? 'text-emerald-600' : 'text-primary'} shadow-sm">${p.visited ? '🌸 Đã đi' : '📌 Sẽ đi'}</div></div><div class="p-5 flex-1 flex flex-col justify-between"><div><h3 class="font-serif font-bold text-xl text-textDark mb-1">${p.name}</h3><p class="text-xs text-textGray flex items-center gap-1 mb-3">📍 ${p.address || 'Chưa cập nhật'}</p></div><div class="flex items-center justify-between border-t border-gray-100 pt-3"><span class="text-xs font-medium bg-accent/50 text-textDark px-2.5 py-1 rounded-lg">${p.type || 'Địa điểm'}</span><div class="flex items-center gap-0.5">${starsHTML}</div></div></div></div>`; }); }
-        function openFormModal(id=null) { editingId=id; const over=document.getElementById('form-modal-overlay'), cont=document.getElementById('form-modal-content'); over.classList.remove('hidden'); over.classList.add('flex'); cont.classList.remove('modal-leave','modal-leave-active'); cont.classList.add('modal-enter','modal-enter-active'); if(id) { const p=places.find(x=>x.id===id); document.getElementById('form-title').innerText="Sửa kỷ niệm 📝"; document.getElementById('input-name').value=p.name||''; document.getElementById('input-address').value=p.address||''; document.getElementById('input-visited').value=p.visited?"true":"false"; setRating(p.rating||4); document.getElementById('input-pros').value=p.pros||''; document.getElementById('input-cons').value=p.cons||''; document.getElementById('input-image').value=p.image||''; document.getElementById('input-menu').value=p.menu||''; switchFormTabPlaces(p.category||'food'); } else { document.getElementById('form-title').innerText="Lưu kỷ niệm mới ☁️"; document.getElementById('add-form').reset(); setRating(4); switchFormTabPlaces('food'); } toggleRating(); }
+        function openFormModal(id=null) { editingId=id; const over=document.getElementById('form-modal-overlay'), cont=document.getElementById('form-modal-content'); over.classList.remove('hidden'); over.classList.add('flex'); cont.classList.remove('modal-leave','modal-leave-active'); cont.classList.add('modal-enter','modal-enter-active'); if(id) { const p=places.find(x=>x.id===id); document.getElementById('form-title').innerText="Sửa kỷ niệm 📝"; document.getElementById('input-name').value=p.name||''; document.getElementById('input-address').value=p.address||''; document.getElementById('input-visited').value=p.visited?"true":"false"; setRating(p.rating||4); document.getElementById('input-pros').value=p.pros||''; document.getElementById('input-cons').value=p.cons||''; document.getElementById('input-image').value=p.image||''; document.getElementById('input-menu').value=p.menu||''; switchFormTabPlaces(p.category||'food'); if(p.category==='homestay'){ document.getElementById('input-home-type').value=p.type||'Homestay'; document.getElementById('input-price').value=p.extra||''; } else { document.getElementById('input-food-type').value=p.type||'Lề đường'; document.getElementById('input-format').value=p.extra||'Ăn tại chỗ'; } } else { document.getElementById('form-title').innerText="Lưu kỷ niệm mới ☁️"; document.getElementById('add-form').reset(); setRating(4); switchFormTabPlaces('food'); } toggleRating(); }
         function closeFormModal() { const c=document.getElementById('form-modal-content'); c.classList.add('modal-leave-active'); setTimeout(()=>{ document.getElementById('form-modal-overlay').classList.add('hidden'); document.getElementById('form-modal-overlay').classList.remove('flex'); c.classList.remove('modal-leave-active'); }, 200); }
         function switchFormTabPlaces(tab) { formCurrentTab=tab; document.getElementById('tab-food').className=tab==='food'?"flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm":"flex-1 py-2 rounded-lg text-textGray font-medium text-sm"; document.getElementById('tab-homestay').className=tab==='homestay'?"flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm":"flex-1 py-2 rounded-lg text-textGray font-medium text-sm"; document.getElementById('form-food-fields').classList[tab==='food'?'remove':'add']('hidden'); document.getElementById('form-homestay-fields').classList[tab==='homestay'?'remove':'add']('hidden'); }
         function setRating(r) { currentRating=r; document.querySelectorAll('#star-group .star').forEach((s,idx)=>{ s.classList[idx<r?'add':'remove']('active', 'text-yellow-400'); s.classList[idx>=r?'add':'remove']('text-gray-300'); }); }
@@ -1161,17 +1162,17 @@
 
         // 7. GACHA LOGIC
         let isRolling=false;
-        function getRandomCard(forceN=false) { let r=Math.random(), c='thuong'; if(forceN) c='thuong'; else { if(userData.pity>=150) { c='bian'; userData.pity=0; } else { if(r<0.001) { c='bian'; userData.pity=0; } else if(r<0.01) c='sieuhiem'; else if(r<0.10) c='caocap'; else if(r<0.40) c='hiem'; else c='thuong'; } } if(!forceN&&c!=='bian') userData.pity++; const p=ALL_CARDS.filter(x=>x.rarity===c); return p[Math.floor(Math.random()*p.length)]; }
+        function getRandomCard(forceN=false, noPity=false) { let r=Math.random(), c='thuong'; if(!forceN) { if(!noPity && userData.pity>=149) c='bian'; else if(r<0.001) c='bian'; else if(r<0.01) c='sieuhiem'; else if(r<0.10) c='caocap'; else if(r<0.40) c='hiem'; if(!noPity) { if(c==='bian') userData.pity=0; else userData.pity++; } } const p=ALL_CARDS.filter(x=>x.rarity===c); return p[Math.floor(Math.random()*p.length)]; }
         function useFreeTicket() { if(isRolling||userData.tickets<1) return; userData.tickets--; db.collection('users').doc(currentUser).update({tickets:userData.tickets}); startCSGORoulette(true); }
         function rollGacha() { if(isRolling) return; if(userData.coins<100) return alert("Hết Coin rùi! Làm bài học tiếng Anh để kiếm xu nhé 🥺"); userData.coins-=100; db.collection('users').doc(currentUser).update({coins:userData.coins}); startCSGORoulette(false); }
-        function startCSGORoulette(forceN) { isRolling=true; const strip=document.getElementById('gacha-strip'); strip.style.transition='none'; strip.style.transform='translateX(0px)'; strip.innerHTML=''; let winCard=getRandomCard(forceN), h=''; for(let i=0;i<50;i++) { let c=(i===40)?winCard:getRandomCard(false); h+=`<div class="gacha-item"><div class="gacha-card ${c.rarityData.glowClass} w-full h-36"><img src="${c.img}" onerror="this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'"><div class="card-overlay"></div></div></div>`; } strip.innerHTML=h; setTimeout(()=>{ const o=(40*151)-(window.innerWidth<768?window.innerWidth/2-75:500)+Math.random()*100; strip.style.transition='transform 6s cubic-bezier(0.1, 0.9, 0.2, 1)'; strip.style.transform=`translateX(-${o}px)`; let tInt=setInterval(()=>{ try{ if(audioTick) { let t = audioTick.cloneNode(); t.volume = 0.4; t.play().catch(()=>{}); } } catch(e){} }, 150); setTimeout(()=>clearInterval(tInt), 4800); setTimeout(()=>{ isRolling=false; if(!userData.inventory[winCard.id]) userData.inventory[winCard.id]=0; userData.inventory[winCard.id]++; db.collection('users').doc(currentUser).update({inventory:userData.inventory, pity:userData.pity}); showCardReveal(winCard); }, 6500); }, 100); }
+        function startCSGORoulette(forceN) { isRolling=true; const strip=document.getElementById('gacha-strip'); strip.style.transition='none'; strip.style.transform='translateX(0px)'; strip.innerHTML=''; let winCard=getRandomCard(forceN), h=''; for(let i=0;i<50;i++) { let c=(i===40)?winCard:getRandomCard(false, true); h+=`<div class="gacha-item"><div class="gacha-card ${c.rarityData.glowClass} w-full h-36"><img src="${c.img}" onerror="this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'"><div class="card-overlay"></div></div></div>`; } strip.innerHTML=h; setTimeout(()=>{ const o=(40*151)-(window.innerWidth<768?window.innerWidth/2-75:500)+Math.random()*100; strip.style.transition='transform 6s cubic-bezier(0.1, 0.9, 0.2, 1)'; strip.style.transform=`translateX(-${o}px)`; let tInt=setInterval(()=>{ try{ if(audioTick) { let t = audioTick.cloneNode(); t.volume = 0.4; t.play().catch(()=>{}); } } catch(e){} }, 150); setTimeout(()=>clearInterval(tInt), 4800); setTimeout(()=>{ isRolling=false; if(!userData.inventory[winCard.id]) userData.inventory[winCard.id]=0; userData.inventory[winCard.id]++; db.collection('users').doc(currentUser).update({inventory:userData.inventory, pity:userData.pity}); showCardReveal(winCard); }, 6500); }, 100); }
         function showCardReveal(c) { try{if(audioReveal){audioReveal.currentTime=0;audioReveal.play().catch(()=>{});}}catch(e){} document.getElementById('reveal-img').src=c.img; document.getElementById('reveal-rarity-text').innerText=c.rarityData.name; document.getElementById('reveal-rarity-text').style.color=c.rarityData.color; document.getElementById('reveal-card-front').className=`card-front bg-gray-900 rounded-xl overflow-hidden border-4 ${c.rarityData.glowClass}`; document.getElementById('card-reveal-modal').classList.remove('hidden'); document.getElementById('card-reveal-modal').classList.add('flex'); if(c.rarity==='sieuhiem'||c.rarity==='bian') fireConfetti(); }
         function closeReveal() { document.getElementById('card-reveal-modal').classList.add('hidden'); document.getElementById('card-reveal-modal').classList.remove('flex'); document.querySelector('.card-3d-wrapper').classList.remove('flipped'); }
         function switchBoxTab(t) { ['gacha','collection','auction','top'].forEach(x=>{ document.getElementById(`bb-tab-${x}`).classList.add('hidden'); document.getElementById(`btab-${x}`).className="px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white"; }); document.getElementById(`bb-tab-${t}`).classList.remove('hidden'); document.getElementById(`btab-${t}`).className="px-6 py-2 rounded-lg font-bold text-sm bg-primary text-white"; if(t==='collection') updateCollectionGrid(); if(t==='top') updateLeaderboard(); if(t==='auction') loadFakeAuction(); }
         let currFilter='all'; function filterCollection(r) { currFilter=r; updateCollectionGrid(); }
         function updateCollectionGrid() { if(!document.getElementById('bb-tab-collection')) return; const grid=document.getElementById('collection-grid'); grid.innerHTML=''; let s={thuong:0,hiem:0,caocap:0,sieuhiem:0,bian:0,total:0}; ALL_CARDS.forEach(c=>{ let q=userData.inventory[c.id]||0; if(q>0){ s[c.rarity]++; s.total++; } if(currFilter!=='all'&&c.rarity!==currFilter) return; if(q>0) grid.innerHTML+=`<div class="gacha-card owned ${c.rarityData.glowClass} cursor-pointer" onclick="playClickSound(); showCardReveal(${JSON.stringify(c).replace(/"/g, '&quot;')})"><img src="${c.img}" onerror="this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'" class="w-full h-full object-cover"><div class="card-overlay"></div><div class="card-badge" style="color: ${c.rarityData.color}">${c.rarityData.name}</div><div class="card-count">x${q}</div></div>`; else grid.innerHTML+=`<div class="gacha-card border-2 border-dashed border-gray-600 bg-black/40 opacity-50"><div class="mystery-box">?</div><div class="card-badge text-gray-500">Chưa có</div></div>`; }); document.getElementById('prog-t').innerText=`${s.thuong}/10`; document.getElementById('prog-h').innerText=`${s.hiem}/10`; document.getElementById('prog-c').innerText=`${s.caocap}/10`; document.getElementById('prog-sh').innerText=`${s.sieuhiem}/10`; document.getElementById('prog-b').innerText=`${s.bian}/10`; document.getElementById('prog-total').innerText=`${Math.round((s.total/50)*100)}%`; }
         function updateLeaderboard() { db.collection('users').get().then(snap=>{ let u=[]; snap.forEach(d=>{ u.push({name:d.id, u:Object.keys(d.data().inventory||{}).length, c:d.data().coins}); }); u.sort((a,b)=>b.u-a.u); document.getElementById('leaderboard-container').innerHTML=u.map((x,i)=>`<div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl mb-2 border border-white/5"><div class="flex items-center gap-4"><div class="text-3xl">${i===0?'🥇':i===1?'🥈':'🥉'}</div><div><p class="font-bold text-lg text-white capitalize">${x.name}</p><p class="text-xs text-blue-400">🪙 ${x.c}</p></div></div><div class="text-right"><p class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-600">${x.u}/50</p></div></div>`).join(''); }); }
-        function loadFakeAuction() { document.getElementById('auction-grid').innerHTML=[1,2,3,4].map(()=>{ let c=getRandomCard(false); let p=Math.floor(Math.random()*500)+(c.rarity==='bian'?5000:c.rarity==='sieuhiem'?2000:200); return `<div class="bg-black/40 rounded-2xl p-4 border border-white/10 flex flex-col items-center"><div class="w-full aspect-[2/3] gacha-card ${c.rarityData.glowClass} pointer-events-none mb-4"><img src="${c.img}" onerror="this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'"><div class="card-overlay"></div></div><p class="font-bold text-sm mb-1 text-white">${c.name}</p><p class="text-xs ${c.rarityData.color} mb-4">${c.rarityData.name}</p><button onclick="playClickSound()" class="w-full bg-blue-500/20 text-blue-300 py-2 rounded-xl font-bold">Mua: ${p} 🪙</button></div>`; }).join(''); }
+        function loadFakeAuction() { document.getElementById('auction-grid').innerHTML=[1,2,3,4].map(()=>{ let c=getRandomCard(false, true); let p=Math.floor(Math.random()*500)+(c.rarity==='bian'?5000:c.rarity==='sieuhiem'?2000:200); return `<div class="bg-black/40 rounded-2xl p-4 border border-white/10 flex flex-col items-center"><div class="w-full aspect-[2/3] gacha-card ${c.rarityData.glowClass} pointer-events-none mb-4"><img src="${c.img}" onerror="this.src='https://i.postimg.cc/mD8zQxGj/placeholder.png'"><div class="card-overlay"></div></div><p class="font-bold text-sm mb-1 text-white">${c.name}</p><p class="text-xs ${c.rarityData.color} mb-4">${c.rarityData.name}</p><button onclick="playClickSound()" class="w-full bg-blue-500/20 text-blue-300 py-2 rounded-xl font-bold">Mua: ${p} 🪙</button></div>`; }).join(''); }
 
         // 8. BARISTA
         let currentBaristaDrink = null;
@@ -1191,6 +1192,9 @@
         // LOGIC SHADOW HUNTER - CẬP NHẬT 3D & HIT EFFECT & LUẬT LỆ
         // ----------------------------------------------------
         let shCurrentTurn = 0;
+        let shData = { coins: 0, avatar: 'Nhân vật khởi đầu', avatarSrc: 'nhanvatkhoidau.glb' };
+        let shCurrentUser = null;
+        let shPlayers = [];
         let targetCallback = null; 
         let pendingHermitTarget = null;
 
@@ -1280,7 +1284,7 @@
                     isMe: i === 0,
                     avatarName: i === 0 ? shData.avatar : 'Nhân vật khởi đầu',
                     avatarSrc: i === 0 ? shData.avatarSrc : 'nhanvatkhoidau.glb',
-                    faction: factions[i],
+                    faction: char.faction,
                     char: char,
                     hp: char.hp, maxHp: char.hp,
                     equip: [], revealed: false, isDead: false, area: 0
@@ -1488,7 +1492,18 @@
             updateBoardUI();
         }
 
+        function checkSHWin() {
+            const alive = shPlayers.filter(p => !p.isDead);
+            const hunters = alive.filter(p => p.faction === 'Hunter').length;
+            const shadows = alive.filter(p => p.faction === 'Shadow').length;
+            if (!shadows && !hunters) return 'Hết phe đối đầu, game kết thúc!';
+            if (!shadows) return 'Phe Hunter thắng!';
+            if (!hunters) return 'Phe Shadow thắng!';
+            return null;
+        }
         function endTurn() {
+            const result = checkSHWin();
+            if (result) { shLog(`🏁 <b class="text-yellow-400">${result}</b>`); document.getElementById('btn-sh-move').disabled = true; document.getElementById('btn-sh-attack').disabled = true; return; }
             shCurrentTurn++;
             if(shCurrentTurn >= shPlayers.length) shCurrentTurn = 0;
             playTurn();
@@ -1499,6 +1514,7 @@
 /* ===== PATCH: Luyện tập đủ từ + liệt kê từ sai + thêm đoạn văn A1 ===== */
 
 // --- 1. Luyện tập dùng toàn bộ vocabData, tổng kết hiện từng từ sai ---
+            let quizLocked = false;
 function getQuizQA(item) {
     if (studyState.mode === 'en-vi') return { q: item.en, a: item.vi };
     if (studyState.mode === 'vi-en') return { q: item.vi, a: item.en };
@@ -1506,6 +1522,7 @@ function getQuizQA(item) {
 }
 
 function loadQuizQuestion() {
+    quizLocked = false;
     if (!quizStats.wrongList) quizStats.wrongList = [];
     const total = studyState.shuffledData.length;
     if (studyState.currentIndex >= total) {
@@ -1561,12 +1578,14 @@ function retryWrongWords() {
 }
 
 function checkQuizAnswer() {
-    if (studyState.currentIndex >= studyState.shuffledData.length) return;
+    if (quizLocked || studyState.currentIndex >= studyState.shuffledData.length) return;
     // Bắt đầu phiên mới (openStudyMode đã reset đúng/sai về 0) thì xóa danh sách từ sai cũ
     if (!quizStats.wrongList || (quizStats.correct + quizStats.wrong === 0)) quizStats.wrongList = [];
 
     const item = studyState.shuffledData[studyState.currentIndex];
     const rawUser = document.getElementById('quiz-input').value.trim();
+    if (!rawUser) return;
+    quizLocked = true;
     const user = rawUser.toLowerCase();
     let c = false;
     if (studyState.mode === 'en-vi') { const ex = item.vi.toLowerCase(); if ((ex.includes(user) && user.length > 2) || user === ex) c = true; }
