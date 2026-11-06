@@ -13,7 +13,6 @@
     
     <!-- 3D Model Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
-
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -24,11 +23,12 @@
                         primary: '#5B9BFF', secondary: '#A5D8FF', accent: '#E0F7FA', textDark: '#1A2A44', textGray: '#64748B', vipRed: '#E63946', vipDark: '#0A0A0A',
                     },
                     fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Playfair Display', 'serif'] },
-                    animation: { 'ken-burns': 'kenBurns 20s ease-in-out infinite alternate', 'float-glow': 'floatGlow 3s ease-in-out infinite alternate', 'flash-red': 'flashRed 0.5s ease-out' },
+                    animation: { 'ken-burns': 'kenBurns 20s ease-in-out infinite alternate', 'float-glow': 'floatGlow 3s ease-in-out infinite alternate', 'flash-red': 'flashRed 0.5s ease-out', 'bounce-soft': 'bounceSoft 2s infinite' },
                     keyframes: {
                         kenBurns: { '0%': { transform: 'scale(1)' }, '100%': { transform: 'scale(1.15)' } },
                         floatGlow: { '0%': { transform: 'translateY(0)', textShadow: '0 0 10px rgba(230, 57, 70, 0.5)' }, '100%': { transform: 'translateY(-10px)', textShadow: '0 0 30px rgba(230, 57, 70, 1)' } },
-                        flashRed: { '0%': { backgroundColor: 'rgba(153, 27, 27, 0.8)', borderColor: '#ef4444', boxShadow: '0 0 20px #ef4444' }, '100%': { backgroundColor: 'transparent' } }
+                        flashRed: { '0%': { backgroundColor: 'rgba(153, 27, 27, 0.8)', borderColor: '#ef4444', boxShadow: '0 0 20px #ef4444' }, '100%': { backgroundColor: 'transparent' } },
+                        bounceSoft: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-5px)' } }
                     }
                 }
             }
@@ -39,12 +39,13 @@
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
-
     <style>
-        @keyframes flashRed { 0% { background-color: rgba(153,27,27,0.8); border-color: #ef4444; box-shadow: 0 0 20px #ef4444; } 100% { background-color: transparent; } }
+	    @keyframes flashRed { 0% { background-color: rgba(153,27,27,0.8); border-color: #ef4444; box-shadow: 0 0 20px #ef4444; } 100% { background-color: transparent; } }
         body { background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 50%, #7DD3FC 100%); min-height: 100vh; margin: 0; overflow-x: hidden; scroll-behavior: smooth; }
         .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 8px 32px rgba(91, 155, 255, 0.1); }
-        .vip-glass { background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(20px); border-left: 1px solid rgba(255, 255, 255, 0.1); box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
+        .vip-glass { background: rgba(20, 20, 30, 0.6); backdrop-filter: blur(25px); border-left: 1px solid rgba(255, 255, 255, 0.1); box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
+        .music-item-glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; }
+        .music-item-glass:hover { background: rgba(255, 255, 255, 0.15); transform: translateX(5px) scale(1.02); border-color: rgba(255, 255, 255, 0.3); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         .bubble-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
         .bubble-card:hover { transform: scale(1.03) translateY(-5px); box-shadow: 0 20px 40px rgba(91, 155, 255, 0.2); border-color: rgba(91, 155, 255, 0.4); }
         .start-bubble { background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.2)); box-shadow: inset 0 0 20px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.4), 0 15px 30px rgba(91, 155, 255, 0.4); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.6); animation: floatBubble 3s ease-in-out infinite; }
@@ -54,7 +55,7 @@
         .modal-enter { opacity: 0; transform: scale(0.95) translateY(10px); } .modal-enter-active { opacity: 1; transform: scale(1) translateY(0); transition: all 0.3s ease-out; }
         .modal-leave { opacity: 1; transform: scale(1) translateY(0); } .modal-leave-active { opacity: 0; transform: scale(0.95) translateY(10px); transition: all 0.2s ease-in; }
         .slide-down-enter { opacity: 0; transform: translateY(-20px); transition: all 0.4s ease; } .slide-down-enter-active { opacity: 1; transform: translateY(0); }
-        .dark-scroll::-webkit-scrollbar { width: 6px; } .dark-scroll::-webkit-scrollbar-track { background: transparent; } .dark-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        .dark-scroll::-webkit-scrollbar { width: 6px; } .dark-scroll::-webkit-scrollbar-track { background: transparent; } .dark-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
         ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #A5D8FF; border-radius: 10px; }
         .no-scroll { overflow: hidden; height: 100vh; }
         .star { cursor: pointer; color: #cbd5e1; transition: color 0.2s; } .star.active { color: #fbbf24; }
@@ -77,7 +78,6 @@
         .card-count { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.8); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); }
         .mystery-box { font-size: 3rem; font-weight: bold; color: rgba(255,255,255,0.2); }
         .card-3d-wrapper { perspective: 1000px; } .card-3d-inner { transition: transform 0.8s; transform-style: preserve-3d; } .card-3d-wrapper.flipped .card-3d-inner { transform: rotateY(180deg); } .card-front, .card-back { backface-visibility: hidden; position: absolute; inset: 0; } .card-back { transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; background: url('https://i.postimg.cc/85z1DkS0/card-back.jpg') center/cover; border-radius: 0.75rem; border: 2px solid rgba(255,255,255,0.2); }
-
         .cute-falling-word { position: absolute; padding: 12px 16px; background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%); border-radius: 24px; border: 2px solid #bae6fd; border-bottom: 6px solid #7dd3fc; box-shadow: 0 10px 25px rgba(56, 189, 248, 0.25), inset 0 3px 0 white; text-align: center; will-change: transform, top; animation: floatWobble 2s ease-in-out infinite alternate; z-index: 10; }
         .cute-hint { font-size: 0.85rem; color: #0284c7; font-weight: 800; margin-bottom: 6px; display: block; text-shadow: 1px 1px 0px rgba(255,255,255,0.8); }
         .letter-box { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 32px; border-radius: 8px; font-weight: 900; font-size: 16px; text-transform: uppercase; margin: 0 2px; }
@@ -86,7 +86,7 @@
         .cute-falling-word.hit { background: linear-gradient(135deg, #bbf7d0, #4ade80); border-color: #22c55e; border-bottom-color: #16a34a; transform: scale(1.1); opacity: 0; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes floatWobble { 0% { transform: rotate(-3deg) translateX(-2px); } 100% { transform: rotate(3deg) translateX(2px); } }
         @keyframes pulseGlow { 0% { box-shadow: 0 0 0 rgba(56, 189, 248, 0); } 100% { box-shadow: 0 0 10px rgba(56, 189, 248, 0.5); } }
-
+        
         /* Game Styles */
         .sh-theme { background: radial-gradient(circle at center, #1a0000 0%, #000000 100%); color: #ff3333; font-family: 'Inter', sans-serif; }
         .blood-text { font-family: 'Creepster', cursive; text-shadow: 0 0 10px #ff0000, 0 0 20px #8b0000; }
@@ -101,7 +101,6 @@
     </style>
 </head>
 <body class="text-textDark antialiased no-scroll" id="body">
-
     <!-- AUDIO SOUND EFFECTS -->
     <audio id="bg-music" loop src="https://files.catbox.moe/by6h11.mp4"></audio>
     <audio id="sound-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
@@ -129,7 +128,6 @@
             <button id="sh-login-btn" onclick="playClickSound(); handleSHLogin()" class="w-full mt-4 bg-transparent border-2 border-red-900 text-red-600 hover:bg-red-900 hover:text-white py-3.5 rounded-xl font-bold transition-all shadow-[0_0_15px_rgba(150,0,0,0.5)]">
                 Vào Kênh Game Shadow Hunter 💀
             </button>
-
             <p id="login-error" class="text-rose-500 text-sm mt-4 hidden font-medium">Sai tài khoản hoặc mật khẩu!</p>
         </div>
     </div>
@@ -145,1270 +143,977 @@
     <div id="hub-screen" class="fixed inset-0 z-[90] flex flex-col items-center justify-center hidden opacity-0 scale-95 transition-all duration-500">
         <div class="absolute top-6 left-6 glass-card px-5 py-3 rounded-2xl flex items-center gap-4 shadow-md border-white/60">
             <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold text-xl uppercase shadow-md" id="hub-avatar">L</div>
-            <div>
-                <p class="font-bold text-textDark" id="hub-username">User</p>
-                <div class="flex items-center gap-3 mt-0.5">
-                    <p class="text-sm font-semibold text-yellow-500">🪙 <span id="hub-coins">0</span> Coin</p>
-                    <p class="text-sm font-semibold text-orange-500" title="Chuỗi học tập liên tiếp">🔥 <span id="hub-streak">0</span> Ngày</p>
-                </div>
-            </div>
+            <div><p class="font-bold text-textDark" id="hub-username">User</p><p class="text-sm font-semibold text-yellow-500 mt-0.5">🪙 <span id="hub-coins">0</span> Coin</p></div>
             <div class="pl-4 border-l border-gray-200 ml-2"><p class="text-xs text-textGray font-medium">Bộ sưu tầm</p><p class="font-bold text-primary" id="hub-cards">0 / 50</p></div>
         </div>
-
+        
         <h1 class="font-serif text-4xl md:text-5xl font-bold text-textDark mb-16 drop-shadow-sm tracking-wide text-center px-4">Không gian của tụi mình ✨</h1>
+        
         <div class="flex flex-wrap justify-center gap-8 md:gap-14 px-6">
-            <div class="group relative cursor-pointer hub-icon" onclick="playClickSound(); switchView('places')"><div class="w-28 h-28 md:w-36 md:h-36 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20"><img src="diadiem.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/854/854878.png'" class="w-14 h-14 md:w-20 md:h-20 object-contain drop-shadow-md"></div><div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-primary shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Địa điểm đã đi 🗺️</div></div>
-            <div class="group relative cursor-pointer hub-icon" onclick="playClickSound(); openMusicConfirm()"><div class="w-28 h-28 md:w-36 md:h-36 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20"><img src="nghenhac.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3011/3011236.png'" class="w-14 h-14 md:w-20 md:h-20 object-contain drop-shadow-md"></div><div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-rose-500 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Sảnh Nghe Nhạc 🎧</div></div>
-            <div class="group relative cursor-pointer hub-icon" onclick="playClickSound(); switchView('study')"><div class="w-28 h-28 md:w-36 md:h-36 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20"><img src="studyE.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/330/330731.png'" class="w-14 h-14 md:w-20 md:h-20 object-contain drop-shadow-md"></div><div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-primary shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Học Tiếng Anh 📚</div></div>
-            <div class="group relative cursor-pointer hub-icon" onclick="playClickSound(); switchView('blindbox')"><div class="w-28 h-28 md:w-36 md:h-36 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-4 border-yellow-300 shadow-[0_0_30px_rgba(234,179,8,0.5)]"><div class="text-5xl animate-pulse">🎁</div></div><div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-yellow-600 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Gacha VIP 🎲</div></div>
+            <div class="group relative cursor-pointer hub-icon" onclick="playClickSound(); switchView('places')">
+                <div class="w-28 h-28 md:w-36 md:h-36 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20"><img src="diadiem.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/854/854878.png'" class="w-14 h-14 md:w-20 md:h-20 object-contain drop-shadow-md"></div>
+                <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-primary shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Địa điểm đã đi 🗺️</div>
+            </div>
+            <div class="group relative cursor-pointer hub-icon" onclick="playClickSound(); openMusicConfirm()">
+                <div class="w-28 h-28 md:w-36 md:h-36 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20"><img src="nghenhac.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3011/3011236.png'" class="w-14 h-14 md:w-20 md:h-20 object-contain drop-shadow-md"></div>
+                <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-rose-500 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Sảnh Nghe Nhạc 🎧</div>
+            </div>
+            <div class="group relative cursor-pointer hub-icon" onclick="playClickSound(); switchView('study')">
+                <div class="w-28 h-28 md:w-36 md:h-36 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-2 border-white/50 shadow-xl shadow-primary/20 relative">
+                    <!-- FIRE STREAK ICON ON TOP OF ENGLISH -->
+                    <div id="hub-streak-badge" class="absolute -top-3 -right-3 bg-orange-100 border border-orange-300 px-2 py-1 rounded-full shadow-lg z-10 flex items-center gap-1 hidden">
+                        <span class="text-lg animate-bounce-soft">🔥</span><span class="font-bold text-orange-600 text-sm" id="hub-streak-count">0</span>
+                    </div>
+                    <img src="studyE.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/330/330731.png'" class="w-14 h-14 md:w-20 md:h-20 object-contain drop-shadow-md">
+                </div>
+                <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-primary shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Học Tiếng Anh 📚</div>
+            </div>
+            <div class="group relative cursor-pointer hub-icon" onclick="playClickSound(); switchView('blindbox')">
+                <div class="w-28 h-28 md:w-36 md:h-36 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-transform duration-500 border-4 border-yellow-300 shadow-[0_0_30px_rgba(234,179,8,0.5)]"><div class="text-5xl animate-pulse">🎁</div></div>
+                <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold text-yellow-600 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Gacha VIP 🎲</div>
+            </div>
         </div>
     </div>
 
     <!-- Modal Xác nhận vào sảnh nhạc -->
     <div id="music-confirm-modal" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 transition-opacity">
         <div id="music-confirm-content" class="bg-white rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl p-6 text-center modal-enter relative transition-all duration-300">
-            <h3 class="text-xl font-bold text-textDark mb-3">Vào Sảnh V.I.P? 🎧</h3>
-            <p class="text-sm text-textGray mb-6 leading-relaxed">Bạn muốn vào sảnh nghe nhạc chứ?<br/>(Nhạc GD sẽ tự động tạm tắt nhạc nền ngoài sảnh chính)</p>
-            <div class="flex gap-3"><button onclick="playClickSound(); closeMusicConfirm()" class="flex-1 py-2.5 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 font-medium transition-colors">Hủy</button><button onclick="playClickSound(); enterMusicHub()" class="flex-1 py-2.5 rounded-xl bg-rose-500 text-white hover:bg-rose-600 font-medium transition-colors shadow-lg shadow-rose-200">Vào ngay 🔥</button></div>
+            <h3 class="text-xl font-bold text-textDark mb-3">Vào Sảnh Âm Nhạc? 🎧</h3>
+            <p class="text-sm text-textGray mb-6 leading-relaxed">Bạn muốn vào sảnh nghe nhạc Chill & Việt Nam chứ?<br/>(Nhạc nền mặc định sẽ tạm dừng)</p>
+            <div class="flex gap-3"><button onclick="playClickSound(); closeMusicConfirm()" class="flex-1 py-2.5 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 font-medium transition-colors">Hủy (Phím ESC)</button><button onclick="playClickSound(); enterMusicHub()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 text-white hover:opacity-90 font-bold transition-colors shadow-lg shadow-purple-200">Vào ngay 🔥</button></div>
         </div>
     </div>
 
-    <!-- 3. SẢNH V.I.P MUSIC PLAYER (ĐÃ CẬP NHẬT UI CHILL & VIỆT) -->
+    <!-- 3. SẢNH NHẠC V.I.P MỚI (CHILL & VIET) -->
     <div id="music-module" class="fixed inset-0 z-[95] hidden opacity-0 transition-all duration-1000 bg-vipDark overflow-hidden flex flex-col md:flex-row">
         <div class="absolute inset-0 z-0 pointer-events-none">
-            <div class="absolute inset-0 bg-[url('g-dragon.jpg')] bg-cover bg-center opacity-30 animate-ken-burns"></div>
-            <div class="absolute inset-0 bg-gradient-to-br from-vipDark/90 via-vipDark/60 to-[#E63946]/30"></div>
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1614113489855-66422ad300a4?q=80&w=2000')] bg-cover bg-center opacity-30 animate-ken-burns"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-indigo-900/90 via-purple-900/60 to-black/80"></div>
+            <div class="absolute inset-0" style="background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px); background-size: 50px 50px;"></div>
         </div>
-        <button onclick="playClickSound(); switchView('hub')" class="absolute top-6 left-6 z-[100] bg-white/10 backdrop-blur-md border border-white/20 px-5 py-2.5 rounded-full text-white font-medium hover:bg-white/20 transition-all flex items-center gap-2 shadow-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Sảnh chính</button>
+        <button onclick="playClickSound(); switchView('hub')" class="absolute top-6 left-6 z-[100] bg-white/10 backdrop-blur-md border border-white/20 px-5 py-2.5 rounded-full text-white font-medium hover:bg-white/20 transition-all flex items-center gap-2 shadow-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Sảnh chính (ESC)</button>
         
-        <div class="relative z-10 flex-1 flex items-center justify-center p-10 mt-16 md:mt-0 pointer-events-auto">
+        <div class="relative z-10 flex-1 flex flex-col items-center justify-center p-10 mt-16 md:mt-0 pointer-events-auto">
             <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 uppercase tracking-[0.2em] mb-4 animate-float-glow" id="music-station-title">G-DRAGON</h1>
-                <p class="text-white/60 tracking-[0.3em] uppercase text-sm md:text-lg font-light" id="music-station-subtitle">V.I.P Lounge Collection</p>
-                <div class="mt-12 relative w-48 h-48 md:w-64 md:h-64 mx-auto"><div id="record-disk" class="absolute inset-0 rounded-full border-4 border-[#E63946]/30 shadow-[0_0_50px_rgba(230,57,70,0.3)] transition-transform duration-1000 ease-linear"><div class="absolute inset-2 rounded-full border border-white/10 flex items-center justify-center bg-black/50 backdrop-blur-sm"><div class="w-16 h-16 rounded-full border-2 border-[#E63946] bg-vipDark flex items-center justify-center shadow-inner"><div class="w-4 h-4 bg-white rounded-full"></div></div></div></div></div>
-            </div>
-        </div>
-        
-        <div class="relative z-20 w-full md:w-96 lg:w-[450px] h-[55vh] md:h-full vip-glass flex flex-col p-6 rounded-t-3xl md:rounded-none transition-transform pointer-events-auto shadow-[-20px_0_30px_rgba(0,0,0,0.5)] border-l border-white/5">
-            <!-- Tabs Nhạc -->
-            <div class="flex gap-2 p-1 bg-white/5 rounded-xl mb-6 backdrop-blur-sm border border-white/10">
-                <button id="mtab-main" onclick="playClickSound(); switchMusicTab('main')" class="flex-1 py-2 rounded-lg font-bold text-sm bg-[#E63946] text-white shadow-md">GD (Nền)</button>
-                <button id="mtab-chill" onclick="playClickSound(); switchMusicTab('chill')" class="flex-1 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white">Chill Lofi</button>
-                <button id="mtab-viet" onclick="playClickSound(); switchMusicTab('viet')" class="flex-1 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white">Nhạc Việt</button>
-            </div>
-            
-            <ul id="gd-playlist-container" class="flex-1 overflow-y-auto dark-scroll space-y-3 pr-2">
-                <!-- Javascript sinh nhạc -->
-            </ul>
-            
-            <div class="mt-6 p-5 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-md">
-                <div class="mb-4"><p class="text-xs text-[#E63946] font-bold uppercase tracking-widest mb-1" id="music-now-playing-label">Đang phát</p><p id="gd-now-playing-title" class="text-white font-medium truncate">Chưa chọn bài</p></div>
-                <div class="flex items-center justify-center gap-6">
-                    <button onclick="playClickSound(); prevGDSong()" class="text-white/70 hover:text-white transition-colors transform hover:scale-110"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z"></path></svg></button>
-                    <button onclick="playClickSound(); toggleGDSong()" id="btn-gd-play" class="w-14 h-14 rounded-full bg-[#E63946] hover:bg-red-600 text-white flex items-center justify-center transition-all shadow-[0_0_20px_rgba(230,57,70,0.5)] transform hover:scale-105"><svg id="gd-icon-play" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg><svg id="gd-icon-pause" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg></button>
-                    <button onclick="playClickSound(); nextGDSong()" class="text-white/70 hover:text-white transition-colors transform hover:scale-110"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0013 14V8.798l5.445 3.63A1 1 0 0020 14V6a1 1 0 00-1.555-.832L13 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4zM4 6a1 1 0 11-2 0v8a1 1 0 112 0V6z"></path></svg></button>
-                </div>
-            </div>
-        </div>
-    </div>
-<!-- 4. MODULE BẢN ĐỒ -->
-    <div id="places-module" class="hidden opacity-0 scale-95 pb-20 transition-all duration-500">
-        <button onclick="playClickSound(); switchView('hub')" class="fixed top-6 left-6 z-[80] glass-card px-4 py-2 rounded-full text-primary font-medium hover:bg-white transition-colors flex items-center gap-2 shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Sảnh chính</button>
-        <header class="max-w-4xl mx-auto pt-24 px-6 text-center">
-            <h1 class="font-serif text-4xl font-semibold mb-4 text-textDark">Bản đồ <span class="text-primary italic">khoảnh khắc xanh</span></h1>
-            <button onclick="playClickSound(); openFormModal()" class="bg-primary hover:bg-[#4FC3F7] text-white px-8 py-3 rounded-full font-medium transition-transform transform hover:scale-105 shadow-lg shadow-primary/30 flex items-center gap-2 mx-auto mt-6"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg> Thêm địa điểm</button>
-        </header>
-        <main id="places-grid" class="max-w-5xl mx-auto mt-12 px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></main>
-    </div>
-
-    <!-- MODAL XEM CHI TIẾT ĐỊA ĐIỂM -->
-    <div id="view-modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 transition-opacity"><div id="view-modal-content" class="bg-white rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto scroll-smooth shadow-2xl relative"><button onclick="playClickSound(); closeViewModal()" class="absolute top-4 right-4 z-10 p-2 bg-black/30 text-white backdrop-blur-md rounded-full hover:bg-black/50 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg></button><div class="h-56 bg-gray-200 w-full relative shrink-0"><img id="view-image" src="" class="w-full h-full object-cover"><div id="view-status-badge" class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1 shadow-sm"></div></div><div class="p-6"><h2 id="view-name" class="text-2xl font-serif font-bold text-textDark mb-1">Tên</h2><p id="view-address" class="text-sm text-textGray mb-4"></p><div class="bg-accent/30 rounded-2xl p-4 mb-4"><div class="grid grid-cols-2 gap-4"><div><p class="text-xs text-textGray mb-1">Loại hình</p><p id="view-type" class="font-medium text-sm">Nhà hàng</p></div><div><p class="text-xs text-textGray mb-1" id="view-extra-label">Hình / Giá</p><p id="view-extra-value" class="font-medium text-sm">Ăn tại chỗ</p></div><div class="col-span-2"><p class="text-xs text-textGray mb-1">Đánh giá</p><div class="flex items-center gap-1" id="view-stars"></div></div></div></div><div id="view-pros-cons" class="mb-4 space-y-3 hidden"><div id="view-pros-container" class="bg-emerald-50 border border-emerald-100 rounded-2xl p-3.5 hidden"><p class="text-xs text-emerald-600 font-semibold mb-1">💖 Điểm cộng</p><p id="view-pros" class="text-sm text-emerald-800"></p></div><div id="view-cons-container" class="bg-rose-50 border border-rose-100 rounded-2xl p-3.5 hidden"><p class="text-xs text-rose-500 font-semibold mb-1">🥺 Điểm trừ</p><p id="view-cons" class="text-sm text-rose-800"></p></div></div><div id="view-menu-container" class="mb-6 hidden"><p class="text-sm font-semibold mb-2">📖 Menu</p><div class="rounded-2xl overflow-hidden border border-gray-100"><img id="view-menu-image" src="" class="w-full h-auto object-cover"></div></div><div class="flex gap-3"><button onclick="playClickSound(); editCurrentPlace()" class="flex-1 py-3 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 transition-colors font-medium">Sửa</button><button onclick="playClickSound(); deleteCurrentPlace()" class="py-3 px-4 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-colors font-medium">Xóa</button></div></div></div></div>
-    
-    <!-- MODAL THÊM / SỬA ĐỊA ĐIỂM -->
-    <div id="form-modal-overlay" class="fixed inset-0 bg-textDark/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 transition-opacity"><div id="form-modal-content" class="bg-white rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl relative max-h-[90vh] overflow-y-auto scroll-smooth"><button onclick="playClickSound(); closeFormModal()" class="absolute top-4 right-4 p-2 bg-gray-100 hover:bg-gray-200 transition-colors rounded-full"><svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg></button><div class="p-6"><h2 id="form-title" class="text-2xl font-serif font-bold mb-4">Lưu lại một kỷ niệm ☁️</h2><div class="flex p-1 bg-gray-100 rounded-xl mb-6"><button id="tab-food" type="button" onclick="switchFormTabPlaces('food')" class="flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm">Ăn uống</button><button id="tab-homestay" type="button" onclick="switchFormTabPlaces('homestay')" class="flex-1 py-2 rounded-lg text-textGray font-medium text-sm hover:text-primary transition-colors">Homestay / Net</button></div><form id="add-form" onsubmit="handleFormSubmit(event)" class="space-y-4"><div><label class="block text-sm font-medium mb-1">Tên địa điểm *</label><input type="text" id="input-name" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary focus:outline-none transition-colors"></div><div><label class="block text-sm font-medium mb-1">Địa chỉ</label><input type="text" id="input-address" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary focus:outline-none transition-colors"></div><div id="form-food-fields" class="space-y-4"><div class="grid grid-cols-2 gap-4"><div><label class="block text-sm font-medium mb-1">Loại</label><select id="input-food-type" class="w-full px-4 py-2.5 rounded-xl border border-gray-200"><option>Lề đường</option><option>Nhà hàng</option><option>Quán Cà Phê</option></select></div><div><label class="block text-sm font-medium mb-1">Hình thức</label><select id="input-format" class="w-full px-4 py-2.5 rounded-xl border border-gray-200"><option>Ăn tại chỗ</option><option>Mang đi</option><option>Cả hai</option></select></div></div></div><div id="form-homestay-fields" class="space-y-4 hidden"><div class="grid grid-cols-2 gap-4"><div><label class="block text-sm font-medium mb-1">Loại</label><select id="input-home-type" class="w-full px-4 py-2.5 rounded-xl border border-gray-200"><option>Homestay</option><option>Phòng Net</option></select></div><div><label class="block text-sm font-medium mb-1">Giá / Đêm / Giờ</label><input type="text" id="input-price" class="w-full px-4 py-2.5 rounded-xl border border-gray-200"></div></div></div><div class="grid grid-cols-2 gap-4 pt-2 border-t border-gray-100"><div><label class="block text-sm font-medium mb-1">Trạng thái</label><select id="input-visited" onchange="toggleRating()" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-blue-50/50"><option value="true">Đã đi rùi 🌸</option><option value="false">Sẽ đi 📌</option></select></div><div id="rating-container"><label class="block text-sm font-medium mb-1">Chấm điểm</label><div class="flex gap-1 mt-2.5" id="star-group"><svg onclick="setRating(1)" class="w-6 h-6 star active text-yellow-400 hover:scale-110" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg onclick="setRating(2)" class="w-6 h-6 star active text-yellow-400 hover:scale-110" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg onclick="setRating(3)" class="w-6 h-6 star active text-yellow-400 hover:scale-110" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg onclick="setRating(4)" class="w-6 h-6 star active text-yellow-400 hover:scale-110" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg onclick="setRating(5)" class="w-6 h-6 star text-gray-300 hover:scale-110" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg></div></div></div><div id="review-details" class="space-y-4"><div><label class="block text-sm font-medium mb-1">Điểm cộng 💖</label><input type="text" id="input-pros" class="w-full px-4 py-2.5 rounded-xl border border-gray-200"></div><div><label class="block text-sm font-medium mb-1">Điểm trừ 🥺</label><input type="text" id="input-cons" class="w-full px-4 py-2.5 rounded-xl border border-gray-200"></div></div><div class="pt-2 border-t border-gray-100 space-y-4"><div><label class="block text-sm font-medium mb-1">Link ảnh bìa</label><input type="url" id="input-image" class="w-full px-4 py-2.5 rounded-xl border border-gray-200"></div><div><label class="block text-sm font-medium mb-1">Link ảnh Menu 📖</label><input type="url" id="input-menu" class="w-full px-4 py-2.5 rounded-xl border border-gray-200"></div></div><button type="submit" id="btn-submit" onclick="playClickSound()" class="w-full mt-6 bg-primary hover:bg-[#4FC3F7] transition-colors text-white py-3.5 rounded-xl font-semibold shadow-md">Lưu vào Bản Đồ</button></form></div></div></div>
-
-    <!-- 5. MODULE HỌC TIẾNG ANH (ĐÃ FIX LỖI 81 TỪ & BÁO LỖI CHI TIẾT) -->
-    <div id="study-module" class="hidden opacity-0 scale-95 pb-20 transition-all duration-500 h-full overflow-y-auto">
-        <!-- Nút Trở Về Sảnh Chính (Mặc định ở Góc Học Tập) -->
-        <button id="btn-study-back-hub" onclick="playClickSound(); switchView('hub')" class="fixed top-6 left-6 z-[80] glass-card px-4 py-2 rounded-full text-primary font-medium hover:bg-white transition-colors flex items-center gap-2 shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Sảnh chính</button>
-        
-        <header class="max-w-4xl mx-auto pt-24 px-6 text-center mb-10" id="study-main-header">
-            <h1 class="font-serif text-4xl font-semibold mb-4 text-textDark">Góc <span class="text-primary italic">Tiếng Anh</span></h1>
-            <p class="text-textGray">Cùng nhau ôn tập từ vựng và ngữ pháp nhé! 📖</p>
-        </header>
-        
-        <main class="max-w-5xl mx-auto px-6 relative">
-            <div id="study-menu" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <button onclick="playClickSound(); openStudyMode('list')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group"><div class="text-3xl mb-3">📝</div><h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Danh sách từ vựng</h3><p class="text-sm text-textGray">Xem đầy đủ 81 từ đã học</p></button>
-                <button onclick="playClickSound(); openStudyMode('en-vi')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-blue-200"><div class="text-3xl mb-3">🇬🇧 ➡️ 🇻🇳</div><h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Dịch Tiếng Việt</h3><p class="text-sm text-textGray">Hỏi tiếng Anh</p></button>
-                <button onclick="playClickSound(); openStudyMode('vi-en')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-green-200"><div class="text-3xl mb-3">🇻🇳 ➡️ 🇬🇧</div><h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Dịch Tiếng Anh</h3><p class="text-sm text-textGray">Hỏi tiếng Việt</p></button>
-                <button onclick="playClickSound(); openStudyMode('type')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-purple-200"><div class="text-3xl mb-3">🔍</div><h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-primary transition-colors">Phân tích loại từ</h3><p class="text-sm text-textGray">Nhập Noun, Verb...</p></button>
-                <button onclick="playClickSound(); openStudyMode('grammar')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-orange-200"><div class="text-3xl mb-3">✨</div><h3 class="text-lg font-bold text-textDark mb-1 group-hover:text-orange-500 transition-colors">Ngữ Pháp & Bài Tập</h3><p class="text-sm text-textGray">Giới từ</p></button>
-                <button onclick="playClickSound(); openStudyMode('memory')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-rose-200 bg-white/50"><div class="text-3xl mb-3">🧠</div><h3 class="text-lg font-bold text-rose-600 mb-1">Kiểm tra trí nhớ</h3><p class="text-sm text-textGray">Gõ đúng thứ tự 81 từ</p></button>
-                <button onclick="playClickSound(); openStudyMode('paragraph')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-indigo-200"><div class="text-3xl mb-3">📜</div><h3 class="text-lg font-bold text-indigo-600 mb-1">Dịch Đoạn Văn</h3><p class="text-sm text-textGray">Luyện dịch dài</p></button>
-                <button onclick="playClickSound(); openStudyMode('falling')" class="glass-card p-6 rounded-3xl text-left hover:scale-105 transition-transform group border-cyan-300 shadow-[0_0_20px_rgba(34,211,238,0.3)]"><div class="text-3xl mb-3 animate-bounce">☄️</div><h3 class="text-lg font-bold text-cyan-600 mb-1">Mini Game Chữ Rơi</h3><p class="text-sm text-textGray">Tập gõ siêu tốc</p></button>
-            </div>
-
-            <div id="study-content" class="hidden glass-card rounded-3xl p-6 md:p-10 relative mt-6 border-white/60 shadow-xl">
-                <!-- Nút Thoát bài học về Menu Study -->
-                <button onclick="playClickSound(); backToStudyMenu()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors z-20"><svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
-                <h2 id="study-content-title" class="text-2xl font-bold text-primary mb-6 border-b border-primary/20 pb-4 pr-10">Tiêu đề</h2>
-                
-                <div id="vocab-list-container" class="hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"></div>
-                
-                <div id="quiz-container" class="hidden flex flex-col items-center">
-                    <div class="text-sm text-textGray mb-2 font-medium" id="quiz-progress">Câu 1 / 10</div>
-                    <div class="w-full bg-white rounded-2xl p-8 text-center shadow-sm border border-gray-100 mb-6"><p class="text-xs text-primary font-bold uppercase tracking-widest mb-2" id="quiz-hint">Dịch sang tiếng Việt</p><h3 class="text-3xl font-serif font-bold text-textDark capitalize" id="quiz-question">Word</h3></div>
-                    <input type="text" id="quiz-input" autocomplete="off" placeholder="Nhập đáp án của bạn..." class="w-full max-w-md px-5 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-primary text-center text-lg mb-4 transition-colors shadow-inner">
-                    <button id="quiz-submit-btn" onclick="playClickSound(); checkQuizAnswer()" class="bg-primary hover:bg-[#4FC3F7] text-white px-8 py-3 rounded-xl font-bold transition-all shadow-md w-full max-w-md transform hover:scale-105">Kiểm tra (+10🪙)</button>
-                    <div id="quiz-feedback" class="mt-4 p-4 rounded-xl w-full max-w-md hidden text-center font-medium"></div>
-                </div>
-
-                <div id="memory-container" class="hidden flex flex-col items-center">
-                    <p class="text-textGray text-center mb-6">Hãy nhập lại <b class="text-rose-500">toàn bộ 81 từ tiếng Anh</b> theo đúng thứ tự đã học.<br/>(Cách nhau bằng dấu phẩy hoặc khoảng trắng)</p>
-                    <textarea id="memory-input" rows="8" placeholder="Ví dụ: about, above, across..." class="w-full px-5 py-4 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-rose-400 text-lg mb-6 transition-colors resize-none leading-relaxed shadow-inner"></textarea>
-                    <button onclick="playClickSound(); checkMemory()" class="bg-rose-500 hover:bg-rose-600 text-white px-8 py-3 rounded-xl font-bold transition-all shadow-md shadow-rose-200 w-full md:w-auto min-w-[200px] transform hover:scale-105">Nộp bài (+500🪙) 🚀</button>
-                    <div id="memory-feedback" class="mt-6 p-4 rounded-xl w-full hidden text-center font-medium shadow-inner border"></div>
-                </div>
-
-                <div id="grammar-container" class="hidden flex flex-col w-full">
-                    <div class="flex p-1 bg-gray-100 rounded-xl mb-8 max-w-md mx-auto w-full"><button id="tab-theory" onclick="playClickSound(); switchGrammarTab('theory')" class="flex-1 py-2 rounded-lg bg-white shadow-sm font-medium text-primary text-sm transition-all">📖 Lý Thuyết</button><button id="tab-practice" onclick="playClickSound(); switchGrammarTab('practice')" class="flex-1 py-2 rounded-lg text-textGray font-medium text-sm hover:text-primary transition-all">📝 Bài Tập</button></div>
-                    <div id="grammar-theory-content" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-                    <div id="grammar-practice-content" class="hidden flex flex-col items-center w-full max-w-xl mx-auto">
-                        <div class="text-sm text-textGray mb-3 font-medium" id="gram-quiz-progress">Câu 1/8</div>
-                        <div class="w-full bg-white rounded-3xl p-8 text-center shadow-sm border border-gray-100 mb-6"><h3 class="text-2xl font-serif font-bold text-textDark leading-relaxed" id="gram-quiz-question">Question here</h3></div>
-                        <div id="gram-quiz-options" class="grid grid-cols-1 md:grid-cols-3 gap-3 w-full mb-6"></div>
-                        <div id="gram-feedback-container" class="w-full hidden mt-2">
-                            <div id="gram-result-alert" class="px-5 py-3 rounded-2xl mb-4 text-center font-bold text-lg"></div>
-                            <div id="gram-explanation-box" class="bg-blue-50 border border-blue-200 rounded-2xl p-5 slide-down-enter hidden">
-                                <p class="text-sm text-blue-800 font-medium mb-2 flex items-center gap-2"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> Lý thuyết nhắc nhở:</p>
-                                <div id="gram-explanation-content" class="text-sm text-blue-900 bg-white/60 p-4 rounded-xl leading-relaxed"></div>
-                                <button onclick="playClickSound(); nextGrammarQuestion()" class="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white py-2.5 rounded-xl font-medium transition-colors transform hover:scale-105">Tiếp tục thui 🚀</button>
+                <h1 class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-purple-400 to-pink-400 uppercase tracking-[0.1em] mb-2 animate-float-glow">SPACE MUSIC</h1>
+                <p class="text-white/70 tracking-[0.2em] uppercase text-sm md:text-base font-light">Góc Nhỏ Cực Chill</p>
+                <div class="mt-10 relative w-48 h-48 md:w-64 md:h-64 mx-auto">
+                    <div id="record-disk" class="absolute inset-0 rounded-full border-4 border-purple-500/40 shadow-[0_0_40px_rgba(168,85,247,0.4)] transition-transform duration-1000 ease-linear">
+                        <div class="absolute inset-2 rounded-full border border-white/20 flex items-center justify-center bg-black/60 backdrop-blur-sm overflow-hidden">
+                            <div class="w-16 h-16 rounded-full border-2 border-purple-400 bg-vipDark flex items-center justify-center shadow-inner z-10">
+                                <div class="w-4 h-4 bg-white rounded-full"></div>
                             </div>
+                            <div class="absolute inset-0 bg-gradient-to-tr from-purple-500/20 to-transparent"></div>
                         </div>
                     </div>
                 </div>
-
-                <div id="paragraph-container" class="hidden flex flex-col items-center w-full max-w-2xl mx-auto">
-                    <div id="para-list" class="w-full space-y-4 mb-6"></div>
-                    <div id="para-workspace" class="hidden w-full bg-white p-6 rounded-2xl shadow-sm border border-indigo-100">
-                        <button onclick="playClickSound(); closeParagraph()" class="text-indigo-500 text-sm font-bold mb-4 hover:underline flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Chọn bài khác</button>
-                        <h3 class="text-xl font-bold text-indigo-700 mb-2" id="para-work-title">Tiêu đề bài</h3>
-                        <p class="text-textDark font-serif text-lg leading-relaxed bg-indigo-50 p-4 rounded-xl border border-indigo-100 mb-6 shadow-inner" id="para-source-text"></p>
-                        <label class="block text-sm font-bold text-textGray mb-2">Bản dịch của bạn:</label>
-                        <textarea id="para-input" rows="6" placeholder="Nhập bản dịch vào đây..." class="w-full px-4 py-3 rounded-xl border-2 border-indigo-100 focus:outline-none focus:border-indigo-400 mb-4 transition-colors shadow-inner resize-y"></textarea>
-                        <button onclick="playClickSound(); checkParagraph()" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-3 rounded-xl font-bold shadow-md transform hover:scale-105 transition-all">Kiểm tra Đáp Án</button>
-                        <div id="para-result" class="mt-6 hidden bg-gray-50 p-4 rounded-xl border border-gray-200"></div>
-                    </div>
-                </div>
-
-                <div id="falling-container" class="hidden flex flex-col w-full">
-                    <div class="flex justify-between items-center bg-cyan-50 p-4 rounded-2xl border border-cyan-200 mb-4 shadow-sm">
-                        <div><p class="text-xs text-cyan-600 font-bold uppercase">Điểm hiện tại</p><p class="text-2xl font-black text-cyan-700" id="fw-score">0</p></div>
-                        <div class="text-center"><p class="text-xs text-cyan-600 font-bold uppercase">Mạng (Lives)</p><p class="text-xl font-bold text-rose-500 tracking-widest" id="fw-lives">❤️❤️❤️</p></div>
-                        <div class="text-right"><p class="text-xs text-cyan-600 font-bold uppercase">Kỷ Lục</p><p class="text-xl font-bold text-yellow-500" id="fw-highscore">0</p></div>
-                    </div>
-                    
-                    <div id="fw-area" class="relative w-full h-[350px] md:h-[450px] bg-white rounded-2xl border-2 border-cyan-100 overflow-hidden mb-6 shadow-inner transition-colors duration-200">
-                        <div id="fw-start-overlay" class="absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center z-20">
-                            <h3 class="text-3xl font-black text-cyan-600 mb-2">Sẵn sàng gõ phím?</h3>
-                            <p class="text-textGray mb-6 text-center text-sm px-4 max-w-sm">Đọc gợi ý tiếng Việt và điền nhanh các chữ cái tiếng Anh còn thiếu trước khi từ rơi chạm đáy!</p>
-                            <button onclick="playClickSound(); startFallingGame()" class="bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-3 rounded-xl font-bold text-lg shadow-lg shadow-cyan-200 transform hover:scale-105 transition-all">Bắt Đầu Chơi 🚀</button>
-                        </div>
-                        <div id="fw-gameover-overlay" class="absolute inset-0 bg-rose-50/90 backdrop-blur-sm flex flex-col items-center justify-center z-20 hidden">
-                            <h3 class="text-4xl font-black text-rose-600 mb-2 drop-shadow-md">Game Over!</h3>
-                            <p class="text-textDark font-bold text-lg mb-6">Bạn ghi được: <span id="fw-final-score" class="text-cyan-600 text-3xl font-black mx-1">0</span> điểm</p>
-                            <button onclick="playClickSound(); startFallingGame()" class="bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-3 rounded-xl font-bold shadow-md mb-3 transform hover:scale-105 transition-all">Chơi lại</button>
-                        </div>
-                    </div>
-
-                    <input type="text" id="fw-input" autocomplete="off" disabled placeholder="Chờ bắt đầu..." class="w-full max-w-md mx-auto px-5 py-4 rounded-full border-4 border-cyan-200 focus:outline-none focus:border-cyan-500 text-center text-xl font-bold text-textDark bg-white shadow-lg transition-colors disabled:opacity-50 disabled:bg-gray-100">
-                </div>
-
-            </div>
-        </main>
-    </div>
-    <!-- 6. MODULE GACHA VIP -->
-    <div id="blindbox-module" class="fixed inset-0 z-[95] hidden opacity-0 transition-all duration-500 blind-box-bg overflow-y-auto dark-scroll">
-        <div class="sticky top-0 z-[100] bg-black/60 backdrop-blur-xl border-b border-white/10 px-6 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-4"><button onclick="playClickSound(); switchView('hub')" class="bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors"><svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg></button><h1 class="font-serif text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-yellow-600">GACHA V.I.P 🎲</h1></div>
-            <div class="hidden md:flex gap-2 p-1 bg-white/5 rounded-xl border border-white/10 backdrop-blur-md">
-                <button onclick="playClickSound(); switchBoxTab('gacha')" id="btab-gacha" class="px-6 py-2 rounded-lg font-bold text-sm bg-primary text-white shadow-md">Quay Thẻ</button>
-                <button onclick="playClickSound(); switchBoxTab('collection')" id="btab-collection" class="px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white transition-colors">Kho Đồ</button>
-                <button onclick="playClickSound(); switchBoxTab('auction')" id="btab-auction" class="px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white transition-colors">Chợ Đấu Giá</button>
-                <button onclick="playClickSound(); switchBoxTab('top')" id="btab-top" class="px-6 py-2 rounded-lg font-bold text-sm text-white/60 hover:text-white transition-colors">BXH</button>
-            </div>
-            <div class="flex gap-4">
-                <div class="bg-yellow-500/20 px-4 py-1.5 rounded-full flex gap-2 border border-yellow-500/30">🎟️ <span id="bb-tickets" class="font-bold text-yellow-400">0</span></div>
-                <div class="bg-blue-500/20 px-4 py-1.5 rounded-full flex gap-2 border border-blue-500/30">🪙 <span id="bb-coins" class="font-bold text-blue-400">0</span></div>
             </div>
         </div>
         
-        <div class="max-w-6xl mx-auto p-6 md:p-10">
-            <div id="bb-tab-gacha" class="space-y-8">
-                <div class="text-center mb-10"><h2 class="text-4xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Thử Vận May Của Bạn 🎲</h2><p class="text-gray-400 font-medium">Tỷ lệ: Thường 60% | Hiếm 30% | Cao Cấp 9% | Siêu Hiếm 0.9% | Bí Ẩn 0.1%</p></div>
-                <div class="gacha-window shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-t border-b border-white/20"><div class="gacha-center-line"></div><div class="gacha-strip" id="gacha-strip"></div></div>
-                <div class="flex flex-col items-center mt-10 gap-4">
-                    <div class="flex justify-center gap-4">
-                        <button onclick="playClickSound(); rollGacha()" id="btn-roll-1" class="bg-gradient-to-br from-blue-500 to-purple-600 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition-transform shadow-[0_0_30px_rgba(59,130,246,0.4)] flex items-center gap-2">Quay 1 Lần <span class="bg-black/30 px-2 py-0.5 rounded text-yellow-300 text-sm">100 🪙</span></button>
-                        <button onclick="playClickSound(); useFreeTicket()" id="btn-free-ticket" class="hidden bg-gradient-to-br from-yellow-500 to-orange-600 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition-transform shadow-[0_0_30px_rgba(234,179,8,0.4)] flex items-center gap-2">Quay Miễn Phí <span class="bg-black/30 px-2 py-0.5 rounded text-xs font-normal">Vé Free</span></button>
-                    </div>
-                    <p class="text-sm text-rose-500 font-bold bg-rose-500/10 px-4 py-1.5 rounded-full border border-rose-500/20" id="pity-counter">Pity Bí Ẩn: 0 / 150</p>
+        <div class="relative z-20 w-full md:w-96 lg:w-[450px] h-[55vh] md:h-full vip-glass flex flex-col p-6 rounded-t-3xl md:rounded-none transition-transform pointer-events-auto">
+            <div class="flex items-center justify-between mb-6 border-b border-white/10 pb-4">
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3"><span class="w-2 h-6 bg-purple-500 rounded-full"></span> Danh sách</h2>
+                <div class="flex gap-2">
+                    <button onclick="switchMusicTab('chill')" id="mtab-chill" class="px-4 py-1.5 rounded-full text-xs font-bold bg-purple-500 text-white transition-all">Lofi Chill</button>
+                    <button onclick="switchMusicTab('viet')" id="mtab-viet" class="px-4 py-1.5 rounded-full text-xs font-bold bg-white/10 text-white/60 hover:text-white transition-all">Nhạc Việt</button>
                 </div>
             </div>
             
-            <div id="bb-tab-collection" class="hidden space-y-6">
-                <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8 bg-white/5 p-4 rounded-2xl border border-white/10 backdrop-blur-md">
-                    <div class="col-span-2 md:col-span-1 text-center"><p class="text-xs text-gray-400 mb-1">Tổng tiến độ</p><p class="text-2xl font-black text-primary drop-shadow-md" id="prog-total">0%</p></div>
-                    <div class="text-center"><p class="text-xs text-gray-400 mb-1">Thường</p><p class="text-lg font-bold text-[#A0A0A0]" id="prog-t">0/10</p></div>
-                    <div class="text-center"><p class="text-xs text-gray-400 mb-1">Hiếm</p><p class="text-lg font-bold text-[#3b82f6]" id="prog-h">0/10</p></div>
-                    <div class="text-center"><p class="text-xs text-gray-400 mb-1">Cao Cấp</p><p class="text-lg font-bold text-[#a855f7]" id="prog-c">0/10</p></div>
-                    <div class="text-center"><p class="text-xs text-gray-400 mb-1">Siêu Hiếm</p><p class="text-lg font-bold text-[#eab308]" id="prog-sh">0/10</p></div>
-                    <div class="text-center"><p class="text-xs text-gray-400 mb-1">Bí Ẩn</p><p class="text-lg font-bold text-[#ef4444]" id="prog-b">0/10</p></div>
-                </div>
-                
-                <div class="flex flex-wrap gap-2 mb-6">
-                    <button onclick="filterCollection('all')" class="px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-sm font-bold transition-colors">Tất Cả</button>
-                    <button onclick="filterCollection('thuong')" class="px-4 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-[#A0A0A0] text-[#A0A0A0] text-sm font-bold transition-colors">Thường</button>
-                    <button onclick="filterCollection('hiem')" class="px-4 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-[#3b82f6] text-[#3b82f6] text-sm font-bold transition-colors">Hiếm</button>
-                    <button onclick="filterCollection('caocap')" class="px-4 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-[#a855f7] text-[#a855f7] text-sm font-bold transition-colors">Cao Cấp</button>
-                    <button onclick="filterCollection('sieuhiem')" class="px-4 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-[#eab308] text-[#eab308] text-sm font-bold transition-colors">Siêu Hiếm</button>
-                    <button onclick="filterCollection('bian')" class="px-4 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-[#ef4444] text-[#ef4444] text-sm font-bold transition-colors shadow-[0_0_10px_rgba(239,68,68,0.2)]">Bí Ẩn</button>
-                </div>
-                
-                <div id="collection-grid" class="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-4"></div>
-            </div>
+            <ul id="playlist-chill" class="flex-1 overflow-y-auto dark-scroll space-y-3 pr-2"></ul>
+            <ul id="playlist-viet" class="flex-1 overflow-y-auto dark-scroll space-y-3 pr-2 hidden"></ul>
             
-            <div id="bb-tab-auction" class="hidden">
-                <div class="text-center mb-8"><h2 class="text-3xl font-bold mb-2">Chợ Đen Đấu Giá ⚖️</h2><p class="text-gray-400">Các thẻ bài hiếm được cập nhật liên tục</p></div>
-                <div id="auction-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
-            </div>
-            
-            <div id="bb-tab-top" class="hidden max-w-2xl mx-auto">
-                <h2 class="text-3xl font-bold text-center mb-8">Bảng Vàng Sưu Tầm 🏆</h2>
-                <div class="bg-white/5 rounded-3xl p-2 border border-white/10" id="leaderboard-container"></div>
+            <div class="mt-4 p-5 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-md relative overflow-hidden group">
+                <div class="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="mb-4 relative z-10">
+                    <p class="text-[10px] text-purple-400 font-bold uppercase tracking-widest mb-1 flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse"></span> Đang phát
+                    </p>
+                    <p id="now-playing-title" class="text-white font-bold text-sm md:text-base truncate drop-shadow-md">Chưa chọn bài</p>
+                </div>
+                <div class="flex items-center justify-center gap-6 relative z-10">
+                    <button onclick="playClickSound(); prevSong()" class="text-white/70 hover:text-white transition-transform hover:scale-110"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z"></path></svg></button>
+                    <button onclick="playClickSound(); toggleSong()" id="btn-play-music" class="w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white flex items-center justify-center transition-all shadow-[0_0_20px_rgba(168,85,247,0.5)] transform hover:scale-110 border border-white/20">
+                        <svg id="icon-play" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                        <svg id="icon-pause" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                    </button>
+                    <button onclick="playClickSound(); nextSong()" class="text-white/70 hover:text-white transition-transform hover:scale-110"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0013 14V8.798l5.445 3.63A1 1 0 0020 14V6a1 1 0 00-1.555-.832L13 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4zM4 6a1 1 0 11-2 0v8a1 1 0 112 0V6z"></path></svg></button>
+                </div>
             </div>
         </div>
     </div>
-    
-    <div id="card-reveal-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[300] hidden items-center justify-center p-4">
-        <div id="reveal-particles" class="absolute inset-0 pointer-events-none"></div>
-        <div class="relative z-10 w-full max-w-sm flex flex-col items-center" id="card-reveal-content">
-            <h3 class="text-5xl font-black uppercase tracking-widest mb-8 drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]" id="reveal-rarity-text">RARITY</h3>
-            <div class="card-3d-wrapper w-64 h-96 cursor-pointer transform hover:scale-105 transition-transform" onclick="playClickSound(); this.classList.toggle('flipped')">
-                <div class="card-3d-inner w-full h-full relative shadow-[0_0_50px_rgba(0,0,0,0.8)] rounded-xl">
-                    <div class="card-back"></div>
-                    <div class="card-front bg-gray-900 rounded-xl overflow-hidden border-4" id="reveal-card-front"><img src="" id="reveal-img" class="w-full h-full object-cover"><div class="card-overlay" id="reveal-overlay"></div></div>
-                </div>
+<!-- 4. PLACES MODULE (ĐỊA ĐIỂM) -->
+    <div id="places-module" class="fixed inset-0 z-[80] hidden opacity-0 transition-all duration-700 bg-[#F0F9FF] overflow-hidden flex flex-col">
+        <button onclick="playClickSound(); switchView('hub')" class="absolute top-6 left-6 z-50 bg-white/70 backdrop-blur-md px-5 py-2.5 rounded-full text-primary font-bold shadow-md hover:bg-white transition-all flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Trở về (ESC)</button>
+        
+        <div class="flex-1 w-full h-full relative">
+            <model-viewer id="place-viewer" class="w-full h-full outline-none" camera-controls auto-rotate rotation-per-second="30deg" shadow-intensity="1" exposure="1.2" environment-image="neutral"></model-viewer>
+            <div id="place-loading" class="absolute inset-0 flex flex-col items-center justify-center bg-[#F0F9FF] z-10 transition-opacity duration-300">
+                <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4"></div>
+                <p class="text-primary font-bold animate-pulse">Đang tải không gian...</p>
             </div>
-            <p class="text-gray-400 text-sm mt-6 animate-pulse">(Chạm vào thẻ để lật mặt sau)</p>
-            <button onclick="playClickSound(); closeReveal()" class="mt-4 bg-white/20 hover:bg-white/30 text-white px-10 py-3 rounded-full font-bold transition-colors shadow-lg">Thu Thập</button>
+            
+            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4 w-[90%] md:w-auto overflow-x-auto pb-4 hide-scroll px-4">
+                <button onclick="playClickSound(); changePlace('japanit')" class="flex-shrink-0 bg-white/90 backdrop-blur-sm border-2 border-green-200 px-6 py-3 rounded-2xl shadow-lg hover:-translate-y-2 transition-transform text-green-700 font-bold min-w-[120px]">Japanit Matcha 🍵</button>
+                <button onclick="playClickSound(); changePlace('amakitchen')" class="flex-shrink-0 bg-white/90 backdrop-blur-sm border-2 border-red-200 px-6 py-3 rounded-2xl shadow-lg hover:-translate-y-2 transition-transform text-red-600 font-bold min-w-[120px]">A Mà Kitchen 🥢</button>
+                <button onclick="playClickSound(); changePlace('bigfun')" class="flex-shrink-0 bg-white/90 backdrop-blur-sm border-2 border-orange-200 px-6 py-3 rounded-2xl shadow-lg hover:-translate-y-2 transition-transform text-orange-600 font-bold min-w-[120px]">BigFun Farm 🎪</button>
+                <button onclick="playClickSound(); changePlace('micay')" class="flex-shrink-0 bg-white/90 backdrop-blur-sm border-2 border-yellow-200 px-6 py-3 rounded-2xl shadow-lg hover:-translate-y-2 transition-transform text-yellow-600 font-bold min-w-[120px]">Mì Cay Asan 🍜</button>
+            </div>
+            <div class="absolute top-8 right-8 bg-white/80 backdrop-blur-md p-5 rounded-2xl shadow-xl border border-white max-w-xs transform transition-transform hover:scale-105">
+                <h3 id="place-title" class="font-bold text-xl text-primary mb-2">Chọn địa điểm</h3>
+                <p id="place-desc" class="text-sm text-textGray leading-relaxed">Hãy chọn một nơi kỷ niệm bên dưới để sống lại khoảnh khắc nhé.</p>
+            </div>
         </div>
     </div>
-<!-- 7. MODULE SHADOW HUNTER 💀 (BẢN CẬP NHẬT LỚN) -->
-    <div id="sh-module" class="hidden opacity-0 transition-all duration-700 bg-[#0a0000] overflow-hidden fixed inset-0 z-[100] sh-theme">
+
+    <!-- 5. ENGLISH MODULE (MENU CHỌN BÀI MỚI) -->
+    <div id="study-module" class="fixed inset-0 z-[80] hidden opacity-0 transition-all duration-700 bg-gradient-to-br from-[#E0F2FE] to-[#F3E8FF] overflow-hidden flex flex-col items-center">
+        <button onclick="playClickSound(); switchView('hub')" class="absolute top-6 left-6 z-50 bg-white/70 backdrop-blur-md px-5 py-2.5 rounded-full text-indigo-600 font-bold shadow-md hover:bg-white transition-all flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Trở về (ESC)</button>
+        
+        <!-- Streak Display inside English Module -->
+        <div class="absolute top-6 right-6 z-50 bg-white px-5 py-2.5 rounded-full font-bold shadow-md flex items-center gap-2 border-2 border-orange-200 text-orange-600">
+            <span class="animate-bounce-soft">🔥</span> Streak: <span id="study-streak-count">0</span> ngày
+        </div>
+
+        <!-- Màn hình Menu Chọn Bài -->
+        <div id="study-menu" class="w-full max-w-4xl mt-20 p-6 flex-1 overflow-y-auto">
+            <div class="text-center mb-10">
+                <h2 class="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-600 mb-3 drop-shadow-sm">English Training Area 📚</h2>
+                <p class="text-indigo-800/70 font-medium">Luyện tập mỗi ngày để giữ chuỗi ngọn lửa nhé!</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card Game Chữ Rơi -->
+                <div onclick="playClickSound(); openEnglishGame('falling-words')" class="bg-white/80 backdrop-blur-md p-6 rounded-3xl border-2 border-blue-200 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all cursor-pointer group text-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="w-20 h-20 mx-auto bg-blue-100 rounded-full flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition-transform">🔤</div>
+                    <h3 class="font-bold text-xl text-blue-700 mb-2">Game Hứng Chữ</h3>
+                    <p class="text-sm text-gray-500">Luyện phản xạ gõ phím và nhớ từ vựng qua trò chơi chữ rơi.</p>
+                </div>
+
+                <!-- Card Quiz Trắc Nghiệm -->
+                <div onclick="playClickSound(); openEnglishGame('quiz')" class="bg-white/80 backdrop-blur-md p-6 rounded-3xl border-2 border-purple-200 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all cursor-pointer group text-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="w-20 h-20 mx-auto bg-purple-100 rounded-full flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition-transform">📝</div>
+                    <h3 class="font-bold text-xl text-purple-700 mb-2">Trắc Nghiệm 4 Đáp Án</h3>
+                    <p class="text-sm text-gray-500">Ôn luyện ngữ pháp và cấu trúc câu qua bài tập trắc nghiệm.</p>
+                </div>
+
+                <!-- Card Luyện Dịch -->
+                <div onclick="playClickSound(); openEnglishGame('translate')" class="bg-white/80 backdrop-blur-md p-6 rounded-3xl border-2 border-green-200 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all cursor-pointer group text-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition-transform">🔄</div>
+                    <h3 class="font-bold text-xl text-green-700 mb-2">Luyện Dịch</h3>
+                    <p class="text-sm text-gray-500">Dịch câu giao tiếp ngành F&B thực tế tại quán cà phê.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Màn hình Game Hứng Chữ -->
+        <div id="english-falling-game" class="hidden w-full h-full relative overflow-hidden">
+            <button onclick="playClickSound(); backToStudyMenu()" class="absolute top-6 left-40 z-50 bg-white/70 px-4 py-2 rounded-xl font-bold text-gray-600 shadow hover:bg-gray-100">Quay lại Menu</button>
+            <div id="game-area" class="absolute inset-x-0 top-0 bottom-24 bg-transparent"></div>
+            <div class="absolute bottom-0 w-full h-24 bg-white/60 backdrop-blur-md border-t-2 border-blue-200 flex items-center justify-center px-4 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
+                <input type="text" id="type-input" autocomplete="off" placeholder="Gõ từ tiếng Anh đang rơi..." class="w-full max-w-xl text-center text-2xl font-bold text-blue-600 px-6 py-4 rounded-2xl border-4 border-blue-300 focus:border-blue-500 focus:outline-none shadow-inner bg-white/90">
+            </div>
+            <div class="absolute top-6 right-1/2 translate-x-1/2 bg-white/80 backdrop-blur px-6 py-2 rounded-full border-2 border-blue-200 shadow font-bold text-blue-700 flex gap-4">
+                <span>Điểm: <span id="score-display">0</span></span> | <span>Mạng: <span id="lives-display">❤️❤️❤️</span></span>
+            </div>
+        </div>
+        
+        <!-- Các game khác (Placeholder thông báo đang phát triển để code ngắn gọn, hoặc có thể thêm form tuỳ ý) -->
+        <div id="english-other-game" class="hidden w-full h-full flex flex-col items-center justify-center relative">
+            <button onclick="playClickSound(); backToStudyMenu()" class="absolute top-6 left-40 z-50 bg-white/70 px-4 py-2 rounded-xl font-bold text-gray-600 shadow hover:bg-gray-100">Quay lại Menu</button>
+            <div class="bg-white p-8 rounded-3xl shadow-xl max-w-md text-center">
+                <h3 class="text-2xl font-bold text-indigo-600 mb-4" id="other-game-title">Đang phát triển</h3>
+                <p class="text-gray-600 mb-6">Tính năng này đang được cập nhật. Bạn chơi tạm Game Hứng Chữ để lấy Streak nhé!</p>
+                <button onclick="increaseStreak()" class="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:bg-orange-600">Nhận Streak Bù (+1) 🔥</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. GACHA VIP MODULE -->
+    <div id="blindbox-module" class="fixed inset-0 z-[80] hidden opacity-0 transition-all duration-700 blind-box-bg overflow-hidden flex flex-col">
+        <button onclick="playClickSound(); switchView('hub')" class="absolute top-6 left-6 z-50 bg-white/10 backdrop-blur-md border border-white/20 px-5 py-2.5 rounded-full text-white font-medium hover:bg-white/20 transition-all flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Sảnh chính (ESC)</button>
+        
+        <div class="absolute top-6 right-6 bg-black/50 backdrop-blur border border-yellow-500/30 px-6 py-2 rounded-full flex gap-6 text-white z-10 shadow-lg">
+            <div class="flex items-center gap-2 font-bold text-yellow-400">🪙 <span id="gacha-coins" class="text-xl">0</span></div>
+            <div class="w-px h-6 bg-white/20"></div>
+            <div class="flex items-center gap-2 font-bold text-blue-400">🎟️ <span id="gacha-tickets" class="text-xl">0</span></div>
+        </div>
+
+        <div class="flex-1 flex flex-col md:flex-row items-center justify-center p-6 gap-10 mt-16 md:mt-0 relative">
+            <div class="absolute inset-0 bg-[url('https://i.postimg.cc/k4W0G3w3/fog.png')] opacity-10 bg-cover mix-blend-screen pointer-events-none"></div>
+            
+            <div class="w-full max-w-xl relative z-10 flex flex-col items-center">
+                <h2 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-600 mb-8 uppercase tracking-widest text-center drop-shadow-[0_0_10px_rgba(234,179,8,0.5)]">Vòng Quay Vận Mệnh</h2>
+                
+                <div class="gacha-window mb-8" id="gacha-window">
+                    <div class="gacha-center-line"></div>
+                    <div class="gacha-strip" id="gacha-strip"></div>
+                </div>
+                
+                <div class="flex gap-4">
+                    <button onclick="playClickSound(); pullGacha(1)" id="btn-pull-1" class="px-8 py-4 rounded-2xl bg-gradient-to-b from-blue-500 to-blue-800 text-white font-bold border-2 border-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:scale-105 transition-transform flex flex-col items-center"><span class="text-lg uppercase">Quay 1 Lần</span><span class="text-xs text-blue-200 mt-1">1 🎟️ / 100 🪙</span></button>
+                    <button onclick="playClickSound(); pullGacha(10)" id="btn-pull-10" class="px-8 py-4 rounded-2xl bg-gradient-to-b from-yellow-500 to-yellow-800 text-white font-bold border-2 border-yellow-400 shadow-[0_0_20px_rgba(234,179,8,0.4)] hover:scale-105 transition-transform flex flex-col items-center"><span class="text-lg uppercase">Quay 10 Lần</span><span class="text-xs text-yellow-200 mt-1">10 🎟️ / 1000 🪙</span></button>
+                </div>
+                <button onclick="playClickSound(); addCheatCoins()" class="mt-6 text-white/30 text-xs hover:text-white transition-colors">Nhận 500 Coin Free (Dev)</button>
+            </div>
+            
+            <div class="w-full md:w-96 bg-black/60 backdrop-blur-md border border-white/10 rounded-3xl p-6 h-[60vh] flex flex-col z-10">
+                <div class="flex justify-between items-center mb-4 border-b border-white/10 pb-4">
+                    <h3 class="font-bold text-xl text-white">Bộ Sưu Tập</h3>
+                    <span id="collection-count" class="text-yellow-400 font-bold">0 / 50</span>
+                </div>
+                <div class="flex-1 overflow-y-auto dark-scroll pr-2 grid grid-cols-3 gap-3" id="collection-grid"></div>
+            </div>
+        </div>
+    </div>
+<!-- 7. SHADOW HUNTER MODULE -->
+    <div id="sh-module" class="fixed inset-0 z-[150] hidden opacity-0 transition-all duration-700 sh-theme overflow-hidden flex flex-col">
         <div class="fog-overlay"></div>
-        <button id="sh-back-btn" onclick="playClickSound(); switchView('hub')" class="absolute top-6 left-6 z-[120] bg-red-900/30 border border-red-500/50 px-4 py-2 rounded-full text-red-500 font-bold hover:bg-red-900/60 transition-colors flex items-center gap-2 shadow-[0_0_10px_rgba(255,0,0,0.3)]"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Về Sảnh Chính</button>
         
-        <!-- Nút Thoát Phòng (Chỉ hiện khi đang trong trận) -->
-        <button id="sh-leave-room-btn" onclick="playClickSound(); leaveSHRoom()" class="absolute top-6 right-6 z-[120] hidden bg-red-600 border border-red-400 px-4 py-2 rounded-full text-white font-bold hover:bg-red-700 transition-colors shadow-[0_0_15px_rgba(255,0,0,0.6)] flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg> Thoát Phòng
-        </button>
-
-        <div class="relative z-10 w-full h-full flex flex-col p-6 max-w-6xl mx-auto">
-            <header class="text-center mb-8 pt-10">
-                <h1 class="text-5xl md:text-7xl font-bold blood-text mb-2">SHADOW HUNTER</h1>
-                <p class="text-red-400 tracking-[0.2em] uppercase text-sm">Cõi Bóng Đêm Thức Tỉnh</p>
-                <!-- Info User Shadow Hunter -->
-                <div class="mt-4 inline-flex items-center gap-4 bg-red-950/40 px-6 py-2 rounded-full border border-red-900">
-                    <span class="text-white font-bold" id="sh-player-name">Player</span>
-                    <span class="text-red-500">|</span>
-                    <span class="text-yellow-500 font-bold" id="sh-player-hp">HP: 0</span>
-                </div>
-            </header>
-
-            <!-- LOBBY -->
-            <div id="sh-lobby" class="flex-1 flex flex-col items-center justify-center">
-                <div class="sh-card p-8 rounded-2xl w-full max-w-md text-center">
-                    <h2 class="text-2xl font-bold text-red-500 mb-6">Tạo hoặc Vào Phòng</h2>
-                    <input type="text" id="sh-room-code" placeholder="Nhập mã phòng (vd: SH666)" class="w-full px-5 py-3 bg-black/50 border border-red-900 rounded-xl text-red-500 text-center font-bold text-xl focus:outline-none focus:border-red-500 mb-6 uppercase">
-                    <div class="flex gap-4">
-                        <button onclick="playClickSound(); joinSHRoom()" class="flex-1 sh-btn py-3 rounded-xl font-bold">Vào Phòng</button>
-                        <button onclick="playClickSound(); createSHRoom()" class="flex-1 sh-btn py-3 rounded-xl font-bold text-red-200">Tạo Mới</button>
-                    </div>
-                </div>
+        <!-- Header Game -->
+        <div class="relative z-10 flex justify-between items-center p-4 bg-black/80 border-b border-red-900 shadow-[0_0_15px_rgba(255,0,0,0.3)] backdrop-blur-md">
+            <div class="flex items-center gap-4">
+                <button onclick="playClickSound(); exitShadowHunter()" class="sh-btn px-4 py-2 rounded text-red-500 font-bold text-sm flex items-center gap-2 border border-red-800 hover:bg-red-900/30">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> THOÁT GAME
+                </button>
+                <h2 class="blood-text text-2xl md:text-3xl tracking-widest uppercase ml-4">Shadow Hunter</h2>
             </div>
-
-            <!-- BÀN CHƠI (BOARD) -->
-            <div id="sh-board" class="hidden flex-1 flex flex-col h-full relative">
-                <!-- Khu vực Player Khác -->
-                <div id="sh-opponents" class="flex justify-center gap-4 mb-4">
-                    <!-- Sinh tự động bằng JS, ẩn tên hiển thị mặc định, lấy tên thật -->
-                </div>
-                
-                <!-- Bàn giữa (Khu vực Đổ xí ngầu & Rút Bài) -->
-                <div class="flex-1 flex items-center justify-center relative">
-                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,0,0,0.1)_0%,transparent_70%)] pointer-events-none"></div>
-                    
-                    <div class="sh-card p-8 rounded-full w-72 h-72 flex flex-col items-center justify-center relative shadow-[0_0_50px_rgba(255,0,0,0.1)] border-red-900 border-4 z-10">
-                        <div class="text-red-500 text-sm font-bold uppercase tracking-widest mb-2" id="sh-turn-indicator">Đang chờ...</div>
-                        
-                        <!-- Xí ngầu -->
-                        <div class="flex gap-4 mb-6">
-                            <div id="sh-dice-4" class="w-16 h-16 bg-black border-2 border-red-500 rounded flex items-center justify-center text-3xl font-black shadow-[inset_0_0_15px_rgba(255,0,0,0.5)]">4</div>
-                            <div id="sh-dice-6" class="w-16 h-16 bg-black border-2 border-red-500 rounded flex items-center justify-center text-3xl font-black shadow-[inset_0_0_15px_rgba(255,0,0,0.5)]">6</div>
-                        </div>
-                        <button id="sh-roll-btn" onclick="playClickSound(); rollSHDice()" class="sh-btn px-6 py-2 rounded-full font-bold uppercase text-sm disabled:opacity-50 disabled:cursor-not-allowed">Đổ Xí Ngầu</button>
-                        
-                        <!-- Kết quả vị trí -->
-                        <div id="sh-location-result" class="absolute -bottom-16 bg-red-950/80 px-6 py-2 rounded-xl border border-red-500 text-white font-bold text-lg hidden shadow-[0_0_15px_rgba(255,0,0,0.5)]"></div>
-                    </div>
-
-                    <!-- KHU VỰC RÚT BÀI -->
-                    <div id="sh-deck-area" class="absolute top-1/2 -translate-y-1/2 right-0 hidden flex-col gap-4">
-                        <button onclick="drawSHCard('green')" id="btn-draw-green" class="w-24 h-32 bg-green-900 border-2 border-green-500 rounded-xl shadow-[0_0_15px_rgba(34,197,94,0.5)] hover:scale-110 transition-transform flex items-center justify-center font-bold text-green-300 flex-col"><span class="text-2xl">🌲</span>Hermit</button>
-                        <button onclick="drawSHCard('white')" id="btn-draw-white" class="w-24 h-32 bg-gray-200 border-2 border-white rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.8)] hover:scale-110 transition-transform flex items-center justify-center font-bold text-gray-800 flex-col"><span class="text-2xl">⚪</span>Trắng</button>
-                        <button onclick="drawSHCard('black')" id="btn-draw-black" class="w-24 h-32 bg-gray-900 border-2 border-gray-500 rounded-xl shadow-[0_0_15px_rgba(0,0,0,0.8)] hover:scale-110 transition-transform flex items-center justify-center font-bold text-gray-400 flex-col"><span class="text-2xl">⚫</span>Đen</button>
-                    </div>
-                </div>
-
-                <!-- Khu vực Player Của Mình -->
-                <div class="sh-card p-4 rounded-t-3xl border-b-0 flex justify-between items-end mt-4">
-                    <div class="flex-1">
-                        <h3 class="font-bold text-red-500 mb-2">Trang Bị (Vũ khí/Phòng cụ)</h3>
-                        <div class="flex gap-2" id="sh-my-equips">
-                            <!-- Items -->
-                        </div>
-                    </div>
-                    <div class="text-center px-8 border-x border-red-900">
-                        <div class="w-20 h-20 bg-black rounded-full border-4 border-red-500 mx-auto mb-2 flex items-center justify-center text-3xl shadow-[0_0_20px_rgba(255,0,0,0.5)]" id="sh-my-avatar">L</div>
-                        <p class="font-bold text-white text-lg" id="sh-my-name-board">Player</p>
-                        <p class="text-red-500 font-bold bg-red-950/50 rounded px-2">HP: <span id="sh-my-hp-board">14</span></p>
-                    </div>
-                    <div class="flex-1 flex justify-end gap-2">
-                        <button onclick="playClickSound(); attackSHPlayer()" id="sh-atk-btn" class="sh-btn w-16 h-16 rounded-xl flex flex-col items-center justify-center disabled:opacity-50"><span class="text-2xl mb-1">⚔️</span>Đánh</button>
-                        <button onclick="playClickSound(); useSHAbility()" id="sh-skill-btn" class="sh-btn w-16 h-16 rounded-xl flex flex-col items-center justify-center text-blue-400 border-blue-900"><span class="text-2xl mb-1">✨</span>Skill</button>
-                        <button onclick="playClickSound(); endSHTurn()" id="sh-end-btn" class="sh-btn w-16 h-16 rounded-xl flex flex-col items-center justify-center text-gray-400 border-gray-600 disabled:opacity-50"><span class="text-2xl mb-1">🛑</span>Bỏ qua</button>
-                    </div>
-                </div>
+            <div class="flex items-center gap-6 text-sm font-bold bg-red-950/40 px-6 py-2 rounded-full border border-red-900/50">
+                <span class="text-gray-400">Người chơi: <span id="sh-player-name" class="text-white text-base">Unknown</span></span>
             </div>
         </div>
-    </div>
-    <!-- Modal Hiển Thị Thẻ Bài Bóng Đêm -->
-    <div id="sh-card-modal" class="fixed inset-0 bg-black/95 z-[300] hidden items-center justify-center p-4">
-        <div class="sh-card p-6 rounded-2xl w-full max-w-sm text-center border-4 relative" id="sh-card-display">
-            <h3 class="text-2xl font-black uppercase mb-4" id="sh-card-title">Tên Thẻ</h3>
-            <p class="text-lg text-white mb-6" id="sh-card-desc">Nội dung thẻ bài sẽ hiện ở đây.</p>
-            <button onclick="playClickSound(); document.getElementById('sh-card-modal').style.display='none'" class="sh-btn px-8 py-3 rounded-full font-bold text-white w-full">Đã Hiểu</button>
+
+        <!-- Main Game Area -->
+        <div class="relative z-10 flex-1 flex flex-col items-center justify-center p-6 gap-8">
+            <div class="text-center mb-4">
+                <p class="text-gray-400 text-sm tracking-widest uppercase mb-2">Di chuyển đến khu vực và bốc bài tương ứng</p>
+            </div>
+
+            <!-- Vùng bốc bài -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-4xl px-4">
+                <!-- Thẻ Hermit -->
+                <div onclick="playClickSound(); drawCard('hermit')" class="sh-card rounded-xl aspect-[2/3] flex flex-col items-center justify-center cursor-pointer hover:-translate-y-4 transition-all duration-300 border-2 border-green-900/50 shadow-[0_0_20px_rgba(0,50,0,0.5)] hover:shadow-[0_0_40px_rgba(0,150,0,0.6)] group relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-b from-green-900/20 to-black opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="text-7xl mb-4 group-hover:scale-110 transition-transform relative z-10 drop-shadow-[0_0_10px_rgba(0,255,0,0.5)]">🌿</div>
+                    <p class="font-bold text-green-500 font-serif text-2xl relative z-10 tracking-widest">Hermit</p>
+                    <p class="text-xs text-gray-400 mt-2 relative z-10 uppercase bg-black/50 px-3 py-1 rounded">(Khu vực 2, 3)</p>
+                </div>
+                
+                <!-- Thẻ White -->
+                <div onclick="playClickSound(); drawCard('white')" class="sh-card rounded-xl aspect-[2/3] flex flex-col items-center justify-center cursor-pointer hover:-translate-y-4 transition-all duration-300 border-2 border-gray-500/50 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] group relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-b from-gray-700/30 to-black opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="text-7xl mb-4 group-hover:scale-110 transition-transform relative z-10 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">🤍</div>
+                    <p class="font-bold text-white font-serif text-2xl relative z-10 tracking-widest">White</p>
+                    <p class="text-xs text-gray-400 mt-2 relative z-10 uppercase bg-black/50 px-3 py-1 rounded">(Khu vực 6)</p>
+                </div>
+                
+                <!-- Thẻ Black -->
+                <div onclick="playClickSound(); drawCard('black')" class="sh-card rounded-xl aspect-[2/3] flex flex-col items-center justify-center cursor-pointer hover:-translate-y-4 transition-all duration-300 border-2 border-red-900/80 shadow-[0_0_20px_rgba(100,0,0,0.5)] hover:shadow-[0_0_50px_rgba(255,0,0,0.8)] group relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-b from-red-900/40 to-black opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="text-7xl mb-4 group-hover:scale-110 transition-transform relative z-10 drop-shadow-[0_0_15px_rgba(255,0,0,0.8)] glitch-anim">💀</div>
+                    <p class="font-bold text-red-600 font-serif text-2xl relative z-10 tracking-widest blood-text">Black</p>
+                    <p class="text-xs text-gray-400 mt-2 relative z-10 uppercase bg-black/50 px-3 py-1 rounded">(Khu vực 4, 5)</p>
+                </div>
+            </div>
+
+            <!-- Hiển thị kết quả bốc bài (Nằm đè lên trên khi mở) -->
+            <div id="sh-card-result-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[160] hidden flex items-center justify-center p-4">
+                <div id="sh-card-result" class="bg-[#0a0000] border-2 border-red-800 p-8 rounded-2xl text-center shadow-[0_0_50px_rgba(255,0,0,0.4)] w-full max-w-sm transform scale-95 opacity-0 transition-all duration-300 relative overflow-hidden">
+                    <!-- Hiệu ứng viền phát sáng -->
+                    <div id="sh-card-glow" class="absolute inset-0 bg-gradient-to-b from-red-900/20 to-transparent pointer-events-none"></div>
+                    
+                    <h3 id="sh-card-type" class="text-lg font-bold mb-3 uppercase tracking-[0.3em] text-gray-400">Loại Thẻ</h3>
+                    <h4 id="sh-card-name" class="text-3xl blood-text mb-6">Tên Lá Bài</h4>
+                    
+                    <div class="bg-black/50 p-4 rounded-xl border border-red-900/30 mb-6 min-h-[100px] flex items-center justify-center">
+                        <p id="sh-card-desc" class="text-gray-300 text-sm leading-relaxed"></p>
+                    </div>
+                    
+                    <p id="sh-card-effect-type" class="text-xs font-bold px-4 py-1.5 bg-red-950 text-red-400 inline-block rounded-full mb-6 border border-red-900 uppercase tracking-wider"></p>
+                    
+                    <button onclick="playClickSound(); closeCardResult()" class="sh-btn w-full py-3 rounded-xl font-bold uppercase tracking-widest hover:text-white transition-colors">Xác Nhận</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // === 1. CẤU HÌNH FIREBASE ===
-        const firebaseConfig = {
-            apiKey: "AIzaSyBw-x-x-x-x-x-x-x-x-x-x-x-x-x",
-            authDomain: "luuthiethoa-1.firebaseapp.com",
-            projectId: "luuthiethoa-1",
-            storageBucket: "luuthiethoa-1.appspot.com",
-            messagingSenderId: "364536761005",
-            appId: "1:364536761005:web:5d2a93325e8dd4c0ddc0b1",
-            measurementId: "G-DFB3H2M08P"
+        // ----------------------------------------------------
+        // 1. DATA & STATE MANAGEMENT
+        // ----------------------------------------------------
+        const users = {
+            'luuthiethoa': { name: 'Lưu Thiết Hoa', coins: 1500, tickets: 5, avatar: 'H', cards: [], streak: 5 },
+            'hamy': { name: 'Hà Mỹ', coins: 2000, tickets: 10, avatar: 'M', cards: [], streak: 3 }
         };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        let currentUser = null;
+        let currentView = 'login'; // login, intro, hub, places, music, study, blindbox, shadowhunter
+        let streakUpdatedToday = false;
 
-        // === 2. BIẾN TOÀN CỤC (GLOBAL VARIABLES) ===
-        let currentUserId = null;
-        let userData = null;
-        
-        // Mảng Địa điểm
-        let places = [];
-        let editingPlaceId = null;
-        
-        // Học Tiếng Anh
-        let englishVocab = [];
-        let grammarLessons = [];
-        
-        // Game Chữ Rơi
-        let fwWords = [];
-        let fwCurrentWord = null;
-        let fwScore = 0;
-        let fwLives = 3;
-        let fwGameInterval;
-        let fwDropInterval;
-        let fwCurrentElement = null;
-        let fwIsPlaying = false;
-
-        // Music VIP Variables
-        let mainAudio = document.getElementById('bg-music');
+        // Audio Elements
+        const soundClick = document.getElementById('sound-click');
+        const soundReveal = document.getElementById('sound-reveal');
+        const bgMusic = document.getElementById('bg-music');
+        const soundCoin = document.getElementById('sound-coin');
         let isMainMusicPlaying = false;
-        let gdMusicObj = new Audio();
-        let isGDMPlaying = false;
-        let currentGDIndex = 0;
-        let currentMusicTab = 'main'; // main, chill, viet
-        
-        let playGDInterval = null; // Dùng để update thanh đồng bộ nhấp nháy
-
-        // Hệ thống Chuỗi ngày học (Streak)
-        let lastStudyDate = null;
-        let currentStreak = 0;
-
-        // Quản lý Lịch sử Navigation (Để ESC hoạt động đúng)
-        let navHistory = ['intro'];
 
         // Âm thanh
-        const sfxClick = document.getElementById('sound-click');
-        const sfxTick = document.getElementById('sound-tick');
-        const sfxReveal = document.getElementById('sound-reveal');
-        const sfxCoin = document.getElementById('sound-coin');
-        const sfxError = document.getElementById('sound-error');
+        function playClickSound() { soundClick.currentTime = 0; soundClick.play().catch(e=>console.log(e)); }
+        function playRevealSound() { soundReveal.currentTime = 0; soundReveal.play().catch(e=>console.log(e)); }
+        function playCoinSound() { soundCoin.currentTime = 0; soundCoin.play().catch(e=>console.log(e)); }
 
-        function playClickSound() { sfxClick.currentTime = 0; sfxClick.play().catch(e=>{}); }
-        function playTickSound() { sfxTick.currentTime = 0; sfxTick.play().catch(e=>{}); }
-        function playRevealSound() { sfxReveal.currentTime = 0; sfxReveal.play().catch(e=>{}); }
-        function playCoinSound() { sfxCoin.currentTime = 0; sfxCoin.play().catch(e=>{}); }
-        function playErrorSound() { sfxError.currentTime = 0; sfxError.play().catch(e=>{}); }
-
-        // === 3. HỆ THỐNG ĐIỀU HƯỚNG & NÚT ESC ===
-        function switchView(viewId, isBack = false) {
-            // Danh sách các màn hình
-            const screens = ['login-screen', 'intro-screen', 'hub-screen', 'places-module', 'study-module', 'blindbox-module', 'music-module', 'sh-module'];
-            screens.forEach(id => {
-                const el = document.getElementById(id);
-                if(el) {
-                    el.style.opacity = '0';
-                    el.style.transform = 'scale(0.95)';
-                    setTimeout(() => { el.classList.add('hidden'); }, 300);
-                }
-            });
-
-            setTimeout(() => {
-                const target = document.getElementById(viewId + (viewId.includes('-') ? '' : (viewId === 'hub' || viewId === 'login' || viewId === 'intro' ? '-screen' : '-module')));
-                if(target) {
-                    target.classList.remove('hidden');
-                    // Force reflow
-                    void target.offsetWidth;
-                    target.style.opacity = '1';
-                    target.style.transform = 'scale(1)';
-                }
-            }, 350);
-
-            // Xử lý lịch sử (Stack Navigation)
-            if (!isBack) {
-                if(viewId === 'hub' || viewId === 'login') {
-                    navHistory = [viewId]; // Reset stack khi ra sảnh hoặc đăng xuất
-                } else if (navHistory[navHistory.length - 1] !== viewId) {
-                    navHistory.push(viewId);
-                }
+        // Bật/Tắt nhạc Hub chính
+        function toggleMainMusic() {
+            if(isMainMusicPlaying) {
+                bgMusic.pause();
+                document.getElementById('icon-music-play').classList.add('hidden');
+                document.getElementById('icon-music-pause').classList.remove('hidden');
+            } else {
+                bgMusic.play().catch(e=>console.log("Auto-play blocked"));
+                document.getElementById('icon-music-play').classList.remove('hidden');
+                document.getElementById('icon-music-pause').classList.add('hidden');
             }
-
-            // Hiện nút nhạc nổi nếu ở Hub hoặc Map/Gacha/Study (Trừ lúc ở trong Sảnh Nhạc)
-            const musicToggle = document.getElementById('music-toggle');
-            if(musicToggle) {
-                if(viewId === 'hub' || viewId === 'places' || viewId === 'study' || viewId === 'blindbox') {
-                    musicToggle.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
-                } else {
-                    musicToggle.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
-                }
-            }
-            
-            // Nếu vào Gacha thì load dữ liệu bộ sưu tập
-            if(viewId === 'blindbox') {
-                updateGachaUI();
-            }
+            isMainMusicPlaying = !isMainMusicPlaying;
         }
 
-        // Bắt sự kiện phím ESC
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                // 1. Nếu đang mở Card Modal của Gacha
-                if (document.getElementById('card-reveal-modal') && !document.getElementById('card-reveal-modal').classList.contains('hidden')) {
-                    closeReveal();
+        // Hiện nút nhạc
+        function showMusicToggle() {
+            const btn = document.getElementById('music-toggle');
+            btn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+        }
+
+        // ----------------------------------------------------
+        // 2. TÍNH NĂNG PHÍM ESC 
+        // ----------------------------------------------------
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                // Nếu đang mở Game Shadow Hunter -> Thoát game
+                if (currentView === 'shadowhunter') {
+                    // Nếu đang mở lá bài thì đóng lá bài
+                    if (!document.getElementById('sh-card-result-overlay').classList.contains('hidden')) {
+                        closeCardResult();
+                    } else {
+                        exitShadowHunter();
+                    }
                     return;
+                }
+
+                // Nếu đang ở màn hình phụ (study, music, blindbox, places) -> Về Hub
+                if (['study', 'music', 'blindbox', 'places'].includes(currentView)) {
+                    switchView('hub');
                 }
                 
-                // 2. Nếu đang mở Shadow Hunter Card Modal
-                if (document.getElementById('sh-card-modal') && document.getElementById('sh-card-modal').style.display === 'flex') {
-                    document.getElementById('sh-card-modal').style.display = 'none';
-                    return;
-                }
-
-                // 3. Nếu đang mở Form Địa Điểm
-                if (document.getElementById('form-modal-overlay') && !document.getElementById('form-modal-overlay').classList.contains('hidden')) {
-                    closeFormModal();
-                    return;
-                }
-                if (document.getElementById('view-modal-overlay') && !document.getElementById('view-modal-overlay').classList.contains('hidden')) {
-                    closeViewModal();
-                    return;
-                }
-                if (document.getElementById('music-confirm-modal') && !document.getElementById('music-confirm-modal').classList.contains('hidden')) {
+                // Đóng Modal Âm nhạc nếu đang mở
+                const musicModal = document.getElementById('music-confirm-modal');
+                if (!musicModal.classList.contains('hidden')) {
                     closeMusicConfirm();
-                    return;
                 }
 
-                // 4. Nếu đang ở trong một bài học cụ thể của Góc Tiếng Anh (không phải menu)
-                if (document.getElementById('study-content') && !document.getElementById('study-content').classList.contains('hidden')) {
+                // Nếu đang ở trong game Tiếng Anh -> Về Menu Tiếng Anh
+                if (!document.getElementById('english-falling-game').classList.contains('hidden') || 
+                    !document.getElementById('english-other-game').classList.contains('hidden')) {
                     backToStudyMenu();
-                    return;
-                }
-
-                // 5. Điều hướng lùi trong Stack (NavHistory)
-                if (navHistory.length > 1) {
-                    navHistory.pop(); // Bỏ trang hiện tại
-                    const prevView = navHistory[navHistory.length - 1];
-                    switchView(prevView, true);
                 }
             }
         });
-// === 4. HỆ THỐNG ĐĂNG NHẬP & CHUỖI HỌC (STREAK) ===
+
+        // ----------------------------------------------------
+        // 3. LOGIN & CHUYỂN MÀN HÌNH
+        // ----------------------------------------------------
         function handleLogin() {
             const user = document.getElementById('login-user').value.toLowerCase().trim();
-            const pass = document.getElementById('login-pass').value.trim();
-            const error = document.getElementById('login-error');
-            
-            if ((user === 'luuthiethoa' || user === 'hamy') && pass === '123') {
-                currentUserId = user;
-                initUserWorkspace();
-                switchView('intro');
-                document.getElementById('start-btn').classList.remove('scale-0', 'opacity-0');
+            const pass = document.getElementById('login-pass').value;
+            if(users[user] && pass === '123') {
+                currentUser = user;
+                updateHubUI();
+                document.getElementById('login-screen').classList.add('opacity-0', 'pointer-events-none');
+                setTimeout(() => { 
+                    document.getElementById('login-screen').classList.add('hidden');
+                    document.getElementById('intro-screen').classList.remove('hidden');
+                    setTimeout(() => {
+                        const startBtn = document.getElementById('start-btn');
+                        startBtn.classList.remove('scale-0', 'opacity-0');
+                        startBtn.addEventListener('click', enterHub);
+                    }, 500);
+                }, 500);
             } else {
-                error.classList.remove('hidden');
-                error.innerText = "Sai tài khoản hoặc mật khẩu, thử lại nghen!";
-                playErrorSound();
+                document.getElementById('login-error').classList.remove('hidden');
             }
         }
 
-        // Vào thẳng Kênh Shadow Hunter (Không qua Intro)
+        function enterHub() {
+            document.getElementById('intro-screen').classList.add('opacity-0');
+            setTimeout(() => {
+                document.getElementById('intro-screen').classList.add('hidden');
+                switchView('hub');
+                showMusicToggle();
+                toggleMainMusic(); // Auto bật nhạc sảnh
+            }, 1000);
+        }
+
+        function updateHubUI() {
+            if(!currentUser) return;
+            const data = users[currentUser];
+            document.getElementById('hub-avatar').innerText = data.avatar;
+            document.getElementById('hub-username').innerText = data.name;
+            document.getElementById('hub-coins').innerText = data.coins;
+            document.getElementById('hub-cards').innerText = `${data.cards.length} / 50`;
+            
+            // Update Gacha info
+            document.getElementById('gacha-coins').innerText = data.coins;
+            document.getElementById('gacha-tickets').innerText = data.tickets;
+            
+            // Update Streak Info
+            document.getElementById('hub-streak-count').innerText = data.streak;
+            document.getElementById('study-streak-count').innerText = data.streak;
+            if(data.streak > 0) document.getElementById('hub-streak-badge').classList.remove('hidden');
+            
+            renderCollection();
+        }
+
+        function switchView(viewName) {
+            const views = {
+                'hub': document.getElementById('hub-screen'),
+                'places': document.getElementById('places-module'),
+                'music': document.getElementById('music-module'),
+                'study': document.getElementById('study-module'),
+                'blindbox': document.getElementById('blindbox-module'),
+                'shadowhunter': document.getElementById('sh-module')
+            };
+
+            // Ẩn tất cả
+            Object.values(views).forEach(el => {
+                if(el) {
+                    el.classList.add('opacity-0');
+                    setTimeout(() => el.classList.add('hidden'), 500);
+                }
+            });
+
+            // Luôn đảm bảo khi mở English -> Mở menu chọn bài
+            if(viewName === 'study') {
+                backToStudyMenu();
+            }
+
+            // Hiện view được chọn
+            setTimeout(() => {
+                if(views[viewName]) {
+                    views[viewName].classList.remove('hidden');
+                    // Chờ render xong mới remove opacity
+                    setTimeout(() => views[viewName].classList.remove('opacity-0'), 50);
+                    
+                    if(viewName === 'hub') {
+                        views[viewName].classList.remove('scale-95');
+                        // Nếu nhạc Hub đang tắt và chưa bị thay thế bởi nhạc VIP -> có thể auto bật lại nếu muốn
+                        if(currentMusicAudio) {
+                            currentMusicAudio.pause();
+                        }
+                    }
+                }
+            }, 500);
+            
+            currentView = viewName;
+        }
+// ----------------------------------------------------
+        // 4. SHADOW HUNTER LOGIC
+        // ----------------------------------------------------
         function handleSHLogin() {
             const user = document.getElementById('login-user').value.toLowerCase().trim();
-            const pass = document.getElementById('login-pass').value.trim();
-            const error = document.getElementById('login-error');
-            
-            if ((user === 'luuthiethoa' || user === 'hamy') && pass === '123') {
-                currentUserId = user;
-                initUserWorkspace();
-                switchView('sh-module');
+            const pass = document.getElementById('login-pass').value;
+            if (users[user] && pass === '123') {
+                currentUser = user;
+                document.getElementById('sh-player-name').innerText = users[currentUser].name;
+                document.getElementById('login-screen').classList.add('opacity-0', 'pointer-events-none');
+                setTimeout(() => { 
+                    document.getElementById('login-screen').classList.add('hidden');
+                    switchView('shadowhunter');
+                }, 500);
             } else {
-                error.classList.remove('hidden');
-                error.innerText = "Sai tài khoản hoặc mật khẩu!";
-                playErrorSound();
+                document.getElementById('login-error').classList.remove('hidden');
             }
         }
 
-        function initUserWorkspace() {
-            // Setup thông tin ban đầu
-            const uName = currentUserId === 'luuthiethoa' ? 'Lưu Thiết Hoa' : 'Hà Mỹ';
-            const uAvatar = currentUserId === 'luuthiethoa' ? 'H' : 'M';
-            document.getElementById('hub-username').innerText = uName;
-            document.getElementById('hub-avatar').innerText = uAvatar;
-            document.getElementById('sh-player-name').innerText = uName;
-
-            // Load Firebase User Data (Coin, Vé, Gacha, Nhạc, Streak)
-            db.collection('users').doc(currentUserId).onSnapshot(doc => {
-                if (doc.exists) {
-                    userData = doc.data();
-                    // Streak Logic
-                    updateStreakLogic(userData);
-                    
-                    document.getElementById('hub-coins').innerText = userData.coins || 0;
-                    document.getElementById('bb-coins').innerText = userData.coins || 0;
-                    document.getElementById('bb-tickets').innerText = userData.tickets || 0;
-                    document.getElementById('hub-streak').innerText = userData.streak || 0;
-                    
-                    const owned = userData.inventory ? userData.inventory.length : 0;
-                    document.getElementById('hub-cards').innerText = `${owned} / 50`;
-                } else {
-                    // Tạo mới nếu chưa có
-                    const todayStr = new Date().toISOString().split('T')[0];
-                    userData = { name: uName, coins: 500, tickets: 5, inventory: [], pity: 0, streak: 0, lastStudyDate: todayStr };
-                    db.collection('users').doc(currentUserId).set(userData);
-                }
-            });
-
-            // Load Bản đồ
-            loadPlaces();
+        function exitShadowHunter() {
+            document.getElementById('sh-module').classList.add('opacity-0');
+            setTimeout(() => {
+                document.getElementById('sh-module').classList.add('hidden');
+                document.getElementById('login-screen').classList.remove('hidden');
+                // Tắt trạng thái người dùng hiện tại
+                currentUser = null; 
+                currentView = 'login';
+                setTimeout(() => {
+                    document.getElementById('login-screen').classList.remove('opacity-0', 'pointer-events-none');
+                }, 50);
+            }, 500);
         }
 
-        function updateStreakLogic(data) {
-            const todayStr = new Date().toISOString().split('T')[0];
-            let lastDate = data.lastStudyDate || "";
-            let streak = data.streak || 0;
-            
-            if (lastDate !== todayStr) {
-                const today = new Date(todayStr);
-                const last = new Date(lastDate);
-                const diffTime = Math.abs(today - last);
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-                
-                // Nếu quá 1 ngày chưa học -> Reset
-                if (diffDays > 1) {
-                    db.collection('users').doc(currentUserId).update({ streak: 0 });
-                }
-            }
-        }
-
-        // Gọi hàm này khi user hoàn thành 1 bài tập Tiếng Anh
-        function markStudyCompleted() {
-            const todayStr = new Date().toISOString().split('T')[0];
-            let streak = userData.streak || 0;
-            let lastDate = userData.lastStudyDate || "";
-            
-            if (lastDate !== todayStr) {
-                streak += 1;
-                db.collection('users').doc(currentUserId).update({
-                    streak: streak,
-                    lastStudyDate: todayStr
-                });
-            }
-        }
-
-        document.getElementById('start-btn').addEventListener('click', () => {
-            switchView('hub');
-            toggleMainMusic(true);
-        });
-
-        // === 5. HỆ THỐNG MUSIC (CHÍNH & SẢNH V.I.P) ===
-        function toggleMainMusic(forcePlay = false) {
-            const btnPlay = document.getElementById('icon-music-play');
-            const btnPause = document.getElementById('icon-music-pause');
-            
-            if(forcePlay || mainAudio.paused) {
-                mainAudio.play();
-                isMainMusicPlaying = true;
-                btnPlay.classList.remove('hidden');
-                btnPause.classList.add('hidden');
-            } else {
-                mainAudio.pause();
-                isMainMusicPlaying = false;
-                btnPlay.classList.add('hidden');
-                btnPause.classList.remove('hidden');
-            }
-        }
-
-        function openMusicConfirm() {
-            document.getElementById('music-confirm-modal').classList.remove('hidden');
-            document.getElementById('music-confirm-modal').classList.add('flex');
-        }
-        function closeMusicConfirm() {
-            document.getElementById('music-confirm-modal').classList.add('hidden');
-            document.getElementById('music-confirm-modal').classList.remove('flex');
-        }
-
-        function enterMusicHub() {
-            closeMusicConfirm();
-            switchView('music-module');
-            // Tắt nhạc nền khi vào VIP
-            if(!mainAudio.paused) { toggleMainMusic(); }
-            
-            // Render tab hiện tại
-            switchMusicTab(currentMusicTab);
-        }
-
-        // Data 3 Playlist
-        const playlists = {
-            main: [
-                { title: "Untitled, 2014", url: "https://files.catbox.moe/example_gd1.mp3", author: "G-Dragon" },
-                { title: "Crooked", url: "https://files.catbox.moe/example_gd2.mp3", author: "G-Dragon" },
-                { title: "Who You?", url: "https://files.catbox.moe/example_gd3.mp3", author: "G-Dragon" },
-                { title: "That XX", url: "https://files.catbox.moe/example_gd4.mp3", author: "G-Dragon" },
-                { title: "Missing You", url: "https://files.catbox.moe/example_gd5.mp3", author: "G-Dragon" }
-            ],
-            chill: [
-                { title: "Lofi Study Session", url: "https://files.catbox.moe/example_chill1.mp3", author: "Lofi Girl" },
-                { title: "Midnight Thoughts", url: "https://files.catbox.moe/example_chill2.mp3", author: "Chillhop" },
-                { title: "Coffee Shop Vibes", url: "https://files.catbox.moe/example_chill3.mp3", author: "Jazz Lofi" }
-            ],
-            viet: [
-                { title: "Tình Yêu Chậm Trễ", url: "https://files.catbox.moe/example_v1.mp3", author: "MONO" },
-                { title: "Chìm Sâu", url: "https://files.catbox.moe/example_v2.mp3", author: "MCK" },
-                { title: "Nàng Thơ", url: "https://files.catbox.moe/example_v3.mp3", author: "Hoàng Dũng" },
-                { title: "Gác Lại Âu Lo", url: "https://files.catbox.moe/example_v4.mp3", author: "Da LAB" },
-                { title: "Có Em Chờ", url: "https://files.catbox.moe/example_v5.mp3", author: "MIN" }
-                // User có thể thêm 10 bài nữa vào đây tuỳ ý bằng link catbox.moe
-            ]
-        };
-
-        function switchMusicTab(tab) {
-            currentMusicTab = tab;
-            // Đổi UI Nút
-            ['main', 'chill', 'viet'].forEach(t => {
-                const btn = document.getElementById('mtab-' + t);
-                if(t === tab) {
-                    btn.classList.add('bg-[#E63946]', 'text-white', 'shadow-md');
-                    btn.classList.remove('text-white/60');
-                } else {
-                    btn.classList.remove('bg-[#E63946]', 'text-white', 'shadow-md');
-                    btn.classList.add('text-white/60');
-                }
-            });
-
-            // Đổi UI Banner
-            const titleEl = document.getElementById('music-station-title');
-            const subEl = document.getElementById('music-station-subtitle');
-            
-            if(tab === 'main') { titleEl.innerText = 'G-DRAGON'; subEl.innerText = 'V.I.P Lounge Collection'; }
-            else if(tab === 'chill') { titleEl.innerText = 'CHILL LOFI'; subEl.innerText = 'Study & Relax Space'; }
-            else if(tab === 'viet') { titleEl.innerText = 'NHẠC VIỆT'; subEl.innerText = 'V-Pop Hits & Indie'; }
-            
-            renderPlaylist();
-        }
-
-        function renderPlaylist() {
-            const container = document.getElementById('gd-playlist-container');
-            container.innerHTML = '';
-            
-            const list = playlists[currentMusicTab];
-            list.forEach((song, index) => {
-                const isActive = (isGDMPlaying && index === currentGDIndex && gdMusicObj.src === song.url);
-                const li = document.createElement('li');
-                li.className = `flex items-center justify-between p-3 rounded-xl cursor-pointer transition-colors ${isActive ? 'bg-[#E63946]/20 border border-[#E63946]/50' : 'bg-white/5 hover:bg-white/10 border border-transparent'}`;
-                li.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg ${isActive ? 'bg-[#E63946] text-white shadow-[0_0_15px_rgba(230,57,70,0.5)]' : 'bg-white/10 text-white/50'}">${index + 1}</div>
-                        <div><p class="font-bold text-white text-sm">${song.title}</p><p class="text-xs text-white/50">${song.author}</p></div>
-                    </div>
-                    ${isActive ? '<div class="flex gap-1 items-end h-4 mr-2"><div class="w-1 bg-[#E63946] h-full animate-[bounce_1s_infinite]"></div><div class="w-1 bg-[#E63946] h-1/2 animate-[bounce_1s_infinite_0.2s]"></div><div class="w-1 bg-[#E63946] h-3/4 animate-[bounce_1s_infinite_0.4s]"></div></div>' : ''}
-                `;
-                li.onclick = () => playGDSong(index, list);
-                container.appendChild(li);
-            });
-        }
-
-        function playGDSong(index, list) {
-            currentGDIndex = index;
-            const song = list[index];
-            gdMusicObj.src = song.url;
-            gdMusicObj.play();
-            isGDMPlaying = true;
-            
-            document.getElementById('gd-now-playing-title').innerText = song.title;
-            document.getElementById('gd-icon-play').classList.add('hidden');
-            document.getElementById('gd-icon-pause').classList.remove('hidden');
-            document.getElementById('record-disk').classList.add('animate-[spin_4s_linear_infinite]');
-            
-            renderPlaylist(); // Cập nhật lại UI List
-        }
-
-        function toggleGDSong() {
-            const list = playlists[currentMusicTab];
-            if(gdMusicObj.src === "" && list.length > 0) {
-                playGDSong(0, list);
-                return;
-            }
-            if(isGDMPlaying) {
-                gdMusicObj.pause();
-                isGDMPlaying = false;
-                document.getElementById('gd-icon-play').classList.remove('hidden');
-                document.getElementById('gd-icon-pause').classList.add('hidden');
-                document.getElementById('record-disk').classList.remove('animate-[spin_4s_linear_infinite]');
-            } else {
-                gdMusicObj.play();
-                isGDMPlaying = true;
-                document.getElementById('gd-icon-play').classList.add('hidden');
-                document.getElementById('gd-icon-pause').classList.remove('hidden');
-                document.getElementById('record-disk').classList.add('animate-[spin_4s_linear_infinite]');
-            }
-            renderPlaylist();
-        }
-
-        function nextGDSong() {
-            const list = playlists[currentMusicTab];
-            currentGDIndex = (currentGDIndex + 1) % list.length;
-            playGDSong(currentGDIndex, list);
-        }
-        function prevGDSong() {
-            const list = playlists[currentMusicTab];
-            currentGDIndex = (currentGDIndex - 1 + list.length) % list.length;
-            playGDSong(currentGDIndex, list);
-        }
-
-        // Tự động chuyển bài khi hết
-        gdMusicObj.addEventListener('ended', nextGDSong);
-
-
-        // === 6. MODULE GÓC TIẾNG ANH (HỌC TẬP) ===
-        // (Rút gọn từ vựng mẫu, bạn tự thêm vào cho đủ 81 từ nhé)
-        const sampleVocab = [
-            { en: "about", vi: "về", type: "prep" }, { en: "above", vi: "ở trên", type: "prep" },
-            { en: "across", vi: "ngang qua", type: "prep" }, { en: "after", vi: "sau khi", type: "prep" },
-            { en: "against", vi: "chống lại", type: "prep" }, { en: "along", vi: "dọc theo", type: "prep" }
+        // DATA BỘ THẺ BÀI SHADOW HUNTER
+        const hermitCards = [
+            { name: 'Blood Curse', desc: 'Chọn 1 người chơi, người đó nhận 2 sát thương.', effect: 'Sát thương' },
+            { name: 'Healing Herbs', desc: 'Hồi phục 2 máu cho bản thân hoặc 1 đồng minh.', effect: 'Hồi phục' },
+            { name: 'Shadow Cloak', desc: 'Bạn không thể bị chọn làm mục tiêu tấn công cho đến lượt tiếp theo.', effect: 'Phòng thủ' }
+        ];
+        
+        const whiteCards = [
+            { name: 'Holy Water', desc: 'Hồi tối đa máu cho bản thân.', effect: 'Hồi phục' },
+            { name: 'Silver Bullet', desc: 'Trang bị: +1 sát thương khi tấn công người chơi có thẻ Shadow.', type: 'Equipment', effect: 'Tấn công' },
+            { name: 'Blessing', desc: 'Cho phép bạn bốc thêm 1 lá bài bất kỳ.', effect: 'Hỗ trợ' }
+        ];
+        
+        const blackCards = [
+            { name: 'Vampire Bite', desc: 'Hút 1 máu từ người chơi khác và hồi 1 máu cho bạn.', effect: 'Tấn công / Hồi phục' },
+            { name: 'Cursed Sword', desc: 'Trang bị: Khi tấn công thành công, nạn nhân mất thêm 1 trang bị ngẫu nhiên.', type: 'Equipment', effect: 'Tấn công' },
+            { name: 'Death Sentence', desc: 'Người chơi nhận sát thương này không thể hồi máu trong 2 lượt.', effect: 'Nguyền rủa' }
         ];
 
-        // Khởi tạo Study Logic tương tự code cũ (Các hàm openStudyMode, checkQuizAnswer, checkMemory, grammar, falling words, paragraph...)
-        function openStudyMode(mode) {
-            document.getElementById('study-menu').classList.add('hidden');
-            document.getElementById('study-content').classList.remove('hidden');
-            document.getElementById('study-main-header').classList.add('hidden');
+        function drawCard(type) {
+            let deck = [];
+            let color = '';
             
-            // Ẩn toàn bộ ruột
-            ['vocab-list-container', 'quiz-container', 'memory-container', 'grammar-container', 'paragraph-container', 'falling-container'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
-            });
+            if (type === 'hermit') { deck = hermitCards; color = 'text-green-500'; }
+            else if (type === 'white') { deck = whiteCards; color = 'text-white'; }
+            else if (type === 'black') { deck = blackCards; color = 'text-red-600 blood-text'; }
+            
+            const card = deck[Math.floor(Math.random() * deck.length)];
+            
+            document.getElementById('sh-card-type').innerText = `Lá ${type.toUpperCase()}`;
+            document.getElementById('sh-card-type').className = `text-lg font-bold mb-3 uppercase tracking-[0.3em] ${color}`;
+            document.getElementById('sh-card-name').innerText = card.name;
+            document.getElementById('sh-card-name').className = `text-3xl mb-6 ${color}`;
+            document.getElementById('sh-card-desc').innerText = card.desc;
+            document.getElementById('sh-card-effect-type').innerText = card.type === 'Equipment' ? `Trang bị - ${card.effect}` : `Sử dụng 1 lần - ${card.effect}`;
+            
+            // Show overlay
+            const overlay = document.getElementById('sh-card-result-overlay');
+            const cardUI = document.getElementById('sh-card-result');
+            
+            overlay.classList.remove('hidden');
+            setTimeout(() => {
+                cardUI.classList.remove('scale-95', 'opacity-0');
+                cardUI.classList.add('scale-100', 'opacity-100');
+            }, 10);
+            
+            playRevealSound();
+        }
 
-            if (mode === 'list') {
-                document.getElementById('study-content-title').innerText = "Danh Sách Từ Vựng";
-                document.getElementById('vocab-list-container').classList.remove('hidden');
-                renderVocabList();
-            } else if (mode === 'falling') {
-                document.getElementById('study-content-title').innerText = "Word Falling Game ☄️";
-                document.getElementById('falling-container').classList.remove('hidden');
-                document.getElementById('fw-start-overlay').classList.remove('hidden');
+        function closeCardResult() {
+            const cardUI = document.getElementById('sh-card-result');
+            cardUI.classList.remove('scale-100', 'opacity-100');
+            cardUI.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                document.getElementById('sh-card-result-overlay').classList.add('hidden');
+            }, 300);
+        }
+
+        // ----------------------------------------------------
+        // 5. TIẾNG ANH (STREAK & MINI GAME HỨNG CHỮ)
+        // ----------------------------------------------------
+        function openEnglishGame(gameType) {
+            document.getElementById('study-menu').classList.add('hidden');
+            
+            if (gameType === 'falling-words') {
+                document.getElementById('english-falling-game').classList.remove('hidden');
+                initFallingGame();
+            } else {
+                document.getElementById('english-other-game').classList.remove('hidden');
             }
-            // Thêm các logic mode khác tương tự (en-vi, vi-en, type, memory...)
-            // Bổ sung hàm markStudyCompleted() vào chỗ kết thúc game/kiểm tra để tăng Streak
         }
 
         function backToStudyMenu() {
+            endGame(); // Dừng game nếu đang chạy
+            document.getElementById('english-falling-game').classList.add('hidden');
+            document.getElementById('english-other-game').classList.add('hidden');
             document.getElementById('study-menu').classList.remove('hidden');
-            document.getElementById('study-content').classList.add('hidden');
-            document.getElementById('study-main-header').classList.remove('hidden');
         }
 
-        // Render từ vựng
-        function renderVocabList() {
-            const container = document.getElementById('vocab-list-container');
-            container.innerHTML = sampleVocab.map((v, i) => `
-                <div class="bg-gray-50 border border-gray-100 rounded-xl p-3 flex justify-between items-center hover:shadow-md transition-shadow">
-                    <div><p class="font-bold text-primary">${i+1}. ${v.en}</p><p class="text-sm text-textGray">${v.vi}</p></div>
-                    <span class="text-xs font-semibold bg-primary/10 text-primary px-2 py-1 rounded uppercase">${v.type}</span>
-                </div>
-            `).join('');
+        function increaseStreak() {
+            if(!streakUpdatedToday && currentUser) {
+                users[currentUser].streak += 1;
+                streakUpdatedToday = true; // Chỉ cho phép +1 streak mỗi lần đăng nhập
+                updateHubUI();
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#f97316', '#fbbf24', '#ef4444'] });
+            }
         }
 
-        // === GAME CHỮ RƠI (MINI GAME) ===
-        function startFallingGame() {
-            fwScore = 0; fwLives = 3; fwIsPlaying = true;
-            document.getElementById('fw-score').innerText = fwScore;
-            document.getElementById('fw-lives').innerText = "❤️❤️❤️";
-            document.getElementById('fw-start-overlay').classList.add('hidden');
-            document.getElementById('fw-gameover-overlay').classList.add('hidden');
-            document.getElementById('fw-input').disabled = false;
-            document.getElementById('fw-input').value = "";
-            document.getElementById('fw-input').focus();
+        // --- Logic Game Hứng Chữ ---
+        const fnbWords = [
+            { en: 'coffee', vi: 'Cà phê' }, { en: 'sugar', vi: 'Đường' }, { en: 'milk', vi: 'Sữa' },
+            { en: 'water', vi: 'Nước' }, { en: 'table', vi: 'Bàn' }, { en: 'chair', vi: 'Ghế' },
+            { en: 'menu', vi: 'Thực đơn' }, { en: 'order', vi: 'Gọi món' }, { en: 'bill', vi: 'Hóa đơn' },
+            { en: 'matcha', vi: 'Trà xanh' }, { en: 'cash', vi: 'Tiền mặt' }, { en: 'ice', vi: 'Đá' }
+        ];
+        let gameScore = 0, gameLives = 3, gameInterval, spawnInterval, activeWords = [];
+        
+        function initFallingGame() {
+            gameScore = 0; gameLives = 3; activeWords = [];
+            updateGameUI();
+            document.getElementById('game-area').innerHTML = '';
+            document.getElementById('type-input').value = '';
+            document.getElementById('type-input').focus();
             
-            spawnFallingWord();
+            document.getElementById('type-input').onkeyup = function(e) {
+                if (e.key === 'Enter') {
+                    const typed = this.value.toLowerCase().trim();
+                    this.value = '';
+                    checkWord(typed);
+                }
+            };
+            
+            gameInterval = setInterval(gameLoop, 50);
+            spawnInterval = setInterval(spawnWord, 2500); // Mỗi 2.5s rớt 1 chữ
         }
 
-        function spawnFallingWord() {
-            if(!fwIsPlaying) return;
-            const wordObj = sampleVocab[Math.floor(Math.random() * sampleVocab.length)];
-            fwCurrentWord = wordObj.en;
+        function spawnWord() {
+            const wordObj = fnbWords[Math.floor(Math.random() * fnbWords.length)];
+            const wordEl = document.createElement('div');
+            wordEl.className = 'cute-falling-word';
+            wordEl.innerHTML = `<span class="cute-hint">${wordObj.vi}</span><div class="font-bold text-lg text-gray-700">${wordObj.en}</div>`;
             
-            if(fwCurrentElement) fwCurrentElement.remove();
+            const areaWidth = document.getElementById('game-area').clientWidth;
+            const leftPos = Math.random() * (areaWidth - 100) + 20; // Tránh tràn viền
             
-            const el = document.createElement('div');
-            el.className = 'cute-falling-word';
-            el.style.left = Math.floor(Math.random() * 60) + 10 + '%';
-            el.style.top = '-50px';
+            wordEl.style.left = leftPos + 'px';
+            wordEl.style.top = '-50px';
+            document.getElementById('game-area').appendChild(wordEl);
             
-            // Xóa 1-2 ký tự làm quiz
-            let displayHTML = `<span class="cute-hint">${wordObj.vi}</span><div>`;
-            for(let i=0; i<wordObj.en.length; i++) {
-                if(i === 1 || (i === 3 && wordObj.en.length > 4)) {
-                    displayHTML += `<span class="letter-box hidden-box">?</span>`;
-                } else {
-                    displayHTML += `<span class="letter-box show-box">${wordObj.en[i]}</span>`;
+            activeWords.push({ el: wordEl, text: wordObj.en, y: -50 });
+        }
+
+        function gameLoop() {
+            const areaHeight = document.getElementById('game-area').clientHeight;
+            for (let i = activeWords.length - 1; i >= 0; i--) {
+                let w = activeWords[i];
+                w.y += 2; // Tốc độ rơi
+                w.el.style.top = w.y + 'px';
+                
+                if (w.y > areaHeight - 40) { // Chạm đáy
+                    w.el.remove();
+                    activeWords.splice(i, 1);
+                    gameLives--;
+                    updateGameUI();
+                    if (gameLives <= 0) endGame(true);
                 }
             }
-            displayHTML += `</div>`;
-            el.innerHTML = displayHTML;
-            
-            document.getElementById('fw-area').appendChild(el);
-            fwCurrentElement = el;
-            
-            let pos = -50;
-            const dropSpeed = 1.5 + (fwScore * 0.1);
-            
-            clearInterval(fwDropInterval);
-            fwDropInterval = setInterval(() => {
-                pos += dropSpeed;
-                el.style.top = pos + 'px';
-                if(pos > document.getElementById('fw-area').offsetHeight) {
-                    loseFwLife();
-                }
-            }, 50);
         }
 
-        document.getElementById('fw-input').addEventListener('keyup', (e) => {
-            if(e.key === 'Enter' && fwIsPlaying) {
-                const val = e.target.value.toLowerCase().trim();
-                if(val === fwCurrentWord) {
-                    fwCurrentElement.classList.add('hit');
-                    clearInterval(fwDropInterval);
-                    fwScore += 10;
-                    document.getElementById('fw-score').innerText = fwScore;
-                    e.target.value = "";
+        function checkWord(typed) {
+            for (let i = 0; i < activeWords.length; i++) {
+                if (activeWords[i].text === typed) {
+                    const w = activeWords[i];
+                    w.el.classList.add('hit'); // Hiệu ứng trúng
+                    setTimeout(() => w.el.remove(), 300);
+                    activeWords.splice(i, 1);
+                    gameScore += 10;
                     playCoinSound();
-                    setTimeout(spawnFallingWord, 300);
-                } else {
-                    e.target.value = "";
-                    e.target.classList.add('animate-flash-red');
-                    setTimeout(() => e.target.classList.remove('animate-flash-red'), 500);
-                    playErrorSound();
+                    updateGameUI();
+                    
+                    // Nếu ghi điểm lần đầu trong ngày, cộng Streak
+                    if(gameScore === 10) increaseStreak();
+                    return;
                 }
             }
-        });
+        }
 
-        function loseFwLife() {
-            clearInterval(fwDropInterval);
-            fwLives--;
-            document.getElementById('fw-lives').innerText = "❤️".repeat(fwLives);
-            if(fwLives <= 0) {
-                fwIsPlaying = false;
-                document.getElementById('fw-input').disabled = true;
-                document.getElementById('fw-final-score').innerText = fwScore;
-                document.getElementById('fw-gameover-overlay').classList.remove('hidden');
-                
-                // Cộng tiền và kinh nghiệm
-                const bonusCoins = Math.floor(fwScore / 2);
-                db.collection('users').doc(currentUserId).update({
-                    coins: firebase.firestore.FieldValue.increment(bonusCoins)
-                });
-                markStudyCompleted(); // Tăng streak
-            } else {
-                spawnFallingWord();
+        function updateGameUI() {
+            document.getElementById('score-display').innerText = gameScore;
+            document.getElementById('lives-display').innerText = '❤️'.repeat(Math.max(0, gameLives));
+        }
+
+        function endGame(showMsg = false) {
+            clearInterval(gameInterval);
+            clearInterval(spawnInterval);
+            document.getElementById('game-area').innerHTML = '';
+            document.getElementById('type-input').onkeyup = null;
+            if(showMsg && gameLives <= 0) {
+                alert(`Game Over! Điểm của bạn: ${gameScore}`);
             }
         }
 
+        // ----------------------------------------------------
+        // 6. GACHA VIP LOGIC
+        // ----------------------------------------------------
+        const cardPool = [
+            { id: 1, name: 'Sơn Tùng M-TP', rarity: 'thuong', img: 'https://i.postimg.cc/mZhGktC9/sontung.png' },
+            { id: 2, name: 'HIEUTHUHAI', rarity: 'thuong', img: 'https://i.postimg.cc/HnfB5Wf0/hieuthuhai.png' },
+            { id: 3, name: 'Wren Evans', rarity: 'hiem', img: 'https://i.postimg.cc/BbqQ8sM9/wren.png' },
+            { id: 4, name: 'Tlinh', rarity: 'hiem', img: 'https://i.postimg.cc/tJc9636F/tlinh.png' },
+            { id: 5, name: 'MCK', rarity: 'caocap', img: 'https://i.postimg.cc/26LdM2Q1/mck.png' },
+            { id: 6, name: 'Binz', rarity: 'caocap', img: 'https://i.postimg.cc/cCcL57P2/binz.png' },
+            { id: 7, name: 'MONO', rarity: 'sieuhiem', img: 'https://i.postimg.cc/KYSyW8g0/mono.png' },
+            { id: 8, name: 'SOOBIN', rarity: 'sieuhiem', img: 'https://i.postimg.cc/NfK72b4C/soobin.png' },
+            { id: 9, name: 'B Ray', rarity: 'bian', img: 'https://i.postimg.cc/xT8WzXyN/b-ray.jpg' }
+        ];
 
-        // === 7. MODULE BẢN ĐỒ VÀ ĐỊA ĐIỂM (CRUD CƠ BẢN) ===
-        function loadPlaces() {
-            db.collection('places').onSnapshot(snapshot => {
-                places = [];
-                snapshot.forEach(doc => { places.push({id: doc.id, ...doc.data()}); });
-                renderPlaces();
-            });
+        let isPulling = false;
+
+        function addCheatCoins() {
+            if(!currentUser) return;
+            users[currentUser].coins += 500;
+            updateHubUI();
+            playCoinSound();
         }
 
-        function renderPlaces() {
-            const grid = document.getElementById('places-grid');
-            grid.innerHTML = places.map(p => `
-                <div class="glass-card rounded-3xl overflow-hidden bubble-card" onclick="viewPlace('${p.id}')">
-                    <div class="h-48 w-full bg-gray-200 relative">
-                        <img src="${p.image || 'https://via.placeholder.com/400'}" class="w-full h-full object-cover">
-                        <div class="absolute top-3 left-3 bg-white/90 px-3 py-1 rounded-full text-xs font-bold ${p.visited ? 'text-green-600' : 'text-blue-600'} shadow-sm">${p.visited ? 'Đã đi 🌸' : 'Sẽ đi 📌'}</div>
-                    </div>
-                    <div class="p-5">
-                        <h3 class="font-serif font-bold text-xl mb-1">${p.name}</h3>
-                        <p class="text-sm text-textGray line-clamp-1">📍 ${p.address}</p>
-                    </div>
-                </div>
-            `).join('');
+        function pullGacha(times) {
+            if(isPulling || !currentUser) return;
+            
+            const costCoins = times * 100;
+            const costTickets = times;
+            let data = users[currentUser];
+            
+            if(data.tickets >= costTickets) { data.tickets -= costTickets; }
+            else if (data.coins >= costCoins) { data.coins -= costCoins; }
+            else { alert('Không đủ xu hoặc vé!'); return; }
+            
+            updateHubUI();
+            isPulling = true;
+            document.getElementById('btn-pull-1').style.opacity = '0.5';
+            document.getElementById('btn-pull-10').style.opacity = '0.5';
+            
+            executePull(times);
         }
 
-        // Form & Modals Bản Đồ
-        function openFormModal() { document.getElementById('form-modal-overlay').classList.remove('hidden'); document.getElementById('form-modal-overlay').classList.add('flex'); }
-        function closeFormModal() { document.getElementById('form-modal-overlay').classList.add('hidden'); document.getElementById('form-modal-overlay').classList.remove('flex'); editingPlaceId = null; document.getElementById('add-form').reset(); }
-        function viewPlace(id) { /* Logic binding data to view-modal */ document.getElementById('view-modal-overlay').classList.remove('hidden'); document.getElementById('view-modal-overlay').classList.add('flex'); }
-        function closeViewModal() { document.getElementById('view-modal-overlay').classList.add('hidden'); document.getElementById('view-modal-overlay').classList.remove('flex'); }
-
-
-        // === 8. GACHA V.I.P (QUAY THẺ) ===
-        function switchBoxTab(tab) {
-            ['gacha', 'collection', 'auction', 'top'].forEach(t => {
-                document.getElementById('bb-tab-' + t).classList.add('hidden');
-                document.getElementById('btab-' + t).classList.remove('bg-primary', 'text-white');
-                document.getElementById('btab-' + t).classList.add('text-white/60');
-            });
-            document.getElementById('bb-tab-' + tab).classList.remove('hidden');
-            document.getElementById('btab-' + tab).classList.remove('text-white/60');
-            document.getElementById('btab-' + tab).classList.add('bg-primary', 'text-white');
+        function getCardByRarity() {
+            const rand = Math.random() * 100;
+            let targetRarity = 'thuong';
+            if (rand < 2) targetRarity = 'bian';
+            else if (rand < 10) targetRarity = 'sieuhiem';
+            else if (rand < 30) targetRarity = 'caocap';
+            else if (rand < 60) targetRarity = 'hiem';
+            
+            const pool = cardPool.filter(c => c.rarity === targetRarity);
+            return pool[Math.floor(Math.random() * pool.length)];
         }
 
-        function rollGacha() {
-            if(userData.coins < 100) { alert('Không đủ xu!'); return; }
-            db.collection('users').doc(currentUserId).update({ coins: firebase.firestore.FieldValue.increment(-100) });
-            executeRollAnimation();
-        }
-
-        function useFreeTicket() {
-            if(userData.tickets < 1) { alert('Không có vé!'); return; }
-            db.collection('users').doc(currentUserId).update({ tickets: firebase.firestore.FieldValue.increment(-1) });
-            executeRollAnimation();
-        }
-
-        function executeRollAnimation() {
-            playTickSound();
-            // Animation cuộn gacha...
+        function executePull(times) {
+            const strip = document.getElementById('gacha-strip');
+            strip.innerHTML = '';
+            strip.style.transition = 'none';
+            strip.style.transform = 'translateX(0px)';
+            
+            const totalItems = 30 + times; 
+            const finalResults = [];
+            
+            for(let i=0; i<times; i++) finalResults.push(getCardByRarity());
+            
+            for(let i=0; i<totalItems; i++) {
+                const item = document.createElement('div');
+                item.className = 'gacha-item';
+                
+                let cardData;
+                if(i >= totalItems - times - 2 && i < totalItems - 2) {
+                    cardData = finalResults[i - (totalItems - times - 2)];
+                } else {
+                    cardData = getCardByRarity();
+                }
+                
+                item.innerHTML = `<div class="gacha-card card-${cardData.rarity}"><div class="card-overlay"></div><img src="${cardData.img}" class="w-full h-full object-cover"><div class="card-badge">${cardData.name}</div></div>`;
+                strip.appendChild(item);
+            }
+            
             setTimeout(() => {
-                // Xác định độ hiếm & Show Reveal Modal
-                const rarity = Math.random();
-                let rarityClass = 'thuong', rarityText = 'Thẻ Thường';
-                if(rarity > 0.999) { rarityClass = 'bian'; rarityText = 'BÍ ẨN KHỦNG KHIẾP!'; }
-                else if(rarity > 0.99) { rarityClass = 'sieuhiem'; rarityText = 'SIÊU HIẾM'; }
+                strip.style.transition = 'transform 3s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                const itemWidth = 150;
+                const stopIndex = totalItems - times - 2; 
+                const stopPos = -(stopIndex * itemWidth) + (document.getElementById('gacha-window').offsetWidth / 2) - (itemWidth / 2);
                 
-                document.getElementById('reveal-rarity-text').innerText = rarityText;
-                document.getElementById('reveal-card-front').className = `card-front bg-gray-900 rounded-xl overflow-hidden card-${rarityClass}`;
+                strip.style.transform = `translateX(${stopPos}px)`;
                 
-                document.getElementById('card-reveal-modal').classList.remove('hidden');
-                document.getElementById('card-reveal-modal').classList.add('flex');
-                playRevealSound();
-            }, 1000);
-        }
-        function closeReveal() {
-            document.getElementById('card-reveal-modal').classList.add('hidden');
-            document.getElementById('card-reveal-modal').classList.remove('flex');
-        }
-
-
-        // === 9. SHADOW HUNTER LOGIC CỐT LÕI (CẬP NHẬT MỚI) ===
-        
-        let currentRoomId = null;
-        let roomData = null;
-        
-        // 3 Bộ bài (Green, White, Black)
-        const deckGreen = [
-            { id: 'g1', title: 'Thảo Dược', desc: 'Hồi 2 Máu', effect: { heal: 2 } },
-            { id: 'g2', title: 'La Bàn', desc: 'Rút 1 Thẻ Trang Bị Trắng', effect: { draw: 'white' } },
-            { id: 'g3', title: 'Lều Ẩn Nấp', desc: 'Tránh đòn đánh tiếp theo', effect: { buff: 'dodge' } }
-        ];
-        
-        const deckWhite = [
-            { id: 'w1', title: 'Thánh Giá Bạc', desc: 'Trang Bị: Tăng sát thương lên Shadow', equip: 'wpn' },
-            { id: 'w2', title: 'Nước Thánh', desc: 'Hồi toàn bộ máu', effect: { heal: 'max' } },
-            { id: 'w3', title: 'Giáp Ánh Sáng', desc: 'Trang Bị: Giảm 1 sát thương nhận vào', equip: 'def' }
-        ];
-        
-        const deckBlack = [
-            { id: 'b1', title: 'Huyết Kiếm', desc: 'Trang Bị: Tăng sát thương, nhưng mất 1 máu mỗi lượt', equip: 'wpn_cursed' },
-            { id: 'b2', title: 'Nụ Hôn Nhện Độc', desc: 'Gây 2 sát thương cho người bên trái', effect: { dmg_left: 2 } },
-            { id: 'b3', title: 'Áo Choàng Hắc Ám', desc: 'Phản lại sát thương cho người tấn công', buff: 'reflect' }
-        ];
-
-        // Khởi tạo phòng chơi
-        function createSHRoom() {
-            const rcode = 'SH' + Math.floor(1000 + Math.random() * 9000);
-            document.getElementById('sh-room-code').value = rcode;
-            
-            const newRoom = {
-                id: rcode,
-                turn: currentUserId,
-                players: {},
-                status: 'playing',
-                created: firebase.firestore.FieldValue.serverTimestamp()
-            };
-            
-            // Khởi tạo Player đầu tiên (Host)
-            newRoom.players[currentUserId] = {
-                name: document.getElementById('sh-player-name').innerText,
-                hp: 14,
-                maxHp: 14,
-                equips: [],
-                position: 0,
-                role: 'unknown'
-            };
-            
-            db.collection('sh_rooms').doc(rcode).set(newRoom).then(() => {
-                joinSHRoomProcess(rcode);
-            });
-        }
-
-        function joinSHRoom() {
-            const rcode = document.getElementById('sh-room-code').value.toUpperCase().trim();
-            if(!rcode) return;
-            joinSHRoomProcess(rcode);
-        }
-
-        function joinSHRoomProcess(rcode) {
-            db.collection('sh_rooms').doc(rcode).get().then(doc => {
-                if(doc.exists) {
-                    currentRoomId = rcode;
-                    // Lắng nghe realtime
-                    db.collection('sh_rooms').doc(rcode).onSnapshot(snap => {
-                        roomData = snap.data();
-                        updateSHBoard();
+                setTimeout(() => {
+                    finalResults.forEach(c => {
+                        const exist = users[currentUser].cards.find(uc => uc.id === c.id);
+                        if(exist) exist.count++; else users[currentUser].cards.push({...c, count: 1});
                     });
                     
-                    // Nếu user chưa có trong phòng thì thêm vào
-                    if(!doc.data().players[currentUserId]) {
-                        const newPlayer = {
-                            name: document.getElementById('sh-player-name').innerText,
-                            hp: 12, maxHp: 12, equips: [], position: 0, role: 'unknown'
-                        };
-                        db.collection('sh_rooms').doc(rcode).update({
-                            [`players.${currentUserId}`]: newPlayer
-                        });
+                    if(finalResults.some(c => c.rarity === 'sieuhiem' || c.rarity === 'bian')) {
+                        confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
                     }
-
-                    // Đổi UI sang Bàn Chơi
-                    document.getElementById('sh-lobby').classList.add('hidden');
-                    document.getElementById('sh-board').classList.remove('hidden');
-                    document.getElementById('sh-leave-room-btn').classList.remove('hidden');
-                } else {
-                    alert("Không tìm thấy mã phòng này!");
-                }
-            });
-        }
-
-        // Thoát phòng
-        function leaveSHRoom() {
-            if(!currentRoomId) return;
-            if(confirm("Bạn có chắc chắn muốn thoát khỏi bàn chơi?")) {
-                db.collection('sh_rooms').doc(currentRoomId).update({
-                    [`players.${currentUserId}`]: firebase.firestore.FieldValue.delete()
-                }).then(() => {
-                    currentRoomId = null;
-                    document.getElementById('sh-leave-room-btn').classList.add('hidden');
-                    document.getElementById('sh-board').classList.add('hidden');
-                    document.getElementById('sh-lobby').classList.remove('hidden');
-                    document.getElementById('sh-room-code').value = '';
-                });
-            }
-        }
-
-        function updateSHBoard() {
-            if(!roomData) return;
-            
-            const isMyTurn = (roomData.turn === currentUserId);
-            document.getElementById('sh-turn-indicator').innerText = isMyTurn ? "ĐẾN LƯỢT CỦA BẠN" : "ĐỢI NGƯỜI KHÁC...";
-            document.getElementById('sh-turn-indicator').className = isMyTurn ? "text-green-500 font-bold text-xl uppercase tracking-widest mb-2 animate-pulse" : "text-gray-500 text-sm font-bold uppercase tracking-widest mb-2";
-            
-            document.getElementById('sh-roll-btn').disabled = !isMyTurn;
-            document.getElementById('sh-atk-btn').disabled = !isMyTurn;
-            document.getElementById('sh-end-btn').disabled = !isMyTurn;
-
-            // Render Player Khác (Opponents) - Sử dụng TÊN THẬT thay vì Player 2,3,4
-            const oppContainer = document.getElementById('sh-opponents');
-            oppContainer.innerHTML = '';
-            
-            Object.keys(roomData.players).forEach(uid => {
-                const p = roomData.players[uid];
-                if(uid === currentUserId) {
-                    // Update My UI
-                    document.getElementById('sh-my-hp-board').innerText = p.hp;
-                    document.getElementById('sh-player-hp').innerText = `HP: ${p.hp}`;
-                    // Update Equips
-                    document.getElementById('sh-my-equips').innerHTML = p.equips.map(e => `<div class="w-10 h-10 bg-gray-800 border border-gray-500 rounded flex items-center justify-center text-xs" title="${e.title}">🛡️</div>`).join('');
-                } else {
-                    // Cập nhật tên thực tế từ Data
-                    const oppDiv = document.createElement('div');
-                    oppDiv.className = `sh-card px-4 py-2 rounded-xl flex flex-col items-center ${roomData.turn === uid ? 'border-green-500 border-2' : ''}`;
-                    oppDiv.innerHTML = `
-                        <div class="w-12 h-12 bg-black rounded-full border-2 border-red-500 mb-1 flex items-center justify-center text-xl font-bold">${p.name.charAt(0)}</div>
-                        <p class="font-bold text-sm truncate max-w-[80px]" title="${p.name}">${p.name}</p>
-                        <p class="text-xs text-red-400">HP: ${p.hp}</p>
-                    `;
-                    oppContainer.appendChild(oppDiv);
-                }
-            });
-        }
-
-        // Đổ xí ngầu SH
-        function rollSHDice() {
-            const d4 = Math.floor(Math.random() * 4) + 1;
-            const d6 = Math.floor(Math.random() * 6) + 1;
-            
-            // Effect quay
-            const el4 = document.getElementById('sh-dice-4');
-            const el6 = document.getElementById('sh-dice-6');
-            let counter = 0;
-            let rollInterval = setInterval(() => {
-                el4.innerText = Math.floor(Math.random() * 4) + 1;
-                el6.innerText = Math.floor(Math.random() * 6) + 1;
-                counter++;
-                if(counter > 10) {
-                    clearInterval(rollInterval);
-                    el4.innerText = d4; el6.innerText = d6;
-                    resolveSHLocation(d4, d6);
-                }
+                    playRevealSound();
+                    updateHubUI();
+                    isPulling = false;
+                    document.getElementById('btn-pull-1').style.opacity = '1';
+                    document.getElementById('btn-pull-10').style.opacity = '1';
+                }, 3000);
             }, 50);
-            playTickSound();
         }
 
-        function resolveSHLocation(d4, d6) {
-            const sum = d4 + d6;
-            const locEl = document.getElementById('sh-location-result');
-            const deckArea = document.getElementById('sh-deck-area');
+        function renderCollection() {
+            if(!currentUser) return;
+            const grid = document.getElementById('collection-grid');
+            grid.innerHTML = '';
+            const myCards = users[currentUser].cards;
             
-            locEl.classList.remove('hidden');
-            deckArea.classList.add('hidden', 'flex'); // Ẩn nút rút bài trước
+            document.getElementById('collection-count').innerText = `${myCards.length} / ${cardPool.length}`;
             
-            let locName = "";
-            let btnGreen = document.getElementById('btn-draw-green');
-            let btnWhite = document.getElementById('btn-draw-white');
-            let btnBlack = document.getElementById('btn-draw-black');
+            myCards.forEach(c => {
+                const el = document.createElement('div');
+                el.className = `gacha-card card-${c.rarity} owned`;
+                el.innerHTML = `<div class="card-overlay"></div><img src="${c.img}" class="w-full h-full object-cover"><div class="card-badge">${c.name}</div><div class="card-count">x${c.count}</div>`;
+                grid.appendChild(el);
+            });
+        }
 
-            btnGreen.classList.add('hidden'); btnWhite.classList.add('hidden'); btnBlack.classList.add('hidden');
 
-            if(sum === 2 || sum === 3) {
-                locName = "Vực Tiếng Vang (Rút Thẻ Hermit/Xanh)";
-                deckArea.classList.remove('hidden'); btnGreen.classList.remove('hidden');
-            } else if(sum === 4 || sum === 5) {
-                locName = "Khu Rừng Đen (Rút Thẻ Đen)";
-                deckArea.classList.remove('hidden'); btnBlack.classList.remove('hidden');
-            } else if(sum === 6) {
-                locName = "Cổng Ánh Sáng (Rút Thẻ Trắng)";
-                deckArea.classList.remove('hidden'); btnWhite.classList.remove('hidden');
-            } else if(sum === 7) {
-                locName = "Tùy Ý (Chọn rút Xanh/Trắng/Đen)";
-                deckArea.classList.remove('hidden'); 
-                btnGreen.classList.remove('hidden'); btnWhite.classList.remove('hidden'); btnBlack.classList.remove('hidden');
-            } else if(sum === 8) {
-                locName = "Điện Thờ (Rút Thẻ Trắng)";
-                deckArea.classList.remove('hidden'); btnWhite.classList.remove('hidden');
-            } else if(sum === 9) {
-                locName = "Nhà Thờ Cũ (Rút Thẻ Đen)";
-                deckArea.classList.remove('hidden'); btnBlack.classList.remove('hidden');
+        // ----------------------------------------------------
+        // 7. PLACES LOGIC (ĐỊA ĐIỂM 3D)
+        // ----------------------------------------------------
+        const placesModels = {
+            'japanit': { title: 'Japanit Matcha', desc: 'Góc làm việc quen thuộc. Trà xanh thơm mát, không gian yên bình.', src: 'https://modelviewer.dev/shared-assets/models/Astronaut.glb' },
+            'amakitchen': { title: 'A Mà Kitchen', desc: 'Hương vị tuổi thơ và những ca làm bận rộn.', src: 'https://modelviewer.dev/shared-assets/models/shishkebab.glb' },
+            'bigfun': { title: 'BigFun Farm', desc: 'Niềm vui của những trò chơi và kỷ niệm khó quên.', src: 'https://modelviewer.dev/shared-assets/models/RobotExpressive.glb' },
+            'micay': { title: 'Mì Cay Asan', desc: 'Những tô mì cay nóng hổi, cay xè nhưng ấm áp.', src: 'https://modelviewer.dev/shared-assets/models/boombox.glb' }
+        };
+
+        function changePlace(id) {
+            const viewer = document.getElementById('place-viewer');
+            const loading = document.getElementById('place-loading');
+            
+            loading.classList.remove('opacity-0', 'pointer-events-none');
+            
+            setTimeout(() => {
+                viewer.src = placesModels[id].src;
+                document.getElementById('place-title').innerText = placesModels[id].title;
+                document.getElementById('place-desc').innerText = placesModels[id].desc;
+                
+                viewer.addEventListener('load', () => { loading.classList.add('opacity-0', 'pointer-events-none'); }, {once: true});
+            }, 300);
+        }
+
+        // ----------------------------------------------------
+        // 8. MUSIC VIP LOGIC (CHILL & VIET TAB)
+        // ----------------------------------------------------
+        const playlists = {
+            chill: [
+                { id: 1, title: 'Lofi Chill Study', url: 'https://files.catbox.moe/by6h11.mp4' },
+                { id: 2, title: 'Rainy Cafe Vibes', url: 'https://files.catbox.moe/9x6b1s.mp3' },
+                { id: 3, title: 'Midnight Stroll', url: 'https://files.catbox.moe/xyz123.mp3' } // link test
+            ],
+            viet: [
+                { id: 4, title: 'Em Của Ngày Hôm Qua - Sơn Tùng', url: 'https://files.catbox.moe/4v8j2p.mp3', img: 'https://i.postimg.cc/mZhGktC9/sontung.png' },
+                { id: 5, title: 'Ngủ Một Mình - HIEUTHUHAI', url: 'https://files.catbox.moe/123abc.mp3', img: 'https://i.postimg.cc/HnfB5Wf0/hieuthuhai.png' }
+            ]
+        };
+
+        let currentMusicAudio = null;
+        let currentPlaylist = 'chill';
+        let currentSongIndex = 0;
+        let isVipPlaying = false;
+
+        function switchMusicTab(tab) {
+            currentPlaylist = tab;
+            if(tab === 'chill') {
+                document.getElementById('mtab-chill').className = 'px-4 py-1.5 rounded-full text-xs font-bold bg-purple-500 text-white transition-all';
+                document.getElementById('mtab-viet').className = 'px-4 py-1.5 rounded-full text-xs font-bold bg-white/10 text-white/60 hover:text-white transition-all';
+                document.getElementById('playlist-chill').classList.remove('hidden');
+                document.getElementById('playlist-viet').classList.add('hidden');
             } else {
-                locName = "Nghĩa Trang (Hút 1 HP từ người khác)";
-            }
-            
-            locEl.innerText = `Tổng: ${sum} -> ${locName}`;
-            
-            // Lưu vị trí vào DB
-            db.collection('sh_rooms').doc(currentRoomId).update({
-                [`players.${currentUserId}.position`]: sum
-            });
-        }
-
-        // Rút thẻ
-        function drawSHCard(type) {
-            let deck = type === 'green' ? deckGreen : (type === 'white' ? deckWhite : deckBlack);
-            let card = deck[Math.floor(Math.random() * deck.length)];
-            
-            document.getElementById('sh-card-title').innerText = card.title;
-            document.getElementById('sh-card-title').className = `text-2xl font-black uppercase mb-4 ${type === 'green' ? 'text-green-500' : (type === 'white' ? 'text-white' : 'text-gray-400')}`;
-            document.getElementById('sh-card-desc').innerText = card.desc;
-            
-            document.getElementById('sh-card-modal').style.display = 'flex';
-            playRevealSound();
-            
-            // Ẩn vùng rút thẻ sau khi rút
-            document.getElementById('sh-deck-area').classList.add('hidden');
-        }
-
-        // Chuyển lượt
-        function endSHTurn() {
-            if(!roomData) return;
-            const uids = Object.keys(roomData.players);
-            const myIndex = uids.indexOf(currentUserId);
-            const nextUid = uids[(myIndex + 1) % uids.length];
-            
-            db.collection('sh_rooms').doc(currentRoomId).update({
-                turn: nextUid
-            });
-            
-            document.getElementById('sh-location-result').classList.add('hidden');
-            document.getElementById('sh-deck-area').classList.add('hidden');
-        }
-
-        function attackSHPlayer() {
-            // Logic đánh tạm thời trừ 1 hp người đầu tiên tìm thấy
-            const uids = Object.keys(roomData.players).filter(id => id !== currentUserId);
-            if(uids.length > 0) {
-                const target = uids[0];
-                const curHp = roomData.players[target].hp;
-                db.collection('sh_rooms').doc(currentRoomId).update({
-                    [`players.${target}.hp`]: Math.max(0, curHp - 1)
-                });
-                alert(`Đã gây 1 sát thương cho ${roomData.players[target].name}!`);
+                document.getElementById('mtab-viet').className = 'px-4 py-1.5 rounded-full text-xs font-bold bg-purple-500 text-white transition-all';
+                document.getElementById('mtab-chill').className = 'px-4 py-1.5 rounded-full text-xs font-bold bg-white/10 text-white/60 hover:text-white transition-all';
+                document.getElementById('playlist-viet').classList.remove('hidden');
+                document.getElementById('playlist-chill').classList.add('hidden');
             }
         }
 
-        function useSHAbility() { alert('Chức năng Skill đang được mở rộng!'); }
+        function renderPlaylists() {
+            // Render Chill
+            const ulChill = document.getElementById('playlist-chill');
+            ulChill.innerHTML = '';
+            playlists.chill.forEach((s, idx) => {
+                ulChill.innerHTML += `
+                    <li onclick="playSong('chill', ${idx})" class="music-item-glass p-3 rounded-xl flex items-center justify-between cursor-pointer group">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs group-hover:bg-purple-500 group-hover:text-white transition-colors">🎵</div>
+                            <span class="text-white/80 group-hover:text-white text-sm font-medium">${s.title}</span>
+                        </div>
+                    </li>`;
+            });
 
+            // Render Viet
+            const ulViet = document.getElementById('playlist-viet');
+            ulViet.innerHTML = '';
+            playlists.viet.forEach((s, idx) => {
+                ulViet.innerHTML += `
+                    <li onclick="playSong('viet', ${idx})" class="music-item-glass p-3 rounded-xl flex items-center justify-between cursor-pointer group">
+                        <div class="flex items-center gap-3">
+                            <img src="${s.img}" class="w-10 h-10 rounded-full object-cover border-2 border-white/20">
+                            <span class="text-white/80 group-hover:text-white text-sm font-medium">${s.title}</span>
+                        </div>
+                    </li>`;
+            });
+        }
+
+        function playSong(playlistId, index) {
+            currentPlaylist = playlistId;
+            currentSongIndex = index;
+            const song = playlists[playlistId][index];
+            
+            // Tắt nhạc Hub chính nếu đang mở
+            if(isMainMusicPlaying) toggleMainMusic();
+            
+            if(currentMusicAudio) { currentMusicAudio.pause(); }
+            currentMusicAudio = new Audio(song.url);
+            
+            // Tự động nhảy bài
+            currentMusicAudio.addEventListener('ended', nextSong);
+            
+            currentMusicAudio.play().catch(e => console.log(e));
+            isVipPlaying = true;
+            
+            document.getElementById('now-playing-title').innerText = song.title;
+            document.getElementById('icon-play').classList.add('hidden');
+            document.getElementById('icon-pause').classList.remove('hidden');
+            document.getElementById('record-disk').classList.add('animate-[spin_4s_linear_infinite]');
+        }
+
+        function toggleSong() {
+            if(!currentMusicAudio) { playSong(currentPlaylist, 0); return; }
+            if(isVipPlaying) {
+                currentMusicAudio.pause();
+                document.getElementById('icon-play').classList.remove('hidden');
+                document.getElementById('icon-pause').classList.add('hidden');
+                document.getElementById('record-disk').classList.remove('animate-[spin_4s_linear_infinite]');
+            } else {
+                currentMusicAudio.play();
+                document.getElementById('icon-play').classList.add('hidden');
+                document.getElementById('icon-pause').classList.remove('hidden');
+                document.getElementById('record-disk').classList.add('animate-[spin_4s_linear_infinite]');
+            }
+            isVipPlaying = !isVipPlaying;
+        }
+
+        function nextSong() {
+            let nextIdx = currentSongIndex + 1;
+            if(nextIdx >= playlists[currentPlaylist].length) nextIdx = 0;
+            playSong(currentPlaylist, nextIdx);
+        }
+
+        function prevSong() {
+            let prevIdx = currentSongIndex - 1;
+            if(prevIdx < 0) prevIdx = playlists[currentPlaylist].length - 1;
+            playSong(currentPlaylist, prevIdx);
+        }
+
+        // Logic Modal Xác nhận Âm Nhạc
+        function openMusicConfirm() { 
+            document.getElementById('music-confirm-modal').classList.remove('hidden'); 
+            document.getElementById('music-confirm-modal').classList.add('flex'); 
+        }
+        function closeMusicConfirm() { 
+            document.getElementById('music-confirm-modal').classList.add('hidden'); 
+            document.getElementById('music-confirm-modal').classList.remove('flex'); 
+        }
+        function enterMusicHub() {
+            closeMusicConfirm();
+            switchView('music');
+            renderPlaylists();
+        }
+
+        // Init khi Load trang
+        window.onload = () => {
+            renderPlaylists();
+            document.getElementById('login-screen').classList.remove('opacity-0', 'pointer-events-none');
+        };
     </script>
 </body>
 </html>
