@@ -113,6 +113,7 @@
 <body class="text-textDark antialiased no-scroll" id="body">
 
     <!-- AUDIO SOUND EFFECTS -->
+    <!-- Nhạc nền tổng của sảnh vẫn giữ nguyên (nếu bạn muốn đổi thì đổi link này) -->
     <audio id="bg-music" loop src="https://files.catbox.moe/by6h11.mp4"></audio>
     <audio id="sound-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
     <audio id="sound-tick" src="https://assets.mixkit.co/active_storage/sfx/2073/2073-preview.mp3"></audio>
@@ -120,7 +121,7 @@
     <audio id="sound-coin" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
     <audio id="sound-error" src="https://assets.mixkit.co/active_storage/sfx/2955/2955-preview.mp3"></audio>
 
-    <!-- NÚT BẬT/TẮT NHẠC CHÍNH -->
+    <!-- NÚT BẬT/TẮT NHẠC CHÍNH (GÓC MÀN HÌNH) -->
     <button id="music-toggle" onclick="toggleMainMusic()" class="fixed bottom-6 right-6 w-12 h-12 rounded-full glass-card flex items-center justify-center cursor-pointer z-[9999] text-primary hover:bg-white transition-all duration-500 transform hover:scale-110 shadow-lg shadow-primary/30 opacity-0 pointer-events-none translate-y-4">
         <svg id="icon-music-play" class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
         <svg id="icon-music-pause" class="w-6 h-6 hidden text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path></svg>
@@ -184,7 +185,7 @@
         </div>
     </div>
 
-    <!-- 3. SẢNH V.I.P MUSIC PLAYER (ĐÃ CẬP NHẬT 3 TABS, AUTO PLAY, MOTION 3D) -->
+    <!-- 3. SẢNH V.I.P MUSIC PLAYER -->
     <div id="music-module" class="fixed inset-0 z-[95] hidden opacity-0 transition-all duration-1000 bg-gray-900 flex flex-col overflow-hidden">
         <div class="absolute inset-0 bg-[url('https://i.postimg.cc/85z1DkS0/card-back.jpg')] bg-cover bg-center opacity-30" id="music-bg-blur"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
@@ -214,6 +215,13 @@
                         </button>
                         
                         <button onclick="playClickSound(); nextTrack()" class="text-white/60 hover:text-white transform hover:scale-110 transition-all"><svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20"><path d="M11.555 14.832A1 1 0 0013 14V8.798l5.445 3.63A1 1 0 0020 14V6a1 1 0 00-1.555-.832L13 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4zM4 6a1 1 0 11-2 0v8a1 1 0 112 0V6z"></path></svg></button>
+                    </div>
+
+                    <!-- NÚT AUTO CHUYỂN BÀI -->
+                    <div class="mt-5">
+                        <button onclick="playClickSound(); toggleAutoNext()" id="btn-auto-next" class="text-[11px] font-bold px-4 py-1.5 rounded-full bg-green-500/20 text-green-400 border border-green-500/50 hover:bg-green-500/30 transition-colors uppercase tracking-wider">
+                            Tự chuyển bài: BẬT 🔄
+                        </button>
                     </div>
                 </div>
             </div>
@@ -270,7 +278,7 @@
                 
                 <h2 id="study-content-title" class="text-2xl font-bold text-primary mb-6 border-b border-primary/20 pb-4 flex justify-between items-center">
                     <span>Tiêu đề</span>
-                    <button onclick="playClickSound(); document.getElementById('study-content').classList.add('hidden'); document.getElementById('study-menu').classList.remove('hidden');" class="text-sm bg-gray-100 px-3 py-1 rounded text-gray-600 border shadow-sm">Xem chế độ khác</button>
+                    <button onclick="playClickSound(); document.getElementById('study-content').classList.add('hidden'); document.getElementById('study-menu').classList.remove('hidden');" class="text-sm bg-gray-100 px-3 py-1 rounded text-gray-600 border shadow-sm hover:bg-gray-200 ml-4">Xem chế độ khác</button>
                 </h2>
                 
                 <div id="vocab-list-container" class="hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"></div>
@@ -483,14 +491,12 @@
         let userData = { coins: 0, tickets: 0, pity: 0, inventory: {}, highScoreFalling: 0, streak: 0, lastStudyDate: "" };
         let places = [];
 
-        // 2. DATA CŨ HOÀN CHỈNH (KHÔNG CẮT)
-        // TỪ VỰNG TIẾNG ANH (81 TỪ)
+        // 2. DATA CŨ HOÀN CHỈNH
         let vocabData = [ 
             {en:'about',type:'Adverb/Preposition',vi:'Về cái gì đó'}, {en:'above',type:'Adverb/Preposition',vi:'Hơn cái gì đó'}, {en:'across',type:'Adverb/Preposition',vi:'Băng qua, Ngang qua'}, {en:'action',type:'Noun',vi:'Hành động'}, {en:'actor',type:'Noun',vi:'Diễn Viên'}, {en:'actress',type:'Noun',vi:'Nữ diễn viên'}, {en:'activity',type:'Noun',vi:'Hoạt động'}, {en:'add',type:'Verb',vi:'Thêm'}, {en:'address',type:'Noun',vi:'Địa chỉ'}, {en:'adult',type:'Noun',vi:'Người lớn'}, {en:'advice',type:'Noun',vi:'Khuyên bảo'}, {en:'afraid',type:'Adjective',vi:'Sợ'}, {en:'after',type:'Preposition',vi:'Sau đó'}, {en:'afternoon',type:'Noun',vi:'Buổi chiều'}, {en:'again',type:'Adverb',vi:'Lặp lại'}, {en:'age',type:'Noun',vi:'Tuổi'}, {en:'ago',type:'Adverb',vi:'Trước kia'}, {en:'agree',type:'Verb',vi:'Đồng ý'}, {en:'air',type:'Noun',vi:'Không khí'}, {en:'airport',type:'Noun',vi:'Sân bay'}, {en:'all',type:'Determiner/Pronoun',vi:'Tất cả'}, {en:'also',type:'Adverb',vi:'Mà còn'}, {en:'always',type:'Adverb',vi:'Luôn luôn'}, {en:'amazing',type:'Adjective',vi:'Ngạc nhiên'}, {en:'an',type:'Indefinite article',vi:'Một'}, {en:'and',type:'Conjunction',vi:'Và'}, {en:'angry',type:'Adjective',vi:'Giận dữ'}, {en:'animal',type:'Noun',vi:'Động vật'}, {en:'another',type:'Determiner/Pronoun',vi:'Khác'}, {en:'answer',type:'Noun/Verb',vi:'Trả lời'}, {en:'any',type:'Determiner/Pronoun',vi:'Bất kì'}, {en:'anyone',type:'Pronoun',vi:'Bất kì ai'}, {en:'anything',type:'Pronoun',vi:'Bất kì điều gì'}, {en:'apartment',type:'Noun',vi:'Căn hộ'}, {en:'apple',type:'Noun',vi:'Quả táo'}, {en:'april',type:'Noun',vi:'Tháng tư'}, {en:'area',type:'Noun',vi:'Khu vực, vùng, diện tích'}, {en:'arm',type:'Noun',vi:'Cánh tay'}, {en:'around',type:'Adverb/Preposition',vi:'Xung quanh'}, {en:'arrive',type:'Verb',vi:'Đến, tới nơi'}, {en:'art',type:'Noun',vi:'Nghệ thuật'}, {en:'article',type:'Noun',vi:'Bài báo, bài viết'}, {en:'artist',type:'Noun',vi:'Nghệ sĩ, họa sĩ'}, {en:'as',type:'Preposition',vi:'Như, như là, khi, vì'}, {en:'ask',type:'Verb',vi:'Hỏi, yêu cầu'}, {en:'at',type:'Preposition',vi:'Ở, tại, lúc'}, {en:'august',type:'Noun',vi:'Tháng tám'}, {en:'aunt',type:'Noun',vi:'Dì, cô, bác'}, {en:'autumn',type:'Noun',vi:'Mùa thu'}, {en:'away',type:'Adverb',vi:'Đi xa, cách xa, rời'},
             {en:'baby',type:'Noun',vi:'Em bé'}, {en:'back',type:'Noun/Adverb',vi:'Phía sau, lưng'}, {en:'bad',type:'Adjective',vi:'Xấu, tồi tệ'}, {en:'bag',type:'Noun',vi:'Cái túi'}, {en:'bake',type:'Verb',vi:'Nướng'}, {en:'balance',type:'Noun/Verb',vi:'Cân bằng'}, {en:'ball',type:'Noun',vi:'Quả bóng'}, {en:'banana',type:'Noun',vi:'Quả chuối'}, {en:'band',type:'Noun',vi:'Ban nhạc'}, {en:'bank',type:'Noun',vi:'Ngân hàng'}, {en:'bar',type:'Noun',vi:'Quán bar, thanh'}, {en:'base',type:'Noun',vi:'Cơ sở, nền tảng'}, {en:'basic',type:'Adjective',vi:'Cơ bản'}, {en:'bat',type:'Noun',vi:'Con dơi, gậy bóng chày'}, {en:'bath',type:'Noun',vi:'Bồn tắm'}, {en:'be',type:'Verb',vi:'Thì, là, ở'}, {en:'beach',type:'Noun',vi:'Bãi biển'}, {en:'bear',type:'Noun',vi:'Con gấu'}, {en:'beat',type:'Verb',vi:'Đánh bại, nhịp đập'}, {en:'beautiful',type:'Adjective',vi:'Xinh đẹp'}, {en:'because',type:'Conjunction',vi:'Bởi vì'}, {en:'become',type:'Verb',vi:'Trở nên'}, {en:'bed',type:'Noun',vi:'Cái giường'}, {en:'bedroom',type:'Noun',vi:'Phòng ngủ'}, {en:'before',type:'Preposition',vi:'Trước khi'}, {en:'begin',type:'Verb',vi:'Bắt đầu'}, {en:'behind',type:'Preposition',vi:'Đằng sau'}, {en:'believe',type:'Verb',vi:'Tin tưởng'}, {en:'bell',type:'Noun',vi:'Cái chuông'}, {en:'below',type:'Preposition',vi:'Bên dưới'}, {en:'best',type:'Adjective',vi:'Tốt nhất'}
         ];
         
-        // ĐOẠN VĂN (9 BÀI)
         const paragraphData = [
             { id: 'p1_en', type: 'en-vi', title: 'Bài 1: Dịch sang Tiếng Việt', src: "I live in a small apartment. I like eating apples. My birthday is in April. The area around my house is very beautiful. Yesterday my arm hurt a little. I often walk around the park. My friend arrives at 7 o'clock. I like art and read articles. She is an artist. I work as a teacher. I ask her a question. I am at home in the evening. August is very hot. My aunt lives far away. Autumn is very beautiful.", expected: "Tôi sống trong một căn hộ nhỏ. Tôi thích ăn táo. Sinh nhật tôi vào tháng Tư. Khu vực quanh nhà tôi rất đẹp. Hôm qua cánh tay tôi hơi đau. Tôi thường đi dạo quanh công viên. Bạn tôi đến lúc 7 giờ. Tôi thích nghệ thuật và đọc bài báo. Cô ấy là một nghệ sĩ. Tôi làm việc như một giáo viên. Tôi hỏi cô ấy một câu hỏi. Tôi ở nhà vào buổi tối. Tháng Tám rất nóng. Dì tôi sống ở xa. Mùa thu rất đẹp." },
             { id: 'p1_vi', type: 'vi-en', title: 'Bài 1: Dịch sang Tiếng Anh', src: "Tôi sống trong một căn hộ nhỏ. Tôi thích ăn táo. Sinh nhật tôi vào tháng Tư. Khu vực quanh nhà tôi rất đẹp. Hôm qua cánh tay tôi hơi đau. Tôi thường đi dạo quanh công viên. Bạn tôi đến lúc 7 giờ. Tôi thích nghệ thuật và đọc bài báo. Cô ấy là một nghệ sĩ. Tôi làm việc như một giáo viên. Tôi hỏi cô ấy một câu hỏi. Tôi ở nhà vào buổi tối. Tháng Tám rất nóng. Dì tôi sống ở xa. Mùa thu rất đẹp.", expected: "I live in a small apartment. I like eating apples. My birthday is in April. The area around my house is very beautiful. Yesterday my arm hurt a little. I often walk around the park. My friend arrives at 7 o'clock. I like art and read articles. She is an artist. I work as a teacher. I ask her a question. I am at home in the evening. August is very hot. My aunt lives far away. Autumn is very beautiful." },
@@ -508,7 +514,7 @@
             { id: 'p7_vi', type: 'vi-en', title: 'Bài 7: Dịch sang Tiếng Anh', src: "Bạn tôi là một diễn viên. Anh ấy làm việc ở một thành phố lớn. Anh ấy thường đi bằng máy bay. Anh ấy đến sân bay sớm. Anh ấy làm công việc của mình rất giỏi. Anh ấy luôn cho tôi lời khuyên tốt.", expected: "My friend is an actor. He works in a big city. He often travels by plane. He arrives at the airport early. He is amazing at his job. He always gives me good advice." },
             { id: 'p8_en', type: 'en-vi', title: 'Bài 8: Dịch sang Tiếng Việt', src: "I like music. My brother is in a band. They play every Friday at a bar. I am sometimes angry because they are very loud. But I believe they are good. I begin to like their songs.", expected: "Tôi thích âm nhạc. Anh trai tôi ở trong một ban nhạc. Họ chơi mỗi thứ Sáu ở một quán bar. Đôi khi tôi giận vì họ rất ồn. Nhưng tôi tin là họ chơi hay. Tôi bắt đầu thích các bài hát của họ." },
             { id: 'p8_vi', type: 'vi-en', title: 'Bài 8: Dịch sang Tiếng Anh', src: "Tôi thích âm nhạc. Anh trai tôi ở trong một ban nhạc. Họ chơi mỗi thứ Sáu ở một quán bar. Đôi khi tôi giận vì họ rất ồn. Nhưng tôi tin là họ chơi hay. Tôi bắt đầu thích các bài hát của họ.", expected: "I like music. My brother is in a band. They play every Friday at a bar. I am sometimes angry because they are very loud. But I believe they are good. I begin to like their songs." },
-            { id: 'p9_en', type: 'en-vi', title: 'Bài 9: Dịch sang Tiếng Việt', src: "On Monday I go to the bank. I add money to my account. Then I ask a question about my address. The man answers me. I say thank you and go home.", expected: "Vào thứ Hai tôi đến ngân hàng. Tôi gửi thêm tiền vào tài khoản. Sau đó tôi hỏi một câu về địa chỉ của mình. Người đàn ông trả lời tôi. Tôi nói cảm ơn và đi về nhà." },
+            { id: 'p9_en', type: 'en-vi', title: 'Bài 9: Dịch sang Tiếng Việt', src: "On Monday I go to the bank. I add money to my account. Then I ask a question about my address. The man answers me. I say thank you and go home.", expected: "Vào thứ Hai tôi đến ngân hàng. Tôi gửi thêm tiền vào tài khoản. Sau đó tôi hỏi một câu về địa chỉ của mình. Người đàn hiện trả lời tôi. Tôi nói cảm ơn và đi về nhà." },
             { id: 'p9_vi', type: 'vi-en', title: 'Bài 9: Dịch sang Tiếng Anh', src: "Vào thứ Hai tôi đến ngân hàng. Tôi gửi thêm tiền vào tài khoản. Sau đó tôi hỏi một câu về địa chỉ của mình. Người đàn ông trả lời tôi. Tôi nói cảm ơn và đi về nhà.", expected: "On Monday I go to the bank. I add money to my account. Then I ask a question about my address. The man answers me. I say thank you and go home." }
         ];
 
@@ -532,16 +538,16 @@
             {q: "My boss is terrible ___ communicating.", options: ["At","In","To"], ans: "At", ruleKey: "at"} 
         ];
 
-        // MẢNG NHẠC MỚI THEO YÊU CẦU
+        // 🟢 CẬP NHẬT: LINK NHẠC CHUẨN TỪ BẠN 🟢
         const playLists = {
             gd: [
-                {title: "G-Dragon Track 1", url: "https://files.catbox.moe/ov2hwx.mp4", img: "https://i.postimg.cc/85z1DkS0/card-back.jpg"},
-                {title: "G-Dragon Track 2", url: "https://files.catbox.moe/3v0jic.mp4", img: "https://i.postimg.cc/85z1DkS0/card-back.jpg"}
+                {title: "G-Dragon - Track 1", url: "https://files.catbox.moe/by6h11.mp4", img: "https://api.dicebear.com/7.x/notionists/svg?seed=GD1&backgroundColor=fca5a5"},
+                {title: "G-Dragon - Track 2", url: "https://files.catbox.moe/by6h11.mp4", img: "https://api.dicebear.com/7.x/notionists/svg?seed=GD2&backgroundColor=fca5a5"}
             ],
             chill: [
-                {title: "Chill Lofi 1", url: "https://files.catbox.moe/xhwns8.mp4", img: "https://i.postimg.cc/mD8zQxGj/placeholder.png"},
-                {title: "Chill Lofi 2", url: "https://files.catbox.moe/n2bnpv.mp4", img: "https://i.postimg.cc/mD8zQxGj/placeholder.png"},
-                {title: "Chill Lofi 3", url: "https://files.catbox.moe/o75g75.mp4", img: "https://i.postimg.cc/mD8zQxGj/placeholder.png"}
+                {title: "Chill Lofi 1", url: "https://files.catbox.moe/xhwns8.mp4", img: "https://api.dicebear.com/7.x/notionists/svg?seed=Chill1&backgroundColor=a7f3d0"},
+                {title: "Chill Lofi 2", url: "https://files.catbox.moe/n2bnpv.mp4", img: "https://api.dicebear.com/7.x/notionists/svg?seed=Chill2&backgroundColor=a7f3d0"},
+                {title: "Chill Lofi 3", url: "https://files.catbox.moe/o75g75.mp4", img: "https://api.dicebear.com/7.x/notionists/svg?seed=Chill3&backgroundColor=a7f3d0"}
             ],
             viet: [
                 {title: "Bài này không phải để đi diễn", url: "https://files.catbox.moe/s8o123.mp4", img: "https://api.dicebear.com/7.x/notionists/svg?seed=Bainay&backgroundColor=b6e3f4"},
@@ -592,23 +598,47 @@
         function fireConfetti() { if (typeof confetti === 'function') confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, zIndex: 9999 }); }
         function playClickSound() { try { if(audioClick) { audioClick.currentTime = 0; audioClick.play().catch(e=>{}); } } catch(e) {} }
 
-        // --- CẬP NHẬT PHÍM ESC BẤT CHẤP MỌI MODULE ---
+        // 🟢 CẬP NHẬT: LOGIC PHÍM ESC HOÀN HẢO 🟢
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
+                // 1. Kiểm tra và đóng các Modal (Popup) trước
+                const modals = [
+                    { id: 'music-confirm-modal', action: closeMusicConfirm },
+                    { id: 'view-modal-overlay', action: closeViewModal },
+                    { id: 'form-modal-overlay', action: closeFormModal },
+                    { id: 'card-reveal-modal', action: closeReveal },
+                    { id: 'sh-shop-modal', action: closeSHShop },
+                    { id: 'sh-modal-pick-target', action: shCancelTarget }
+                ];
+                let didCloseModal = false;
+                modals.forEach(modal => {
+                    const el = document.getElementById(modal.id);
+                    if (el && !el.classList.contains('hidden')) {
+                        modal.action();
+                        didCloseModal = true;
+                    }
+                });
+                if (didCloseModal) return; // Nếu vừa đóng popup, dừng tại đây (không thoát view)
+
+                // 2. Chặn thoát nếu đang ở màn hình Đăng Nhập hoặc Intro
                 if (!document.getElementById('login-screen').classList.contains('hidden') || 
                     !document.getElementById('intro-screen').classList.contains('hidden')) return;
                 
-                // Trừ trường hợp đang trong SH Room thì phải ấn nút Rời Bàn
+                // 3. Xử lý riêng cho màn hình Game Shadow Hunter
                 if (!document.getElementById('sh-module').classList.contains('hidden')) {
-                    if(!document.getElementById('sh-board').classList.contains('hidden')) return; // Bắt out tay để tránh trượt tay thoát game
-                    else switchView('hub'); // Nếu ở sảnh SH thì out về Hub đc
-                } else {
+                    if(!document.getElementById('sh-board').classList.contains('hidden')) return; // Không cho thoát khi đang chơi
+                    else { exitSH(); return; } // Nếu ở sảnh chờ thì thoát game
+                }
+                
+                // 4. Nếu không ở Hub, thoát về Hub
+                const hub = document.getElementById('hub-screen');
+                if (hub && hub.classList.contains('hidden')) {
                     switchView('hub');
                 }
             }
         });
 
-        // 3. LOGIC KHỞI TẠO & ĐĂNG NHẬP CHUNG
+        // INIT & LOGIN
         document.addEventListener('DOMContentLoaded', () => {
             const video = document.getElementById('bg-video'); 
             const startBtn = document.getElementById('start-btn');
@@ -625,7 +655,6 @@
             db.collection("places").orderBy("createdAt", "desc").onSnapshot((snap) => { places = []; snap.forEach((doc) => { places.push({ id: doc.id, ...doc.data() }); }); renderPlaces(); });
         });
 
-        // Hàm Đăng Nhập HUB
         function handleLogin() { 
             const u = document.getElementById('login-user').value.trim().toLowerCase();
             const p = document.getElementById('login-pass').value.trim();
@@ -695,7 +724,6 @@
             if(fwActive) endFallingGame(true);
         }
 
-        // --- HỆ THỐNG LỬA CHUỖI HỌC TẬP (STREAK) ---
         function checkAndUpdateStreak() {
             const today = new Date().toDateString();
             if(userData.lastStudyDate !== today) {
@@ -715,6 +743,7 @@
 
         // 4. LOGIC TRẠM NHẠC 3D MỚI
         let currentTab = 'viet'; let trackIdx = 0; const playerAudio = new Audio();
+        
         function toggleMainMusic() {
             playClickSound();
             if(!playerAudio.paused) {
@@ -765,7 +794,6 @@
             trackIdx = idx; const t = playLists[currentTab][idx];
             playerAudio.src = t.url; playerAudio.play().catch(()=>{});
             
-            // Tắt nhạc sảnh chính
             audioBg.pause(); 
             document.getElementById('icon-music-play').classList.add('hidden'); document.getElementById('icon-music-pause').classList.remove('hidden');
 
@@ -796,8 +824,29 @@
         function nextTrack() { trackIdx++; if(trackIdx >= playLists[currentTab].length) trackIdx = 0; playMusic(trackIdx); }
         function prevTrack() { trackIdx--; if(trackIdx < 0) trackIdx = playLists[currentTab].length - 1; playMusic(trackIdx); }
         
-        // Auto Next
-        playerAudio.addEventListener('ended', nextTrack);
+        // 🟢 NÚT TỰ ĐỘNG CHUYỂN BÀI 🟢
+        let isAutoNext = true;
+        function toggleAutoNext() {
+            isAutoNext = !isAutoNext;
+            const btn = document.getElementById('btn-auto-next');
+            if(isAutoNext) {
+                btn.className = "text-[11px] font-bold px-4 py-1.5 rounded-full bg-green-500/20 text-green-400 border border-green-500/50 hover:bg-green-500/30 transition-colors uppercase tracking-wider";
+                btn.innerText = "Tự chuyển bài: BẬT 🔄";
+            } else {
+                btn.className = "text-[11px] font-bold px-4 py-1.5 rounded-full bg-red-500/20 text-red-400 border border-red-500/50 hover:bg-red-500/30 transition-colors uppercase tracking-wider";
+                btn.innerText = "Tự chuyển bài: TẮT ⏸️";
+            }
+        }
+        
+        playerAudio.addEventListener('ended', () => {
+            if(isAutoNext) {
+                nextTrack();
+            } else {
+                document.getElementById('mp-icon-play').classList.remove('hidden'); 
+                document.getElementById('mp-icon-pause').classList.add('hidden'); 
+                document.getElementById('music-vinyl').classList.add('disk-spin-paused');
+            }
+        });
 
 
         // 5. LOGIC TRẠM HỌC TIẾNG ANH
@@ -807,7 +856,6 @@
             document.getElementById('study-menu').classList.add('hidden');
             document.getElementById('study-content').classList.remove('hidden');
             
-            // Ẩn tất cả các container
             document.getElementById('vocab-list-container').classList.add('hidden');
             document.getElementById('quiz-container').classList.add('hidden');
             document.getElementById('memory-container').classList.add('hidden');
@@ -940,7 +988,7 @@
 
             if (c) {
                 quizStats.combo++; quizStats.correct++;
-                checkAndUpdateStreak(); // Cập nhật lửa
+                checkAndUpdateStreak(); 
                 try { if (audioCoin) { audioCoin.currentTime = 0; audioCoin.play().catch(() => {}); } } catch (e) {}
                 let coinReward = 10 + Math.floor(quizStats.combo / 3) * 5;
                 userData.coins += coinReward; db.collection('users').doc(currentUser).update({ coins: userData.coins }); updateUI();
@@ -983,7 +1031,7 @@
             container.innerHTML = html;
         }
 
-        // KIỂM TRA TRÍ NHỚ (81 TỪ)
+        // KIỂM TRA TRÍ NHỚ
         function checkMemory() {
             const input = document.getElementById('memory-input').value.trim();
             if(!input) return;
@@ -1010,7 +1058,7 @@
             const feedback = document.getElementById('memory-feedback');
             feedback.classList.remove('hidden');
             
-            if(matchCount > 0) checkAndUpdateStreak(); // Cập nhật lửa
+            if(matchCount > 0) checkAndUpdateStreak(); 
             
             if(exactOrderMatch === targetWords.length) {
                 try{if(audioCoin){audioCoin.currentTime=0; audioCoin.play().catch(()=>{});}}catch(e){}
@@ -1048,7 +1096,7 @@
             let input = document.getElementById('para-input').value.trim();
             if(!input) { alert("Bạn chưa nhập bài dịch!"); return; }
 
-            checkAndUpdateStreak(); // Cập nhật lửa
+            checkAndUpdateStreak(); 
 
             let exWords = currentPara.expected.toLowerCase().split(/\s+/);
             let inWords = input.toLowerCase().split(/\s+/);
@@ -1123,7 +1171,7 @@
             const expBox = document.getElementById('gram-explanation-box');
             
             container.classList.remove('hidden');
-            checkAndUpdateStreak(); // Cập nhật lửa
+            checkAndUpdateStreak(); 
             
             if(isCorrect) {
                 try{if(audioCoin){audioCoin.currentTime=0; audioCoin.play().catch(()=>{});}}catch(e){}
@@ -1179,7 +1227,7 @@
 
 
         // ----------------------------------------------------
-        // LOGIC SHADOW HUNTER - THẺ BÀI CHI TIẾT & TÊN AI
+        // LOGIC SHADOW HUNTER
         // ----------------------------------------------------
         let shCurrentTurn = 0;
         let shCurrentUser = null;
@@ -1255,10 +1303,16 @@
             
             if(allowed.includes(u) && p === '123') {
                 shCurrentUser = u;
-                audioBg.pause(); gdAudio?.pause(); playerAudio.pause();
+                
+                // Pause all other music safely
+                if (typeof audioBg !== 'undefined' && audioBg) audioBg.pause();
+                if (typeof playerAudio !== 'undefined' && playerAudio) playerAudio.pause();
                 
                 let shBgm = document.getElementById('sh-bgm');
-                shBgm.volume = 0.3; shBgm.play().catch(()=>{});
+                if (shBgm) {
+                    shBgm.volume = 0.3; 
+                    shBgm.play().catch(()=>{});
+                }
 
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('sh-module').classList.remove('hidden');
@@ -1274,7 +1328,8 @@
             document.getElementById('sh-module').classList.add('hidden');
             document.getElementById('sh-module').classList.remove('flex');
             document.getElementById('login-screen').classList.remove('hidden');
-            document.getElementById('sh-bgm').pause();
+            let shBgm = document.getElementById('sh-bgm');
+            if (shBgm) shBgm.pause();
         }
 
         function exitSHRoom() {
@@ -1320,7 +1375,6 @@
             document.getElementById('sh-log').innerHTML = '<p class="text-red-500">Đêm đã buông. Kẻ đi săn và bóng tối hòa làm một...</p>';
             shLog(`Bạn là phe <b>${shPlayers[0].faction}</b> - <b>${shPlayers[0].char.name}</b>. Giấu danh tính nhé!`);
             
-            // Xóa rác UI cũ
             document.getElementById(`pname-1`).innerText = shPlayers[1].name;
             document.getElementById(`pname-2`).innerText = shPlayers[2].name;
             document.getElementById(`pname-3`).innerText = shPlayers[3].name;
@@ -1389,7 +1443,6 @@
             if (sum === 7) sum = [2,4,6,8,9,10][Math.floor(Math.random()*6)]; 
             p.area = sum; shLog(`🎲 ${p.name} đổ vào Vùng <b>${sum}</b>`); updateBoardUI();
             
-            // KIỂM TRA BỐC THẺ
             let drawType = null;
             if(sum === 2 || sum === 3) drawType = 'hermit';
             else if(sum === 6) drawType = 'white';
@@ -1472,7 +1525,6 @@
             let d4 = Math.floor(Math.random() * 4) + 1;
             let dmg = Math.abs(d6 - d4);
             
-            // XỬ LÝ TRANG BỊ
             if(attacker.equip.some(e => e.includes("Chainsaw") || e.includes("Axe") || e.includes("Knife"))) dmg += 1;
             if(defender.equip.some(e => e.includes("Robe"))) Math.max(0, dmg -= 1);
 
